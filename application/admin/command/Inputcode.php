@@ -15,6 +15,10 @@ use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
 
+/**
+ * Class Inputcode
+ * @package app\admin\command
+ */
 class Inputcode extends Command
 {
     /**
@@ -37,8 +41,16 @@ class Inputcode extends Command
      */
     private $doUnLock = FALSE;
 
+    /**
+     * @var bool
+     */
     private $startRun = FALSE;
 
+    /**
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
     public function __destruct()
     {
         if ($this->startRun === TRUE) {

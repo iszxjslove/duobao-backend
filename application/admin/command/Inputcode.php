@@ -36,7 +36,7 @@ class Inputcode extends Command
     /**
      * @var bool 是否允许释放 LOCK 文件
      */
-    private $doUnLock = FALSE;
+    private $doUnLock = TRUE;
 
     private $startRun = FALSE;
 

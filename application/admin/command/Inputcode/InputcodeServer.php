@@ -34,7 +34,7 @@ class InputcodeServer
             return FALSE;
         }
 
-        $iWaitTime = strtotime($aLastNoDrawIssue['saleend']) - time();
+        $iWaitTime = $aLastNoDrawIssue['saleend'] - time();
         if ($iWaitTime > 0) {
             // 如果: '当前时间' 早于 '最近期销售截止时间', 则: 仍在销售期, 程序正常中断, 等待下次运行
             $this->output->info("[n] [" . date('Y-m-d H:i:s') . "] Curent Issue:[{$aLastNoDrawIssue['issue']}] Is SaleIng, await.\n");

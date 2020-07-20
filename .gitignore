@@ -7,7 +7,7 @@
 /public/assets/libs/
 /public/assets/addons/*
 /public/uploads/*
-public/.user.ini
+/public/.user.ini
 .idea
 composer.lock
 *.log

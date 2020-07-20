@@ -4,7 +4,7 @@
 namespace app\admin\command;
 
 
-use app\admin\command\Inputcode\InputcodeServer;
+use app\admin\command\aaa\InputcodeServer;
 use app\admin\model\Crontab;
 use app\admin\model\Game;
 use think\console\Command;

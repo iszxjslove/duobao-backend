@@ -24,6 +24,7 @@ return [
         '192.168.10.140' => 'api',
         '192.168.10.19'  => 'api',
         '192.168.10.188' => 'api',
-        'api.duobao'     => 'api'
+        'api.duobao'     => 'api',
+        'admin.duobao'   => 'admin',
     ],
 ];

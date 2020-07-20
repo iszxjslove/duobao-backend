@@ -42,7 +42,7 @@ class Inputcode extends Command
     private $doUnLock = FALSE;
 
     /**
-     * @var bool
+     * @var bool 析构方法用来判断运行的是不是当前类
      */
     private $startRun = FALSE;
 

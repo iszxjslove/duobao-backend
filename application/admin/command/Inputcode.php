@@ -4,10 +4,9 @@
 namespace app\admin\command;
 
 
-use app\admin\command\inputcode\InputcodeServer;
+use app\admin\command\Inputcode\InputcodeServer;
 use app\admin\model\Crontab;
 use app\admin\model\Game;
-use app\admin\model\Issue as IssueModel;
 use think\console\Command;
 use think\console\Input;
 use think\console\input\Option;

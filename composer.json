@@ -25,7 +25,8 @@
     "overtrue/wechat": "~4.1",
     "gmars/tp5-nestedsets": "^1.2",
     "ext-json": "*",
-    "ext-bcmath": "*"
+    "ext-bcmath": "*",
+    "ext-csprng": "*"
   },
   "config": {
     "preferred-install": "dist"

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\command\inputcode;
+namespace app\admin\command\Inputcode;
 
 use app\admin\model\Issue;
 use think\console\Output;

@@ -26,7 +26,8 @@
     "gmars/tp5-nestedsets": "^1.2",
     "ext-json": "*",
     "ext-bcmath": "*",
-    "ext-csprng": "*"
+    "endroid/qr-code": "^3.9",
+    "firebase/php-jwt": "^5.2"
   },
   "config": {
     "preferred-install": "dist"

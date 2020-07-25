@@ -25,4 +25,16 @@ class Projects extends Model
         'create_time_text',
         'update_time_text'
     ];
+
+    public function getCreateTimeTextAttr($value, $data)
+    {
+        $value = $value ?: ($data['create_time'] ?? '');
+        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }
+
+    public function getUpdateTimeTextAttr($value, $data)
+    {
+        $value = $value ?: ($data['update_time'] ?? '');
+        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }
 }

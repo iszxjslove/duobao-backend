@@ -2,8 +2,8 @@
 
 namespace app\admin\model;
 
+use think\exception\DbException;
 use think\Model;
-use think\Session;
 
 class Admin extends Model
 {
@@ -21,8 +21,7 @@ class Admin extends Model
     public function resetPassword($uid, $NewPassword)
     {
         $passwd = $this->encryptPassword($NewPassword);
-        $ret = $this->where(['id' => $uid])->update(['password' => $passwd]);
-        return $ret;
+        return $this->where(['id' => $uid])->update(['password' => $passwd]);
     }
 
     // 密码加密
@@ -31,4 +30,24 @@ class Admin extends Model
         return $encrypt($password . $salt);
     }
 
+    /**
+     * 变更会员余额
+     * @param int $money 金额
+     * @param $admin_id
+     * @param string $memo 备注
+     * @throws DbException
+     */
+    public static function money($money, $admin_id, $memo)
+    {
+        $admin = self::get($admin_id);
+        if ($admin && $money) {
+            $before = $admin->money;
+            //$after = $admin->money + $money;
+            $after = function_exists('bcadd') ? bcadd($admin->money, $money, 2) : $admin->money + $money;
+            //更新会员信息
+            $admin->save(['money' => $after]);
+            //写入日志
+            AdminMoneyLog::create(['admin_id' => $admin_id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
+        }
+    }
 }

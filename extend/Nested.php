@@ -351,6 +351,27 @@ class Nested
         return $this->move($id, $near[$this->parentKey], $nearKey, $level);
     }
 
+
+    /**
+     * 获取上级用户
+     * @param $id
+     * @param int $level 上几级
+     * @return bool|false|PDOStatement|string|Collection
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getParent($id, $level = 1)
+    {
+        $item = $this->getItem($id);
+        $condition = [
+            'lft' => ['<', $item[$this->leftKey]],
+            $this->rightKey => ['>', $item[$this->rightKey]],
+            $this->levelKey => ['>=', $item[$this->levelKey] - $level]
+        ];
+        return Db::table($this->tableName)->where($condition)->select();
+    }
+
     private function setError($msg)
     {
         $this->_error = $msg;

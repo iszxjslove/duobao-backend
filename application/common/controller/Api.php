@@ -4,6 +4,7 @@ namespace app\common\controller;
 
 use app\common\library\Auth;
 use think\Config;
+use think\Db;
 use think\Exception;
 use think\exception\HttpResponseException;
 use think\exception\ValidateException;
@@ -63,6 +64,29 @@ class Api
      * @var string
      */
     protected $responseType = 'json';
+
+    /**
+     * 快速搜索时执行查找的字段
+     */
+    protected $searchFields = 'id';
+
+    /**
+     * 是否是关联查询
+     */
+    protected $relationSearch = false;
+
+    /**
+     * 是否开启数据限制
+     * 支持auth/personal
+     * 表示按权限判断/仅限个人
+     * 默认为禁用,若启用请务必保证表中存在admin_id字段
+     */
+    protected $dataLimit = true;
+
+    /**
+     * 数据限制字段
+     */
+    protected $dataLimitField = 'user_id';
 
     /**
      * 构造方法
@@ -321,5 +345,144 @@ class Api
         }
 
         return true;
+    }
+
+    /**
+     * 生成查询所需要的条件,排序方式
+     * @param mixed   $searchfields   快速查询的字段
+     * @param boolean $relationSearch 是否关联查询
+     * @return array
+     */
+    protected function buildparams($searchfields = null, $relationSearch = null)
+    {
+        $searchfields = is_null($searchfields) ? $this->searchFields : $searchfields;
+        $relationSearch = is_null($relationSearch) ? $this->relationSearch : $relationSearch;
+        $search = $this->request->get("search", '');
+        $filter = $this->request->get("filter", '');
+        $op = $this->request->get("op", '', 'trim');
+        $sort = $this->request->get("sort", !empty($this->model) && $this->model->getPk() ? $this->model->getPk() : 'id');
+        $order = $this->request->get("order", "DESC");
+        $offset = $this->request->get("offset", 0);
+        $limit = $this->request->get("limit", 0);
+        $filter = (array)json_decode(htmlspecialchars_decode($filter), true);
+        $op = (array)json_decode(htmlspecialchars_decode($op), true);
+        $filter = $filter ? $filter : [];
+        $where = [];
+        $tableName = '';
+        if ($relationSearch) {
+            if (!empty($this->model)) {
+                $name = $this->model->getTable();
+                $tableName = $name . '.';
+            }
+            $sortArr = explode(',', $sort);
+            foreach ($sortArr as $index => & $item) {
+                $item = stripos($item, ".") === false ? $tableName . trim($item) : $item;
+            }
+            unset($item);
+            $sort = implode(',', $sortArr);
+        }
+        if ($this->dataLimit === true && $this->dataLimitField) {
+            $where[] = [$tableName . $this->dataLimitField, '=', $this->auth->id];
+        }
+        if ($search) {
+            $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);
+            foreach ($searcharr as $k => &$v) {
+                $v = stripos($v, ".") === false ? $tableName . $v : $v;
+            }
+            unset($v);
+            $where[] = [implode("|", $searcharr), "LIKE", "%{$search}%"];
+        }
+        foreach ($filter as $k => $v) {
+            $sym = isset($op[$k]) ? $op[$k] : '=';
+            if (stripos($k, ".") === false) {
+                $k = $tableName . $k;
+            }
+            $v = !is_array($v) ? trim($v) : $v;
+            $sym = strtoupper(isset($op[$k]) ? $op[$k] : $sym);
+            switch ($sym) {
+                case '=':
+                case '<>':
+                    $where[] = [$k, $sym, (string)$v];
+                    break;
+                case 'LIKE':
+                case 'NOT LIKE':
+                case 'LIKE %...%':
+                case 'NOT LIKE %...%':
+                    $where[] = [$k, trim(str_replace('%...%', '', $sym)), "%{$v}%"];
+                    break;
+                case '>':
+                case '>=':
+                case '<':
+                case '<=':
+                    $where[] = [$k, $sym, intval($v)];
+                    break;
+                case 'FINDIN':
+                case 'FINDINSET':
+                case 'FIND_IN_SET':
+                    $where[] = "FIND_IN_SET('{$v}', " . ($relationSearch ? $k : '`' . str_replace('.', '`.`', $k) . '`') . ")";
+                    break;
+                case 'IN':
+                case 'IN(...)':
+                case 'NOT IN':
+                case 'NOT IN(...)':
+                    $where[] = [$k, str_replace('(...)', '', $sym), is_array($v) ? $v : explode(',', $v)];
+                    break;
+                case 'BETWEEN':
+                case 'NOT BETWEEN':
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr)) {
+                        continue 2;
+                    }
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '') {
+                        $sym = $sym == 'BETWEEN' ? '<=' : '>';
+                        $arr = $arr[1];
+                    } elseif ($arr[1] === '') {
+                        $sym = $sym == 'BETWEEN' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
+                    $where[] = [$k, $sym, $arr];
+                    break;
+                case 'RANGE':
+                case 'NOT RANGE':
+                    $v = str_replace(' - ', ',', $v);
+                    $arr = array_slice(explode(',', $v), 0, 2);
+                    if (stripos($v, ',') === false || !array_filter($arr)) {
+                        continue 2;
+                    }
+                    //当出现一边为空时改变操作符
+                    if ($arr[0] === '') {
+                        $sym = $sym == 'RANGE' ? '<=' : '>';
+                        $arr = $arr[1];
+                    } elseif ($arr[1] === '') {
+                        $sym = $sym == 'RANGE' ? '>=' : '<';
+                        $arr = $arr[0];
+                    }
+                    $where[] = [$k, str_replace('RANGE', 'BETWEEN', $sym) . ' time', $arr];
+                    break;
+                case 'LIKE':
+                case 'LIKE %...%':
+                    $where[] = [$k, 'LIKE', "%{$v}%"];
+                    break;
+                case 'NULL':
+                case 'IS NULL':
+                case 'NOT NULL':
+                case 'IS NOT NULL':
+                    $where[] = [$k, strtolower(str_replace('IS ', '', $sym))];
+                    break;
+                default:
+                    break;
+            }
+        }
+        $where = function ($query) use ($where) {
+            foreach ($where as $k => $v) {
+                if (is_array($v)) {
+                    call_user_func_array([$query, 'where'], $v);
+                } else {
+                    $query->where($v);
+                }
+            }
+        };
+        return [$where, $sort, $order, $offset, $limit];
     }
 }

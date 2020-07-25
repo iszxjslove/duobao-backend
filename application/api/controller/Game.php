@@ -4,16 +4,21 @@
 namespace app\api\controller;
 
 
+use app\api\model\FeeLog;
 use app\api\model\Issue;
 use app\api\model\Game as GameModel;
 use app\common\controller\Api;
+use app\common\model\IssueSales;
 use app\common\model\Projects;
+use app\common\model\UserStatistics;
 use think\Db;
 use think\Exception;
 use app\common\model\User;
+use think\Hook;
 
 class Game extends Api
 {
+    protected $model = null;
 
     public function play()
     {
@@ -23,7 +28,7 @@ class Game extends Api
         if (!$issue) {
             $this->error('There is no period to bet on');
         }
-        $data = $issue->visible(['issue', 'salestart', 'saleend', 'earliestwritetime', 'canneldeadline'])->toArray();
+        $data = $issue->visible(['id', 'issue', 'salestart', 'saleend', 'earliestwritetime', 'canneldeadline'])->toArray();
         $data['server_time'] = $time;
         $this->success('', $data);
     }
@@ -41,13 +46,34 @@ class Game extends Api
             'game_id' => $gid,
             'saleend' => ['<', $time]
         ];
+        $total = $issueModel
+            ->where($where)
+            ->order('id', 'desc')
+            ->count();
         $list = $issueModel
             ->where($where)
             ->field('issue,code,last_digits,colors,statuscode,statusbonus')
             ->limit($offset, $limit)
             ->order('id', 'desc')
             ->select();
-        return json($list);
+        return json(['total' => $total, 'rows' => $list]);
+    }
+
+    public function projects()
+    {
+        $this->model = new Projects();
+        list($where, $sort, $order, $offset, $limit) = $this->buildparams();
+        $total = $this->model
+            ->where($where)
+            ->order($sort, $order)
+            ->count();
+
+        $list = $this->model
+            ->where($where)
+            ->order($sort, $order)
+            ->limit($offset, $limit)
+            ->select();
+        return json(['total' => $total, 'rows' => $list]);
     }
 
     public function wager()
@@ -76,10 +102,21 @@ class Game extends Api
         # 总金额
         $totalprice = $money * $number;
         # 奖期是否存在或能否下注
-        $issueinfo = Issue::get(['game_id' => $gid, 'issue' => $issue]);
+        $issueinfo = Issue::get(['issue' => $issue]);
         if (!$issueinfo || $issueinfo->saleend < $time) {
             $this->error("Can't bet");
         }
+
+        // 计算手续费 ---------- START ------
+        if ($totalprice < 100) {
+            $fee = $totalprice * 0.1;
+        } else {
+            $fee = $totalprice * 0.02;
+        }
+        // 合同金额
+        $contract_amount = $totalprice - $fee;
+        // --------------- END ----------------
+
         $colors = [
             'green'  => '1|3|5|7|9',
             'red'    => '0|2|4|6|8',
@@ -87,17 +124,25 @@ class Game extends Api
         ];
         $maxbouns = 0;
         if (isset($colors[$selected])) {
-            $code_type = $selected;
+            $color = $selected;
             $codes = $colors[$selected];
             switch ($selected) {
                 case 'green':
-                    $maxbouns = $totalprice * $game->green_lucky_odds;
+                    $max = $game->green_ordinary;
+                    if ($game->green_ordinary < $game->green_lucky_odds) {
+                        $max = $game->green_lucky_odds;
+                    }
+                    $maxbouns = bcmul($contract_amount, $max, 2);
                     break;
                 case 'red':
-                    $maxbouns = $totalprice * $game->red_lucky_odds;
+                    $max = $game->red_ordinary;
+                    if ($game->red_ordinary < $game->red_lucky_odds) {
+                        $max = $game->red_lucky_odds;
+                    }
+                    $maxbouns = bcmul($contract_amount, $max, 2);
                     break;
                 case 'violet':
-                    $maxbouns = $totalprice * $game->violet_odds;
+                    $maxbouns = $contract_amount * $game->violet_odds;
                     break;
             }
         } else {
@@ -105,29 +150,34 @@ class Game extends Api
                 $this->error('Illegal choice');
             }
             $codes = $selected;
-            $code_type = 'single';
-            $maxbouns = $totalprice * $game->singular_odds;
+            $color = 'singular';
+            $maxbouns = $contract_amount * $game->singular_odds;
         }
 
         $insertData = [
-            'user_id'     => $this->auth->id,
-            'game_id'     => $gid,
-            'issue'       => $issue,
-            'issue_id'    => $issueinfo->id,
-            'code_type'   => $code_type,
-            'code'        => $codes,
-            'singleprice' => $money,
-            'multiple'    => $number,
-            'totalprice'  => $totalprice,
-            'maxbouns'    => $maxbouns,
-            'userip'      => $this->request->ip(),
-            'cdnip'       => $this->request->host(),
+            'user_id'         => $this->auth->id,
+            'game_id'         => $gid,
+            'issue'           => $issue,
+            'issue_id'        => $issueinfo->id,
+            'color'           => $color,
+            'code'            => $codes,
+            'selected'        => $selected,
+            'singleprice'     => $money,
+            'multiple'        => $number,
+            'deducttime'      => time(),
+            'maxbouns'        => $maxbouns,
+            'totalprice'      => $totalprice,
+            'contract_amount' => $contract_amount,
+            'fee'             => $fee,
+            'userip'          => $this->request->ip(),
+            'cdnip'           => $this->request->host(),
         ];
 
-        $order = [];
+        $output = [];
         try {
             Db::startTrans();
             // 下注前的操作
+            Hook::listen("game_wager_before", $this->auth, $insertData);
             // 扣款
             User::payment($totalprice, $this->auth->id, '投注扣款');
             // 下注方案
@@ -137,11 +187,14 @@ class Game extends Api
                 throw new Exception('Bet failed');
             }
             // 下注成功后
-            $order = [
+            Hook::listen("game_wager_after", $this->auth, $projects);
+
+            $output = [
                 'selected'   => $selected,
                 'money'      => $money,
                 'issue'      => $issue,
-                'code_type'  => $code_type,
+                'issue_id'   => $issueinfo->id,
+                'color'      => $color,
                 'code'       => $codes,
                 'totalprice' => $totalprice,
                 'maxbouns'   => $maxbouns,
@@ -151,6 +204,6 @@ class Game extends Api
             Db::rollback();
             $this->error($e->getMessage());
         }
-        $this->success('', $order);
+        $this->success('', $output);
     }
 }

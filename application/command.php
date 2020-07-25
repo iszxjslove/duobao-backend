@@ -19,4 +19,7 @@ return [
     'app\admin\command\Api',
     'app\admin\command\Inputcode',
     'app\admin\command\Createissue',
+    'app\admin\command\CheckSendTask',
+    'app\admin\command\Checkbonus',
+    'app\admin\command\Sendbonus',
 ];

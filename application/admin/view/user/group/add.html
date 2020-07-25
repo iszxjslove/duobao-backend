@@ -17,6 +17,28 @@
         </div>
     </div>
     <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">注册默认分组:</label>
+        <div class="col-xs-12 col-sm-8">
+            <label for="c-is_default">
+                <input id="c-is_default" type="checkbox">
+                <input type="hidden" name="row[is_default]" value="0">
+                <span class="yes" style="display: none">取消注册默认分组</span>
+                <span class="no" style="">设置为注册默认分组</span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">测试用户组:</label>
+        <div class="col-xs-12 col-sm-8">
+            <label for="c-is_test">
+                <input id="c-is_test" type="checkbox">
+                <input type="hidden" name="row[is_test]" value="0">
+                <span class="yes" style="display: none">取消测试分组</span>
+                <span class="no">设置为测试分组</span>
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
         <div class="col-xs-12 col-sm-8">
 

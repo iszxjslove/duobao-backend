@@ -41,10 +41,35 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'name', title: __('Name')},
-                        {field: 'createtime', title: __('Createtime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
-                        {field: 'updatetime', title: __('Updatetime'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
+                        {
+                            field: 'createtime',
+                            title: __('Createtime'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {
+                            field: 'updatetime',
+                            title: __('Updatetime'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {
+                            field: 'is_default', title: '默认分组', operate: false, formatter: function (value) {
+                                return value === 1 ? '默认分组' : ''
+                            }
+                        },
                         {field: 'status', title: __('Status'), formatter: Table.api.formatter.status},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ]
             });
@@ -79,34 +104,59 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'jstree'], function (
                     $("#treeview").jstree($(this).prop("checked") ? "open_all" : "close_all");
                 });
                 $("select[name='row[pid]']").trigger("change");
+
+                $(document).on('change', '#c-is_default', function () {
+                    let def = $('input[name="row[is_default]"]')
+                    if ($(this).is(':checked')) {
+                        def.val(1);
+                        $(this).parent().find('.yes').show()
+                        $(this).parent().find('.no').hide()
+                    } else {
+                        def.val(0);
+                        $(this).parent().find('.yes').hide()
+                        $(this).parent().find('.no').show()
+                    }
+                })
+                $(document).on('change', '#c-is_test', function () {
+                    let test = $('input[name="row[is_test]"]')
+                    if ($(this).is(':checked')) {
+                        test.val(1);
+                        $(this).parent().find('.yes').show()
+                        $(this).parent().find('.no').hide()
+                    } else {
+                        test.val(0);
+                        $(this).parent().find('.yes').hide()
+                        $(this).parent().find('.no').show()
+                    }
+                })
             },
             rendertree: function (content) {
                 $("#treeview")
-                        .on('redraw.jstree', function (e) {
-                            $(".layer-footer").attr("domrefresh", Math.random());
-                        })
-                        .jstree({
-                            "themes": {"stripes": true},
-                            "checkbox": {
-                                "keep_selected_style": false,
+                    .on('redraw.jstree', function (e) {
+                        $(".layer-footer").attr("domrefresh", Math.random());
+                    })
+                    .jstree({
+                        "themes": {"stripes": true},
+                        "checkbox": {
+                            "keep_selected_style": false,
+                        },
+                        "types": {
+                            "root": {
+                                "icon": "fa fa-folder-open",
                             },
-                            "types": {
-                                "root": {
-                                    "icon": "fa fa-folder-open",
-                                },
-                                "menu": {
-                                    "icon": "fa fa-folder-open",
-                                },
-                                "file": {
-                                    "icon": "fa fa-file-o",
-                                }
+                            "menu": {
+                                "icon": "fa fa-folder-open",
                             },
-                            "plugins": ["checkbox", "types"],
-                            "core": {
-                                'check_callback': true,
-                                "data": content
+                            "file": {
+                                "icon": "fa fa-file-o",
                             }
-                        });
+                        },
+                        "plugins": ["checkbox", "types"],
+                        "core": {
+                            'check_callback': true,
+                            "data": content
+                        }
+                    });
             }
         }
     };

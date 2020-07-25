@@ -3,6 +3,7 @@
 namespace app\common\library;
 
 use app\common\model\User;
+use app\common\model\UserGroup;
 use app\common\model\UserRule;
 use fast\Random;
 use think\Config;
@@ -145,6 +146,12 @@ class Auth
         $ip = request()->ip();
         $time = time();
 
+        $group_id = 0;
+        $defaultGroup = UserGroup::get(['is_default' => 1]);
+        if ($defaultGroup) {
+            $group_id = $defaultGroup->id;
+        }
+
         $data = [
             'username' => $username,
             'password' => $password,
@@ -153,6 +160,7 @@ class Auth
             'level'    => 1,
             'score'    => 0,
             'avatar'   => '',
+            'group_id' => $group_id
         ];
         $params = array_merge($data, [
             'nickname'  => $username,
@@ -174,7 +182,7 @@ class Auth
             $userModel->allowField(true);
             $nested = new \Nested($userModel);
             $userId = $nested->insert($params['pid'], $params);
-            if(!$userId){
+            if (!$userId) {
                 throw new Exception($nested->getError());
             }
             $this->_user = User::get($userId);
@@ -385,6 +393,7 @@ class Auth
         $allowFields = $this->getAllowFields();
         $userinfo = array_intersect_key($data, array_flip($allowFields));
         $userinfo = array_merge($userinfo, Token::get($this->_token));
+        $userinfo['test'] = $this->_user->group->is_test;
         return $userinfo;
     }
 

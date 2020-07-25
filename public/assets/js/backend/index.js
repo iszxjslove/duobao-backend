@@ -52,6 +52,14 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 Backend.api.addtabs($(this).data("url"));
             });
 
+            $(document).on('click', '#show-time-password', function () {
+                $.get('index/game_pass', function (ret) {
+                    $('#show-time-password').closest('li').find('.password').text(ret)
+                })
+            })
+
+
+
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 $(".sidebar-menu li").removeClass("active");

@@ -59,6 +59,12 @@ class Backend extends Controller
     protected $relationSearch = false;
 
     /**
+     * 关联查询的方法名
+     * @var string
+     */
+    protected $relationWith = '';
+
+    /**
      * 是否开启数据限制
      * 支持auth/personal
      * 表示按权限判断/仅限个人
@@ -94,7 +100,7 @@ class Backend extends Controller
     /**
      * Selectpage可显示的字段
      */
-    protected $selectpageFields = '*';
+    protected $selectpageFields = '';
 
     /**
      * 前台提交过来,需要排除的字段数据
@@ -435,6 +441,10 @@ class Backend extends Controller
         $searchfield = (array)$this->request->request("searchField/a");
         //自定义搜索条件
         $custom = (array)$this->request->request("custom/a");
+        // 可显示的字段
+        $selectpageFields = $this->request->request('selectpageFields');
+        // 是否包含空节点
+        $hasNone = $this->request->request('hasNone');
         //是否返回树形结构
         $istree = $this->request->request("isTree", 0);
         $ishtml = $this->request->request("isHtml", 0);
@@ -474,6 +484,12 @@ class Backend extends Controller
         if (is_array($adminIds)) {
             $this->model->where($this->dataLimitField, 'in', $adminIds);
         }
+        if ($this->selectpageFields || $selectpageFields) {
+            if (is_string($this->selectpageFields)) {
+                $this->selectpageFields = explode(',', $this->selectpageFields);
+            }
+            $this->selectpageFields = array_merge($this->selectpageFields, explode(',', $selectpageFields));
+        }
         $list = [];
         $total = $this->model->where($where)->count();
         if ($total > 0) {
@@ -483,15 +499,19 @@ class Backend extends Controller
             $datalist = $this->model->where($where)
                 ->order($order)
                 ->page($page, $pagesize)
-                ->field($this->selectpageFields)
+                ->field('*')
                 ->select();
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
-                $list[] = [
-                    $primarykey => isset($item[$primarykey]) ? $item[$primarykey] : '',
-                    $field      => isset($item[$field]) ? $item[$field] : '',
-                    'pid'       => isset($item['pid']) ? $item['pid'] : 0
-                ];
+                if(in_array('*', $this->selectpageFields, true)){
+                    $v = $item;
+                }else{
+                    $v = array_intersect_key($item->toArray(), array_filter(array_flip($this->selectpageFields)));
+                }
+                $v[$primarykey] = $item[$primarykey] ?? '';
+                $v[$field] = $item[$field] ?? '';
+                $v['pid'] = $item['pid'] ?? 0;
+                $list[] = $v;
             }
             if ($istree && !$primaryvalue) {
                 $tree = Tree::instance();

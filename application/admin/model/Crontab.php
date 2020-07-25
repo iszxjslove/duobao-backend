@@ -30,18 +30,6 @@ class Crontab extends Model
         'create_time_text'
     ];
 
-    public static function titleList($name = '')
-    {
-        $list = [
-            'createissue' => '创建奖期',
-            'inputcode' => '输入开奖号码'
-        ];
-        if ($name) {
-            return $list[$name] ?? '';
-        }
-        return $list;
-    }
-
     public function getUpdateTimeTextAttr($value, $data)
     {
         $value = $value ?: ($data['update_time'] ?? '');
@@ -89,7 +77,7 @@ class Crontab extends Model
                 $insertData = [];
                 $insertData['name'] = $name;
                 $insertData['update_time'] = time();
-                $insertData['title'] = $title ?: self::titleList($name);
+                $insertData['title'] = $title;
                 if ($parameter !== "") {
                     $insertData['parameter'] = $parameter;
                 }

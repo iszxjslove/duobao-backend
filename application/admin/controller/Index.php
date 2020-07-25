@@ -4,9 +4,13 @@ namespace app\admin\controller;
 
 use app\admin\model\AdminLog;
 use app\common\controller\Backend;
+use fast\Random;
+use think\Cache;
+use think\cache\driver\Redis;
 use think\Config;
 use think\Hook;
 use think\Validate;
+use Endroid\QrCode\QrCode;
 
 /**
  * 后台首页
@@ -16,7 +20,7 @@ class Index extends Backend
 {
 
     protected $noNeedLogin = ['login'];
-    protected $noNeedRight = ['index', 'logout'];
+    protected $noNeedRight = ['index', 'logout', 'game_pass'];
     protected $layout = '';
 
     public function _initialize()
@@ -24,6 +28,25 @@ class Index extends Backend
         parent::_initialize();
         //移除HTML标签
         $this->request->filter('trim,strip_tags,htmlspecialchars');
+    }
+
+    public function qr()
+    {
+        $this->request->filter('trim,strip_tags');
+        $text = $this->request->get('text');
+        $qrCode = new QrCode(urldecode($text));
+        header('Content-Type: ' . $qrCode->getContentType());
+        echo $qrCode->writeString();
+    }
+
+    public function game_pass()
+    {
+        $pass = Cache::get('game_password');
+        if (!$pass) {
+            $pass = Random::numeric(6);
+            Cache::set('game_password', $pass, 60);
+        }
+        return $pass;
     }
 
     /**

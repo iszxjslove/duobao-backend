@@ -49,14 +49,17 @@ trait Backend
             if ($this->request->request('keyField')) {
                 return $this->selectpage();
             }
+            $with = $this->relationSearch && $this->relationWith ? $this->relationWith : '';
             list($where, $sort, $order, $offset, $limit) = $this->buildparams();
             $total = $this->model
                 ->where($where)
+                ->with($with)
                 ->order($sort, $order)
                 ->count();
 
             $list = $this->model
                 ->where($where)
+                ->with($with)
                 ->order($sort, $order)
                 ->limit($offset, $limit)
                 ->select();

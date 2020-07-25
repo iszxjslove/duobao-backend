@@ -47,7 +47,7 @@ class Createissue extends Command
     /**
      * @var bool 是否允许释放 LOCK 文件
      */
-    private $doUnLock = TRUE;
+    private $doUnLock = FALSE;
 
     private $startRun = FALSE;
 
@@ -55,6 +55,18 @@ class Createissue extends Command
     {
         if ($this->startRun === TRUE) {
             $this->destruct();
+        }
+    }
+
+    /**
+     * 析构函数, 程序完整执行成功或执行错误后. 删除 locks 文件
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
+     * @throws DbException
+     */
+    private function destruct() {
+        if ($this->doUnLock === TRUE) {
+            $this->crontabModel->switchLock($this->getName(), $this->gid, FALSE, $this->getDescription()); //解锁计划任务
         }
     }
 
@@ -101,7 +113,7 @@ class Createissue extends Command
 
         // Step 02: 在此 CLI 程序运行时, 获取独占锁. 禁止多进程同时运行
         $this->crontabModel = new Crontab();
-        $flag = $this->crontabModel->switchLock('createissue', $this->gid, TRUE);
+        $flag = $this->crontabModel->switchLock($this->getName(), $this->gid, TRUE, $this->getDescription());
         if ($flag === FALSE) {
             $output->error('[d] [' . date('Y-m-d H:i:s') . '] The CLI ' . __CLASS__ . ' is running');
             exit;
@@ -129,17 +141,5 @@ class Createissue extends Command
         $output->info("[End Create] " . date('Y-m-d H:i:s'));
 
         return TRUE;
-    }
-
-    /**
-     * 析构函数, 程序完整执行成功或执行错误后. 删除 locks 文件
-     * @throws DataNotFoundException
-     * @throws ModelNotFoundException
-     * @throws DbException
-     */
-    private function destruct() {
-        if ($this->doUnLock === TRUE) {
-            $this->crontabModel->switchLock($this->getName(), $this->gid, FALSE); //解锁计划任务
-        }
     }
 }

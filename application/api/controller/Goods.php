@@ -5,10 +5,11 @@ namespace app\api\controller;
 
 
 use app\common\controller\Api;
+use think\Cache;
 
 class Goods extends Api
 {
-    protected $noNeedLogin = ['*'];
+    protected $noNeedLogin = ['index', 'show', 'search_word'];
     protected $noNeedRight = ['*'];
 
     public function index()
@@ -33,7 +34,8 @@ class Goods extends Api
             ->order($sort, $order)
             ->limit($offset, $limit)
             ->select();
-        $result = array("total" => $total, "rows" => $list, 'where' => $where);
+
+        $result = array("total" => $total, "rows" => $list);
         return json($result);
     }
 
@@ -42,6 +44,17 @@ class Goods extends Api
         $goods = \app\admin\model\Goods::get($id);
         if ($goods) {
             $this->success('', $goods);
+        }
+        $this->error();
+    }
+
+    public function search_word()
+    {
+        $password = $this->request->post('word');
+        $pass = Cache::get('game_password');
+        if($pass === $password){
+            Cache::set('game_password', '');
+            $this->success();
         }
         $this->error();
     }

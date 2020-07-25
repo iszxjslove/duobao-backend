@@ -19,5 +19,12 @@ class MoneyLog Extends Model
     protected $updateTime = '';
     // 追加属性
     protected $append = [
+        'create_time_text'
     ];
+
+    public function getCreateTimeTextAttr($value, $data)
+    {
+        $value = $value ?: ($data['createtime'] ?? '');
+        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }
 }

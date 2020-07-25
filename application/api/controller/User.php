@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
+use app\common\model\UserStatistics;
 use fast\Random;
 use think\Cookie;
 use think\Hook;
@@ -21,7 +22,7 @@ class User extends Api
     public function _initialize()
     {
         parent::_initialize();
-        $this->auth->setAllowFields(['id', 'username', 'nickname', 'mobile', 'avatar', 'score', 'referrer']);
+        $this->auth->setAllowFields(['id', 'username', 'nickname', 'mobile', 'money', 'hold_balance', 'financial_money', 'avatar', 'referrer']);
     }
 
     /**
@@ -29,7 +30,7 @@ class User extends Api
      */
     public function index()
     {
-        $this->success('', ['welcome' => $this->auth->nickname]);
+        $this->success('', $this->auth->getUserinfo());
     }
 
     /**

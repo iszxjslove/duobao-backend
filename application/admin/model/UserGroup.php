@@ -19,6 +19,15 @@ class UserGroup extends Model
         'status_text'
     ];
 
+    protected static function init()
+    {
+        self::beforeWrite(static function ($row) {
+            if($row->is_default ===  1){
+                self::where(['is_default' => 1])->update(['is_default' => 0]);
+            }
+        });
+    }
+
     public function getStatusList()
     {
         return ['normal' => __('Normal'), 'hidden' => __('Hidden')];

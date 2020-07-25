@@ -41,8 +41,24 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             events: Table.api.events.image,
                             formatter: Table.api.formatter.image
                         },
-                        {field: 'title', title: __('Title'), operate: 'LIKE'},
-                        {field: 'subtitle', title: __('Subtitle')},
+                        {
+                            field: 'title',
+                            title: __('Title'),
+                            operate: 'LIKE',
+                            width: '200px',
+                            cellStyle: function () {
+                                return {
+                                    css: {"white-space": "normal"},
+                                }
+                            }
+                        },
+                        {
+                            field: 'subtitle', title: __('Subtitle'), width: '200px', cellStyle: function () {
+                                return {
+                                    css: {"white-space": "normal"},
+                                }
+                            }
+                        },
                         {
                             field: 'status',
                             title: __('Status'),

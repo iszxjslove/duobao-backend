@@ -41,16 +41,16 @@ class InputcodeServer
             return FALSE;
         }
 
-        $code = substr(time(), -4) . random_int(10, 99);
+        $code = substr(date('Ymd') / 17658, -3) . random_int(100, 999);
         $last_digits = substr($code, -1);
         $colors_list = [
-            'green'  => [1, 3, 5, 7, 9],
-            'red'    => [0, 2, 4, 6, 8],
-            'violet' => [0, 5]
+            'green'  => ['1', '3', '5', '7', '9'],
+            'red'    => ['0', '2', '4', '6', '8'],
+            'violet' => ['0', '5']
         ];
         $colors = [];
         foreach ($colors_list as $key => $color_nums) {
-            if (in_array($last_digits, $color_nums)) {
+            if (in_array($last_digits, $color_nums, true)) {
                 $colors[] = $key;
             }
         }
@@ -67,7 +67,7 @@ class InputcodeServer
 //            return FALSE;
 //        }
 //
-        $iWaitTime = strtotime($aLastNoDrawIssue['earliestwritetime']) - time();
+        $iWaitTime = $aLastNoDrawIssue['earliestwritetime'] - time();
         if ($iWaitTime > 0) { // 还未到允许录号时间
             $this->output->info("[n] [" . date('Y-m-d H:i:s') . "] Curent Issue:[{$aLastNoDrawIssue['issue']}] Waiting to drawNumber({$iWaitTime}s)\n");
             sleep($iWaitTime); // 等待允许录号时间

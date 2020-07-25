@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'Id'            => '红包ID',
+    'Admin_id'      => '管理员ID',
+    'Cate'          => '红包类型',
+    'Amount'        => '红包金额',
+    'Number'        => '红包数量',
+    'Total_amount'  => '总金额',
+    'Title'         => '标题',
+    'Cover'         => '封面',
+    'Create_time'   => '创建时间',
+    'First_time'    => '首个领取时间',
+    'Last_time'     => '最后一个领取时间',
+    'Expiry_time'   => '过期时间',
+    'Claim_status'  => '领取状态',
+    'Claim_status_0' => '未领取',
+    'Claim_status_1' => '领取中',
+    'Claim_status_2' => '已领完',
+    'Return_status' => '退还状态',
+    'Return_status_0' => '未退还',
+    'Return_status_1' => '已退还',
+    'Lucky'         => '幸运红包',
+    'Fixed'         => '固定红包',
+];

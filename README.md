@@ -18,6 +18,8 @@ FastAdmin是一款基于ThinkPHP5+Bootstrap的极速后台开发框架。
     * 基于`RequireJS`进行JS模块管理，按需加载
     * 基于`Less`进行样式开发
     * 基于`Bower`进行前端组件包管理
+    * 修改buildparams方法
+    * 增加selectpage的字段过滤功能
 * 强大的插件扩展功能，在线安装卸载升级插件
 * 通用的会员模块和API模块
 * 共用同一账号体系的Web端会员中心权限验证和API接口会员权限验证

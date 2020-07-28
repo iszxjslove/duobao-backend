@@ -19,16 +19,11 @@ return [
     ],
     // 域名绑定到模块
     '__domain__'  => [
-        'admin'          => 'admin',
-        'api'            => 'api',
-        '192.168.10.140' => 'api',
-        '192.168.10.19'  => 'api',
-        '192.168.10.188' => 'api',
-        '192.168.0.101'  => 'api',
-        '192.168.10.108' => 'api',
-        '192.168.0.100'  => 'api',
-        'api.duobao'     => 'api',
-        'admin.duobao'   => 'admin',
-        'admin.80'       => 'admin'
+        'admin'        => 'admin',
+        'api'          => 'api',
+        '192.168.0.9'  => 'api',
+        'api.duobao'   => 'api',
+        'admin.duobao' => 'admin',
+        'admin.80'     => 'admin'
     ],
 ];

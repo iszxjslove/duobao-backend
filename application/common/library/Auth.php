@@ -8,7 +8,10 @@ use app\common\model\UserRule;
 use fast\Random;
 use think\Config;
 use think\Db;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\Exception;
+use think\exception\DbException;
 use think\Hook;
 use think\Request;
 use think\Validate;
@@ -399,7 +402,10 @@ class Auth
 
     /**
      * 获取会员组别规则列表
-     * @return array
+     * @return array|bool|false|\PDOStatement|string|\think\Collection
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
+     * @throws DbException
      */
     public function getRuleList()
     {

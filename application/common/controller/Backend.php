@@ -503,10 +503,10 @@ class Backend extends Controller
                 ->select();
             foreach ($datalist as $index => $item) {
                 unset($item['password'], $item['salt']);
-                if(in_array('*', $this->selectpageFields, true)){
+                if(in_array('*', (array)$this->selectpageFields, true)){
                     $v = $item;
                 }else{
-                    $v = array_intersect_key($item->toArray(), array_filter(array_flip($this->selectpageFields)));
+                    $v = array_intersect_key($item->toArray(), array_filter(array_flip((array)$this->selectpageFields)));
                 }
                 $v[$primarykey] = $item[$primarykey] ?? '';
                 $v[$field] = $item[$field] ?? '';

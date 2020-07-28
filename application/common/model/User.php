@@ -128,23 +128,19 @@ class User extends Model
 
     /**
      * 变更会员余额
+     * @param User $user
      * @param int $money 金额
-     * @param int $user_id 会员ID
      * @param string $memo 备注
-     * @throws DbException
      */
-    public static function money($money, $user_id, $memo)
+    public static function money(User $user, $money, $memo)
     {
-        $user = self::get($user_id);
-        if ($user && $money) {
-            $before = $user->money;
-            //$after = $user->money + $money;
-            $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
-            //更新会员信息
-            $user->save(['money' => $after]);
-            //写入日志
-            MoneyLog::create(['user_id' => $user_id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
-        }
+        $before = $user->money;
+        //$after = $user->money + $money;
+        $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
+        //更新会员信息
+        $user->save(['money' => $after]);
+        //写入日志
+        MoneyLog::create(['user_id' => $user->id, 'money' => $money, 'before' => $before, 'after' => $after, 'memo' => $memo]);
     }
 
     /**
@@ -241,5 +237,10 @@ class User extends Model
         $maxTeamLevel = Config::get('site.max_team_level');
         $parents = (new \Nested($user))->getParent($user->id, $maxTeamLevel - 1);
         return $parents;
+    }
+
+    public function finance()
+    {
+        return $this->hasOne('UserFinance');
     }
 }

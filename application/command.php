@@ -22,4 +22,5 @@ return [
     'app\admin\command\CheckSendTask',
     'app\admin\command\Checkbonus',
     'app\admin\command\Sendbonus',
+    'app\admin\command\sendInterest',
 ];

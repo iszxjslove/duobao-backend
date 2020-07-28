@@ -18,11 +18,11 @@ return [
     // 服务器地址
     'hostname'        => Env::get('database.hostname', '127.0.0.1'),
     // 数据库名
-    'database'        => Env::get('database.database', 'duobao'),
+    'database'        => Env::get('database.database', 'admin_winwincLub'),
     // 用户名
-    'username'        => Env::get('database.username', 'duobao'),
+    'username'        => Env::get('database.username', 'admin_winwincLub'),
     // 密码
-    'password'        => Env::get('database.password', 'duobao'),
+    'password'        => Env::get('database.password', 'EzKyEPJttnryjWKh'),
     // 端口
     'hostport'        => Env::get('database.hostport', ''),
     // 连接dsn

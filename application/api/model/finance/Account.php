@@ -76,7 +76,7 @@ class Account extends Model
             'contract_amount' => 0,
             'interest'        => 0
         ];
-        
+
         return self::create($insertData);
     }
 }

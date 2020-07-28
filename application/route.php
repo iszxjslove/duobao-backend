@@ -23,7 +23,6 @@ return [
         'api'          => 'api',
         '192.168.0.9'  => 'api',
         'api.duobao'   => 'api',
-        'admin.duobao' => 'admin',
-        'admin.80'     => 'admin'
+        'admin.duobao' => 'admin'
     ],
 ];

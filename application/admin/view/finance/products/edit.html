@@ -1,0 +1,113 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Type')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <div class="radio">
+                {foreach name="typeList" item="vo"}
+                <label for="row[type]-{$key}">
+                    <input id="row[type]-{$key}" name="row[type]" type="radio" value="{$key}"
+                           {in name="key" value="$row.type" }checked{/in} /> {$vo}</label>
+                {/foreach}
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-title" data-rule="required" class="form-control" name="row[title]" type="text"
+                   value="{$row.title|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Desc')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-desc" class="form-control" name="row[desc]" type="text" value="{$row.desc|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Period')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-period" data-rule="required(isRegular)" class="form-control" name="row[period]" type="text"
+                   value="{$row.period|htmlentities}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Period_unit')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <select id="c-period_unit" class="form-control selectpicker" name="row[period_unit]">
+                {foreach name="periodUnitList" item="vo"}
+                <option value="{$key}" {in name="key" value="$row.period_unit" }selected{/in}>{$vo}</option>
+                {/foreach}
+            </select>
+
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Rate')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <div class="input-group-addon">%</div>
+                <input id="c-rate" data-rule="required;range(0~, false)" class="form-control" name="row[rate]"
+                       type="number" value="{$row.rate|htmlentities}">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('结息时间')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="radio">
+                <label for="row[interest_settlement_time]-day">
+                    <input id="row[interest_settlement_time]-day" name="row[interest_settlement_time]" type="radio"
+                           value="day" {eq name='row.interest_settlement_time' value='day'}checked{/eq} />
+                    每天结息
+                </label>
+                <label for="row[interest_settlement_time]-end">
+                    <input id="row[interest_settlement_time]-end" name="row[interest_settlement_time]" type="radio"
+                           value="end" {eq name='row.interest_settlement_time' value='end'}checked{/eq} />
+                    到期结息
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('利息转入')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="radio">
+                <label for="row[interest_where]-balance">
+                    <input id="row[interest_where]-balance" name="row[interest_where]" type="radio"
+                           value="balance" {eq name='row.interest_where' value='balance'}checked{/eq} />
+                    余额
+                </label>
+                <label for="row[interest_where]-finance">
+                    <input id="row[interest_where]-finance" name="row[interest_where]" type="radio"
+                           value="finance" {eq name='row.interest_where' value='finance'}checked{/eq} />
+                    余额宝
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+
+            <div class="radio">
+                {foreach name="statusList" item="vo"}
+                <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio"
+                                                       value="{$key}" {in name="key" value="$row.status" }checked{/in}
+                    /> {$vo}</label>
+                {/foreach}
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

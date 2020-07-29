@@ -47,7 +47,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 return val + ' %'
                             }
                         },
-                        {field: 'desc', title: __('Desc')},
+                        {
+                            field: 'desc', title: __('Desc'),
+                            width: '200px', cellStyle: function () {
+                                return {
+                                    css: {"white-space": "normal"},
+                                }
+                            }
+                        },
                         {
                             field: 'status',
                             title: __('Status'),

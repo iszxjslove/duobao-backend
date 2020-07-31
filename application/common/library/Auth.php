@@ -162,6 +162,7 @@ class Auth
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,
+            'money'    => 0,
             'avatar'   => '',
             'group_id' => $group_id
         ];

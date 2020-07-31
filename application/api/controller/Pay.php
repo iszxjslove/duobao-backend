@@ -44,7 +44,7 @@ class Pay extends Api
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-        $this->success('', $response);
+        $this->success('', $output);
     }
 
     public function unified_back()

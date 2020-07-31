@@ -162,7 +162,6 @@ class Auth
             'mobile'   => $mobile,
             'level'    => 1,
             'score'    => 0,
-            'money'    => 0,
             'avatar'   => '',
             'group_id' => $group_id
         ];
@@ -398,7 +397,7 @@ class Auth
         $userinfo = array_intersect_key($data, array_flip($allowFields));
         $userinfo = array_merge($userinfo, Token::get($this->_token));
         $userinfo['test'] = $this->_user->group->is_test;
-        $userinfo['financial_money'] = $this->_user->finance->balance;
+        $userinfo['financial_money'] = $this->_user->finance ? $this->_user->finance->balance : 0;
         return $userinfo;
     }
 

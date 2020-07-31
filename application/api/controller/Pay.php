@@ -22,7 +22,7 @@ class Pay extends Api
         }
         $pay = new Zow();
         $orderInfo = [
-            'merchant_id'         => '200409159',
+            'merchant_id'   => '200409159',
             'trade_no'      => \NumberPool::getOne(),
             'product_title' => 'Jewellery',
             'amount'        => $amount,
@@ -37,9 +37,10 @@ class Pay extends Api
                 $this->error('recharge fail');
             }
             $response = json_decode($response, true);
-            if($response['code'] !== '200' || !$response['url']){
+            if ($response['code'] !== '200' || !$response['url']) {
                 $this->error('Network exception, please try again later');
             }
+            $output['payurl'] = $response['url'];
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }

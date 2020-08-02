@@ -197,7 +197,7 @@ class Issue extends Model
             }
             if ($firstIssue === 'auto') {   //每月自动生成奖期
                 // 首先获取当前彩种最后一期的期号
-                $lastIssueInfo = $this->where(['game_id' => $gid])->whereTime('belongdate', '<', date('Y-m-d', $startDate))->order('issue', 'desc')->find();
+                $lastIssueInfo = $this->whereTime('belongdate', '<', date('Y-m-d', $startDate))->order('issue', 'desc')->find();
                 if (empty($lastIssueInfo)) {
                     $this->error = '没有天数的奖期规则必须指定起始期号';
                     return false;

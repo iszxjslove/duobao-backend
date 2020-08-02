@@ -125,8 +125,8 @@ class Createissue extends Command
         //检查指定日期的奖期是否存在，如果存在就停止运行
         $this->issueModel = new IssueModel();
         $first_issue = $input->getOption('first_issue');
-        $startIssue = $this->issueModel->where(['game_id' => $this->gid, 'belongdate' => $start_date])->find(); // 开始日期的奖期
-        $endIssue = $this->issueModel->find(['game_id' => $this->gid, 'belongdate' => $end_date]); // 结束日期的奖期
+        $startIssue = $this->issueModel->where(['belongdate' => $start_date])->find(); // 开始日期的奖期
+        $endIssue = $this->issueModel->where(['belongdate' => $end_date])->find(); // 结束日期的奖期
         if (empty($startIssue) && empty($endIssue)) { // 没有就生成
             $result = $this->issueModel->generalIssue($this->gid, $first_issue, strtotime($start_date), strtotime($end_date));
             if($result === false){

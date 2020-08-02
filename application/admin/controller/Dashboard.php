@@ -51,10 +51,10 @@ class Dashboard extends Backend
             'uploadmode'       => $uploadmode
         ]);
 
-        $groups = [];
+//        $groups = [];
 
-        $statistics = (new UserStatistics)->group('category')->field('category,category_title,sum(total) as total')->select();
-dump(collection($statistics)->toArray());
+//        $statistics = (new UserStatistics)->group('category')->field('category,category_title,sum(total) as total')->select();
+//dump(collection($statistics)->toArray());
         return $this->view->fetch();
     }
 

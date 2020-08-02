@@ -5,10 +5,8 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
-use app\common\model\UserStatistics;
 use fast\Random;
-use think\Cookie;
-use think\Hook;
+use think\Config;
 use think\Validate;
 
 /**
@@ -155,35 +153,20 @@ class User extends Api
 
     /**
      * 修改会员个人信息
-     *
-     * @param string $avatar 头像地址
-     * @param string $username 用户名
-     * @param string $nickname 昵称
-     * @param string $bio 个人简介
      */
     public function profile()
     {
+        $allowField = ['nickname', 'avatar'];
+        $params = $this->request->request('row/a', '', 'trim,strip_tags,htmlspecialchars');
         $user = $this->auth->getUser();
-        $username = $this->request->request('username');
-        $nickname = $this->request->request('nickname');
-        $bio = $this->request->request('bio');
-        $avatar = $this->request->request('avatar', '', 'trim,strip_tags,htmlspecialchars');
-        if ($username) {
-            $exists = \app\common\model\User::where('username', $username)->where('id', '<>', $this->auth->id)->find();
-            if ($exists) {
-                $this->error(__('Username already exists'));
-            }
-            $user->username = $username;
+        if (!$user) {
+            $this->error();
         }
-        if ($nickname) {
-            $exists = \app\common\model\User::where('nickname', $nickname)->where('id', '<>', $this->auth->id)->find();
-            if ($exists) {
-                $this->error(__('Nickname already exists'));
+        foreach ($params as $key => $param) {
+            if (in_array($key, $allowField, true)) {
+                $user->$key = $param;
             }
-            $user->nickname = $nickname;
         }
-        $user->bio = $bio;
-        $user->avatar = $avatar;
         $user->save();
         $this->success();
     }
@@ -308,7 +291,7 @@ class User extends Api
 //            if (!Validate::regex($mobile, "^1\d{10}$")) {
 //                $this->error(__('Mobile is incorrect'));
 //            }
-            $user = \app\common\model\User::get(['mobile'=>$mobile]);
+            $user = \app\common\model\User::get(['mobile' => $mobile]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -321,7 +304,7 @@ class User extends Api
 //            if (!Validate::is($email, "email")) {
 //                $this->error(__('Email is incorrect'));
 //            }
-            $user = \app\common\model\User::get(['email'=>$email]);
+            $user = \app\common\model\User::get(['email' => $email]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -345,7 +328,7 @@ class User extends Api
      * 修改支付密码
      * @throws \think\exception\DbException
      */
-    public function change_payment_password()
+    public function reset_payment_password()
     {
         $type = $this->request->request("type");
         $mobile = $this->request->request("mobile");
@@ -359,7 +342,7 @@ class User extends Api
 //            if (!Validate::regex($mobile, "^1\d{10}$")) {
 //                $this->error(__('Mobile is incorrect'));
 //            }
-            $user = \app\common\model\User::get(['mobile'=>$mobile]);
+            $user = \app\common\model\User::get(['mobile' => $mobile]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -372,7 +355,7 @@ class User extends Api
 //            if (!Validate::is($email, "email")) {
 //                $this->error(__('Email is incorrect'));
 //            }
-            $user = \app\common\model\User::get(['email'=>$email]);
+            $user = \app\common\model\User::get(['email' => $email]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -383,6 +366,24 @@ class User extends Api
             Ems::flush($email, 'resetpaypwd');
         }
         $ret = $this->auth->change_pay_pwd($newpassword, '', true);
+        if ($ret) {
+            $this->success(__('Reset password successful'));
+        } else {
+            $this->error($this->auth->getError());
+        }
+    }
+
+    /**
+     * 修改密码
+     */
+    public function change_password()
+    {
+        $password = $this->request->request("password");
+        $newpassword = $this->request->request("newpassword");
+        if (!$newpassword || !$password) {
+            $this->error('Password cannot be empty');
+        }
+        $ret = $this->auth->changepwd($newpassword, $password);
         if ($ret) {
             $this->success(__('Reset password successful'));
         } else {

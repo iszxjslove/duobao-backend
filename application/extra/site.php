@@ -40,4 +40,13 @@ return array (
   'mission_group' => 
   array (
   ),
+  'withdraw_rate' => 
+  array (
+    0 => '2',
+    1000 => '0.8',
+    3000 => '1.2',
+    3500 => '1.3',
+    5000 => '0.5',
+  ),
+  'min_withdraw_amount' => '100',
 );

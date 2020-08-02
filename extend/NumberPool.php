@@ -70,14 +70,13 @@ class NumberPool
             $this->handler->connect($this->options['host'], $this->options['port'], $this->options['timeout']);
         }
 
-        if ('' != $this->options['password']) {
+        if ('' !== $this->options['password']) {
             $this->handler->auth($this->options['password']);
         }
 
-        if (0 != $this->options['select']) {
+        if (0 !== $this->options['select']) {
             $this->handler->select($this->options['select']);
         }
-        return $this;
     }
 
     private function __clone(){}
@@ -156,7 +155,7 @@ class NumberPool
     public function getMultiple($num)
     {
         while ($num > 0) {
-            yield $this->getOne();
+            yield self::getOne();
             $num--;
         }
     }

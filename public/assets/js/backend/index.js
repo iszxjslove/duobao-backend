@@ -59,7 +59,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             })
 
 
-
             //切换左侧sidebar显示隐藏
             $(document).on("click fa.event.toggleitem", ".sidebar-menu li > a", function (e) {
                 $(".sidebar-menu li").removeClass("active");
@@ -353,7 +352,6 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
             }
 
             $(window).resize();
-
         },
         login: function () {
             var lastlogin = localStorage.getItem("lastlogin");

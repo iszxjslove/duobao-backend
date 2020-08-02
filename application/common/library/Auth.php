@@ -288,10 +288,45 @@ class Auth
                 return false;
             }
             return true;
-        } else {
-            $this->setError('Password is incorrect');
+        }
+
+        $this->setError('Password is incorrect');
+        return false;
+    }
+
+
+    /**
+     * 修改支付密码
+     * @param string $newpassword 新密码
+     * @param string $oldpassword 旧密码
+     * @param bool $ignoreoldpassword 忽略旧密码
+     * @return boolean
+     */
+    public function change_pay_pwd($newpassword, $oldpassword = '', $ignoreoldpassword = false)
+    {
+        if (!$this->_logined) {
+            $this->setError('You are not logged in');
             return false;
         }
+        //判断旧密码是否正确
+        if ($this->_user->payment_password === $this->getEncryptPaymentPassword($oldpassword) || $ignoreoldpassword) {
+            Db::startTrans();
+            try {
+                $newpassword = $this->getEncryptPaymentPassword($newpassword);
+                $this->_user->save(['payment_password' => $newpassword]);
+                //修改支付密码成功的事件
+                Hook::listen("user_change_paymentpwd_successed", $this->_user);
+                Db::commit();
+            } catch (Exception $e) {
+                Db::rollback();
+                $this->setError($e->getMessage());
+                return false;
+            }
+            return true;
+        }
+
+        $this->setError('Password is incorrect');
+        return false;
     }
 
     /**
@@ -498,6 +533,17 @@ class Auth
     }
 
     /**
+     * 获取支付密码加密后的字符串
+     * @param string $password 密码
+     * @param string $salt 密码盐
+     * @return string
+     */
+    public function getEncryptPaymentPassword($password)
+    {
+        return md5(md5($password) . '123');
+    }
+
+    /**
      * 检测当前控制器和方法是否匹配传递的数组
      *
      * @param array $arr 需要验证权限的数组
@@ -512,7 +558,7 @@ class Auth
         }
         $arr = array_map('strtolower', $arr);
         // 是否存在
-        if (in_array(strtolower($request->action()), $arr) || in_array('*', $arr)) {
+        if(in_array(strtolower($request->action()), $arr) || in_array('*', $arr)) {
             return true;
         }
 
@@ -568,10 +614,10 @@ class Auth
     /**
      * 设置错误信息
      *
-     * @param $error 错误信息
+     * @param $error string
      * @return Auth
      */
-    public function setError($error)
+    public function setError($error): Auth
     {
         $this->_error = $error;
         return $this;

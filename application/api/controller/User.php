@@ -304,11 +304,11 @@ class User extends Api
         if (!$newpassword || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
-        if ($type == 'mobile') {
-            if (!Validate::regex($mobile, "^1\d{10}$")) {
-                $this->error(__('Mobile is incorrect'));
-            }
-            $user = \app\common\model\User::getByMobile($mobile);
+        if ($type === 'mobile') {
+//            if (!Validate::regex($mobile, "^1\d{10}$")) {
+//                $this->error(__('Mobile is incorrect'));
+//            }
+            $user = \app\common\model\User::get(['mobile'=>$mobile]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -318,10 +318,10 @@ class User extends Api
             }
             Sms::flush($mobile, 'resetpwd');
         } else {
-            if (!Validate::is($email, "email")) {
-                $this->error(__('Email is incorrect'));
-            }
-            $user = \app\common\model\User::getByEmail($email);
+//            if (!Validate::is($email, "email")) {
+//                $this->error(__('Email is incorrect'));
+//            }
+            $user = \app\common\model\User::get(['email'=>$email]);
             if (!$user) {
                 $this->error(__('User not found'));
             }
@@ -334,6 +334,55 @@ class User extends Api
         //模拟一次登录
         $this->auth->direct($user->id);
         $ret = $this->auth->changepwd($newpassword, '', true);
+        if ($ret) {
+            $this->success(__('Reset password successful'));
+        } else {
+            $this->error($this->auth->getError());
+        }
+    }
+
+    /**
+     * 修改支付密码
+     * @throws \think\exception\DbException
+     */
+    public function change_payment_password()
+    {
+        $type = $this->request->request("type");
+        $mobile = $this->request->request("mobile");
+        $email = $this->request->request("email");
+        $newpassword = $this->request->request("newpassword");
+        $captcha = $this->request->request("captcha");
+        if (!$newpassword || !$captcha) {
+            $this->error(__('Invalid parameters'));
+        }
+        if ($type === 'mobile') {
+//            if (!Validate::regex($mobile, "^1\d{10}$")) {
+//                $this->error(__('Mobile is incorrect'));
+//            }
+            $user = \app\common\model\User::get(['mobile'=>$mobile]);
+            if (!$user) {
+                $this->error(__('User not found'));
+            }
+//            $ret = Sms::check($mobile, $captcha, 'resetpaypwd');
+//            if (!$ret) {
+//                $this->error(__('Captcha is incorrect'));
+//            }
+            Sms::flush($mobile, 'resetpaypwd');
+        } else {
+//            if (!Validate::is($email, "email")) {
+//                $this->error(__('Email is incorrect'));
+//            }
+            $user = \app\common\model\User::get(['email'=>$email]);
+            if (!$user) {
+                $this->error(__('User not found'));
+            }
+            $ret = Ems::check($email, $captcha, 'resetpaypwd');
+            if (!$ret) {
+                $this->error(__('Captcha is incorrect'));
+            }
+            Ems::flush($email, 'resetpaypwd');
+        }
+        $ret = $this->auth->change_pay_pwd($newpassword, '', true);
         if ($ret) {
             $this->success(__('Reset password successful'));
         } else {

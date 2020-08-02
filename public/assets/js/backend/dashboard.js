@@ -1,7 +1,23 @@
-define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echarts-theme', 'template'], function ($, undefined, Backend, Datatable, Table, Echarts, undefined, Template) {
+define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echarts-theme', 'template', 'socket'], function ($, undefined, Backend, Datatable, Table, Echarts, undefined, Template, io) {
 
     var Controller = {
         index: function () {
+            // 初始化io对象
+            var socket = io(Config.moduleurl+':2120',{
+                transports: ['websocket']
+            });
+            // uid 可以为网站用户的uid，作为例子这里用session_id代替
+            var uid = AdminId;
+            // 当socket连接后发送登录请求
+            socket.on('connect', function () {
+                socket.emit('login', uid, 'fdsafsafs');
+            });
+            // 当服务端推送来消息时触发，这里简单的aler出来，用户可做成自己的展示效果
+            socket.on('new_msg', function (msg) {
+                console.log(msg)
+            });
+
+
             // 基于准备好的dom，初始化echarts实例
             var myChart = Echarts.init(document.getElementById('echart'), 'walden');
 

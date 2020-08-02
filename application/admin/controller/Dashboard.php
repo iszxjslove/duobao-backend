@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
+use app\common\model\UserStatistics;
 use think\Config;
 
 /**
@@ -50,6 +51,10 @@ class Dashboard extends Backend
             'uploadmode'       => $uploadmode
         ]);
 
+        $groups = [];
+
+        $statistics = (new UserStatistics)->group('category')->field('category,category_title,sum(total) as total')->select();
+dump(collection($statistics)->toArray());
         return $this->view->fetch();
     }
 

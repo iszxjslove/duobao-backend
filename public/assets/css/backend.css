@@ -12,6 +12,8 @@
 @import url("../libs/bootstrap-select/dist/css/bootstrap-select.min.css");
 @import url("../libs/fastadmin-selectpage/selectpage.css");
 @import url("../libs/bootstrap-slider/slider.css");
+@import url("../css/quasar/index.css");
+@import url("../css/style.css");
 html,
 body {
   height: 100%;

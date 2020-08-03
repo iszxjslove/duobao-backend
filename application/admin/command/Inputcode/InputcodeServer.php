@@ -80,7 +80,7 @@ class InputcodeServer
         if ($mResult === TRUE) {
             \app\api\model\Issue::update([
                 'id'          => $aLastNoDrawIssue['id'],
-                "code"        => $code,
+                "code"        => $aLastNoDrawIssue['code'] ?: $code,
                 "last_digits" => $last_digits,
                 "colors"      => implode(',', $colors),
                 "statuscode"  => 2

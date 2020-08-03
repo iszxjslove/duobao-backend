@@ -103,6 +103,11 @@ class Issue extends Model
         return $value === '' ? null : ($value && !is_numeric($value) ? strtotime($value) : $value);
     }
 
+    public static function make_code()
+    {
+        return substr(date('Ymd') / 17658, -3) . random_int(100, 999);
+    }
+
     /**
      * 私有方法 分析奖期规则
      * @param $issuerule
@@ -327,13 +332,11 @@ class Issue extends Model
 
     /**
      * 返回最近一期没有开奖的奖期
-     * for CLI usage
      * @param $gid
-     * @return array
+     * @return array|bool|false|\PDOStatement|string|Model
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
-     * @author  Rojer
      */
     public function getLastNoDrawIssue($gid)
     {

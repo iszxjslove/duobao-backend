@@ -8,13 +8,10 @@ use think\Model;
 class Projects extends Model
 {
 
-    
-
-    
 
     // 表名
     protected $name = 'projects';
-    
+
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = false;
 
@@ -28,10 +25,6 @@ class Projects extends Model
         'create_time_text',
         'update_time_text'
     ];
-    
-
-    
-
 
 
     public function getCreateTimeTextAttr($value, $data)
@@ -58,4 +51,8 @@ class Projects extends Model
     }
 
 
+    public function user()
+    {
+        return $this->belongsTo('User', 'user_id', 'id', [], 'LEFT')->setEagerlyType(0);
+    }
 }

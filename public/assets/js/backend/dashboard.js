@@ -3,7 +3,7 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
     var Controller = {
         index: function () {
             // 初始化io对象
-            var socket = io(Config.moduleurl+':2120',{
+            var socket = io(Config.moduleurl + ':2120', {
                 transports: ['websocket']
             });
             // uid 可以为网站用户的uid，作为例子这里用session_id代替
@@ -16,6 +16,19 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
             socket.on('new_msg', function (msg) {
                 console.log(msg)
             });
+
+
+            // 加载数据面板
+            let keysList = []
+            $('.data-panel').each(function () {
+                keysList.push($(this).data('panel'))
+            })
+            $.get('dashboard/data', {keys: keysList.join(',')}, function (ret) {
+                $.each(ret, function (i, el) {
+                    console.log(el)
+                    $('.data-panel[data-panel="issue_sales"]').html(Template(i + '_tpl', el))
+                })
+            })
 
 
             // 基于准备好的dom，初始化echarts实例

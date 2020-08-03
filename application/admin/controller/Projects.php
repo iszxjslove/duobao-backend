@@ -18,6 +18,12 @@ class Projects extends Backend
      */
     protected $model = null;
 
+    protected $relationSearch = true;
+
+    protected $searchFields = 'user.username|issue';
+
+    protected $relationWith = 'user';
+
     public function _initialize()
     {
         parent::_initialize();

@@ -26,6 +26,7 @@ return array (
     'email' => 'Email',
     'dictionary' => 'Dictionary',
     'user' => 'User',
+    'game' => '游戏配置',
   ),
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',
@@ -49,4 +50,5 @@ return array (
     5000 => '0.5',
   ),
   'min_withdraw_amount' => '100',
+  'game_code_digits' => '6',
 );

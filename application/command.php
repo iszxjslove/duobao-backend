@@ -23,5 +23,6 @@ return [
     'app\admin\command\Checkbonus',
     'app\admin\command\Sendbonus',
     'app\admin\command\sendInterest',
-    'app\admin\command\Test'
+    'app\admin\command\Test',
+    'app\admin\command\Quasar',
 ];

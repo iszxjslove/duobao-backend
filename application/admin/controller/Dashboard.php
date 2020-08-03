@@ -67,14 +67,44 @@ class Dashboard extends Backend
         // 今日数据
         $today_data = $ten_data[date('Y-m-d')] ?? [];
 
-        $currentIssue = Issue::get(['saleend' => ['>', time()]]);
-        $currentIssueSales = $currentIssue && $currentIssue->sales ? $currentIssue->sales->toArray() : [];
-        $this->view->assign('currentIssue', $currentIssue->toArray());
-        $this->view->assign('currentIssueSales', $currentIssueSales);
         $this->view->assign('ten_data', $ten_data);
         $this->view->assign('today_data', $today_data);
         $this->view->assign('statistics', $statistics);
         return $this->view->fetch();
     }
 
+    public function data()
+    {
+        $keys = $this->request->get('keys');
+        $list = [];
+        if ($keys) {
+            $keys = explode(',', $keys);
+            foreach ($keys as $key) {
+                if (method_exists($this, $key)) {
+                    $list[$key] = $this->$key();
+                }
+            }
+        }
+        return json($list);
+    }
+
+    public function issue_sales()
+    {
+        $currentIssue = Issue::get(['saleend' => ['>', time()]]);
+        $currentIssueSales = $currentIssue && $currentIssue->sales ? $currentIssue->sales->toArray() : [];
+        $numbers = [];
+        for ($i = 0; $i < 10; $i++) {
+            $numbers[$i] = $currentIssueSales["EE{$i}"] ?? 0.00;
+        }
+        $sort = array_unique($numbers);
+        arsort($sort);
+        return [
+            'issue'   => $currentIssue,
+            'sales'   => $currentIssueSales,
+            'numbers' => $numbers,
+            'first'   => current($sort),
+            'second'  => next($sort),
+            'third'   => next($sort) ?: 0,
+        ];
+    }
 }

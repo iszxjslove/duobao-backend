@@ -1,0 +1,61 @@
+<!--当前奖期销售数据分析-->
+<script type="text/html" id="issue_sales_tpl">
+    <div style="width: 300px">
+        <div class="q-mb-md">奖期<%=issue.issue%></div>
+        <% for(let n in numbers){%>
+        <% let color = '';
+        if(numbers[n] > 0){
+        if(numbers[n] == first){color='progress-bar-danger'};
+        if(numbers[n] == second){color='progress-bar-warning'};
+        if(numbers[n] == third){color='progress-bar-success'};
+        }%>
+        <div class="q-item q-mb-md">
+            <div class="q-item-section side q-pr-md">
+                <div class="q-avatar">
+                    <div class="q-avatar-content bg-orange"><%=n%></div>
+                </div>
+            </div>
+            <div class="q-item-section progress">
+                <div class="progress-bar progress-bar-striped <%=color%> active" role="progressbar" aria-valuenow="45"
+                     aria-valuemin="0" aria-valuemax="100" style="width: <%=numbers[n] / first * 100%>%">
+                    <%=numbers[n]%>
+                </div>
+            </div>
+        </div>
+        <%}%>
+    </div>
+</script>
+
+<style>
+    .q-item{
+        display: flex;
+        align-items: center;
+    }
+    .q-item-section{
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 0;
+        max-width: 100%;
+        margin: 0;
+    }
+    .q-item-section.side{
+        width: auto;
+    }
+    .q-avatar{
+        position: relative;
+        vertical-align: middle;
+        display: inline-block;
+        border-radius: 50%;
+        font-size: 16px;
+        height: 20px;
+        width: 20px;
+    }
+    .q-avatar-content{
+        border-radius: 4px;
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+    }
+</style>

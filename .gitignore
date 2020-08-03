@@ -16,3 +16,5 @@ composer.lock
 .env
 .svn
 .vscode
+/node_modules/*
+.DS_Store

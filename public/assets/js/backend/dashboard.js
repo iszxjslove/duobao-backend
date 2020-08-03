@@ -2,20 +2,20 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
 
     var Controller = {
         index: function () {
-            // 初始化io对象
-            var socket = io(Config.moduleurl + ':2120', {
-                transports: ['websocket']
-            });
-            // uid 可以为网站用户的uid，作为例子这里用session_id代替
-            var uid = AdminId;
-            // 当socket连接后发送登录请求
-            socket.on('connect', function () {
-                socket.emit('login', uid, 'fdsafsafs');
-            });
-            // 当服务端推送来消息时触发，这里简单的aler出来，用户可做成自己的展示效果
-            socket.on('new_msg', function (msg) {
-                console.log(msg)
-            });
+            // // 初始化io对象
+            // var socket = io(Config.moduleurl + ':2120', {
+            //     transports: ['websocket']
+            // });
+            // // uid 可以为网站用户的uid，作为例子这里用session_id代替
+            // var uid = AdminId;
+            // // 当socket连接后发送登录请求
+            // socket.on('connect', function () {
+            //     socket.emit('login', uid, 'fdsafsafs');
+            // });
+            // // 当服务端推送来消息时触发，这里简单的aler出来，用户可做成自己的展示效果
+            // socket.on('new_msg', function (msg) {
+            //     console.log(msg)
+            // });
 
 
             // 加载数据面板

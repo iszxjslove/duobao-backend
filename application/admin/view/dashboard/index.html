@@ -167,7 +167,7 @@
                         <div class="sm-st clearfix">
                             <span class="sm-st-icon st-red"><i class="fa fa-users"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totaluser}</span>
+                                <span>{$statistics.register | default=0}</span>
                                 {:__('Total user')}
                             </div>
                         </div>
@@ -176,8 +176,8 @@
                         <div class="sm-st clearfix">
                             <span class="sm-st-icon st-violet"><i class="fa fa-book"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalviews}</span>
-                                {:__('Total view')}
+                                <span>{$statistics.wager | default=0}</span>
+                                总投注
                             </div>
                         </div>
                     </div>
@@ -185,8 +185,8 @@
                         <div class="sm-st clearfix">
                             <span class="sm-st-icon st-blue"><i class="fa fa-shopping-bag"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalorder}</span>
-                                {:__('Total order')}
+                                <span>{$statistics.recharge | default=0}</span>
+                                累计充值
                             </div>
                         </div>
                     </div>
@@ -194,8 +194,8 @@
                         <div class="sm-st clearfix">
                             <span class="sm-st-icon st-green"><i class="fa fa-cny"></i></span>
                             <div class="sm-st-info">
-                                <span>{$totalorderamount}</span>
-                                {:__('Total order amount')}
+                                <span>{$statistics.withdraw | default=0}</span>
+                                累计提现
                             </div>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
                                     <div class="col-xs-6 stat-col">
                                         <div class="stat-icon"><i class="fa fa-rocket"></i></div>
                                         <div class="stat">
-                                            <div class="value"> {$todayusersignup}</div>
+                                            <div class="value"> {$today_data.register.total | default=0}</div>
                                             <div class="name"> {:__('Today user signup')}</div>
                                         </div>
                                         <div class="progress">
@@ -273,6 +273,15 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="q-row">
+                    <div class="q-col">
+
+                    </div>
+                    <div class="q-col"></div>
+                    <div class="q-col"></div>
+                    <div class="q-col"></div>
                 </div>
 
                 <div class="row" style="margin-top:15px;">

@@ -24,7 +24,7 @@ class Game extends Api
     {
         $gid = 1;
         $time = time();
-        $issue = Issue::get(['game_id' => $gid, 'saleend' => ['>', $time]]);
+        $issue = Issue::get(['saleend' => ['>', $time]]);
         if (!$issue) {
             $this->error('There is no period to bet on');
         }

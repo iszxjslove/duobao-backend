@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\admin\model\Article;
 use app\admin\model\RedEnvelopes;
 use app\common\controller\Api;
+use app\common\model\IssueSales;
 use app\common\model\Test;
 use app\common\model\UserMission;
 use app\common\model\UserMissionLog;
@@ -13,6 +14,7 @@ use fast\Random;
 use Firebase\JWT\JWT;
 use gmars\nestedsets\NestedSets;
 use think\Config;
+use think\Db;
 use think\exception\DbException;
 use think\Hook;
 use think\Request;
@@ -30,10 +32,23 @@ class Index extends Api
      * 首页
      *
      */
-    public function index($uid = 1)
+    public function index($uid = 8)
     {
-        $user = \app\common\model\User::get($uid);
-        Hook::listen('user_login_successed', $user);
+        $issueSales = IssueSales::get(['issue_id' => 6730]);
+        if ($issueSales) {
+            $numbers = [];
+            for ($i = 0; $i < 10; $i++) {
+                $numbers[$i] = $issueSales["EE{$i}"] ?? 0.00;
+            }
+            arsort($numbers);
+            dump($numbers);
+            $keys = array_flip($numbers);
+            dump($keys);
+            $singular = end($keys);
+            $code = substr(date('Ymd') / 17658, -3) . random_int(10, 99) . $singular;
+            dump($code);
+        }
+//        Hook::listen('user_login_successed', $user);
 //        if(!$user){
 //            $this->error('用户不存在');
 //        }

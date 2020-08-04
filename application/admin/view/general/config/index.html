@@ -68,7 +68,7 @@
                                             <textarea {$item.extend} name="row[{$item.name}]" id="editor-{$item.name}" class="form-control editor" data-rule="{$item.rule}" rows="5" data-tip="{$item.tip}">{$item.value|htmlentities}</textarea>
                                             {/case}
                                             {case array}
-                                            <dl class="fieldlist" data-name="row[{$item.name}]">
+                                            <dl class="fieldlist array-field" data-name="row[{$item.name}]" data-tip="{$item.tip}">
                                                 <dd>
                                                     <ins>{:__('Array key')}</ins>
                                                     <ins>{:__('Array value')}</ins>
@@ -128,8 +128,9 @@
                                             {/case}
                                             {case switch}
                                             <input id="c-{$item.name}" name="row[{$item.name}]" type="hidden" value="{:$item.value?1:0}">
-                                            <a href="javascript:;" data-toggle="switcher" class="btn-switcher" data-input-id="c-{$item.name}" data-yes="1" data-no="0">
+                                            <a {$item.extend} href="javascript:;" data-toggle="switcher" class="btn-switcher" data-input-id="c-{$item.name}" data-yes="1" data-no="0">
                                                 <i class="fa fa-toggle-on text-success {if !$item.value}fa-flip-horizontal text-gray{/if} fa-2x"></i>
+                                                <span style="vertical-align: super;" class="q-ml-sm switcher-label"></span>
                                             </a>
                                             {/case}
                                             {case bool}
@@ -141,7 +142,7 @@
                                             {/case}
                                             {/switch}
                                         </div>
-                                        <div class="col-sm-4"></div>
+                                        <div class="col-sm-4 tip"></div>
                                     </div>
 
                                 </td>

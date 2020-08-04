@@ -33,22 +33,24 @@ class WithdrawOrder extends Model
     public function createOrder($user_id, $amount, $card_id)
     {
         $withdraw_rate = Config::get('site.withdraw_rate');
+        ksort($withdraw_rate);
         $rate = 0;
         foreach ($withdraw_rate as $key => $value) {
             if ($amount >= $key) {
                 $rate = $value;
             }
         }
-        $fee = bcmul($amount, $rate, 2);
+        $fee = bcmul($amount, bcdiv($rate, 100, 2), 2);
         User::money($user_id, -$amount, '提现');
         User::hold_balance($user_id, $amount, '提现预扣');
-        return $this->insert([
+        return $this->save([
             'user_id'  => $user_id,
             'admin_id' => 0,
             'card_id'  => $card_id,
             'trade_no' => \NumberPool::center(2)->getOne(),
             'amount'   => $amount,
-            'fee'      => $fee
+            'fee'      => $fee,
+            'real_amount' => bcsub($amount, $fee, 2)
         ]);
     }
 }

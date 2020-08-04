@@ -382,6 +382,7 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                             $("i", this).removeClass("fa-flip-horizontal text-gray");
                         }
                         input.trigger('change');
+                        $(this).trigger('switcher.bs.change', input.val())
                     }
                     return false;
                 });

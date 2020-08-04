@@ -12,6 +12,7 @@ class RedEnvelopes extends Validate
     protected $rule = [
         'amount' => 'require|number|min:1',
         'number' => 'require|number|min:1',
+        'cate' => 'require',
     ];
     /**
      * 提示消息

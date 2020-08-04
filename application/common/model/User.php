@@ -2,7 +2,12 @@
 
 namespace app\common\model;
 
+use Nested;
+use PDOStatement;
+use think\Collection;
 use think\Config;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\ModelNotFoundException;
 use think\Exception;
 use think\exception\DbException;
 use think\Model;
@@ -226,17 +231,16 @@ class User extends Model
     /**
      * 获取所有上级
      * @param User $user
-     * @return bool|false|\PDOStatement|string|\think\Collection
+     * @return bool|false|PDOStatement|string|Collection
      * @throws DbException
      * @throws Exception
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
      */
     public static function getParentsByUser(self $user)
     {
         $maxTeamLevel = Config::get('site.max_team_level');
-        $parents = (new \Nested($user))->getParent($user->id, $maxTeamLevel - 1);
-        return $parents;
+        return (new Nested($user))->getParent($user->id, $maxTeamLevel - 1);
     }
 
     public function finance()

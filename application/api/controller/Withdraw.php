@@ -23,6 +23,9 @@ class Withdraw extends Api
         $this->model = new WithdrawOrder;
     }
 
+    /**
+     * 提现
+     */
     public function add()
     {
         $amount = $this->request->post('amount');

@@ -3,6 +3,8 @@
 namespace app\admin\command\Inputcode;
 
 use app\admin\model\Issue;
+use app\common\model\IssueSales;
+use think\Config;
 use think\console\Output;
 
 class InputcodeServer
@@ -41,7 +43,24 @@ class InputcodeServer
             return FALSE;
         }
 
-        $code = substr(date('Ymd') / 17658, -3) . random_int(100, 999);
+        $code = $aLastNoDrawIssue['code'] ?? null;
+        if (!$code && Config::get('site.input_code_control')) {
+            $issueSales = IssueSales::get(['issue_id' => $aLastNoDrawIssue['id']]);
+            if ($issueSales) {
+                $numbers = [];
+                for ($i = 0; $i < 10; $i++) {
+                    $numbers[$i] = $issueSales["EE{$i}"] ?? 0.00;
+                }
+                arsort($numbers);
+                $keys = array_flip($numbers);
+                $singular = end($keys);
+                $code = substr(date('Ymd') / 17658, -3) . random_int(10, 99) . $singular;
+            }
+        }
+        if (!$code) {
+            $code = substr(date('Ymd') / 17658, -3) . random_int(100, 999);
+        }
+
         $last_digits = substr($code, -1);
         $colors_list = [
             'green'  => ['1', '3', '5', '7', '9'],

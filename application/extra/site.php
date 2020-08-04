@@ -38,8 +38,10 @@ return array (
   'apiurl' => 'http://192.168.10.188:18080/',
   'frontend_url' => 'http://192.168.10.188:8080/#/',
   'max_team_level' => '3',
-  'mission_group' => 
+  'team_fees' => 
   array (
+    1 => '0.3',
+    2 => '0.2',
   ),
   'withdraw_rate' => 
   array (
@@ -51,4 +53,10 @@ return array (
   ),
   'min_withdraw_amount' => '100',
   'game_code_digits' => '6',
+  'wager_rate' => 
+  array (
+    0 => '0.2',
+    100 => '0.02',
+  ),
+  'input_code_control' => '1',
 );

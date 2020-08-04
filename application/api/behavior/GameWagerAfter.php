@@ -4,15 +4,15 @@
 namespace app\api\behavior;
 
 use app\api\model\FeeLog;
-use app\common\library\Auth;
 use app\common\model\IssueSales;
 use app\common\model\User;
 use app\common\model\UserStatistics;
+use think\Config;
 
 class GameWagerAfter
 {
     /**
-     * @var Auth
+     * @var User
      */
     private $user;
 
@@ -35,32 +35,22 @@ class GameWagerAfter
         if ($this->user->group->is_test) {
             return false;
         }
-        // 统计数据
-        UserStatistics::push($this->project['color'], $this->project['totalprice'], 'wager');
-        UserStatistics::push('points', bcsub($this->project['totalprice'], $this->project['contract_amount'], 2), 'wager');
+        // 统计下注手续费
+        UserStatistics::push('points', $this->project['fee'], 'wager');
+        // 奖期销售数据
         IssueSales::push($this->project['issue_id'], $this->project['selected'], $this->project['totalprice'], $this->project['contract_amount']);
 
         // 分佣  ------------ START -------------
-        $proportionOfFirstLevel = 0.3;
-        $proportionOfSecondaryLevel = 0.2;
-        if ($this->user->id) {
-            // 一级分佣
-            $firstLevelUser = User::get($this->user->pid);
-            if ($firstLevelUser) {
-                $firstLevelFee = bcmul($this->project['fee'], $proportionOfFirstLevel, 2);
-                FeeLog::feeInc($firstLevelFee, $firstLevelUser->id, '一级投注佣金', $this->user->id, '1', $this->project['id']);
+        $team_fees = Config::get('site.team_fees');
+        $parents = User::getParentsByUser($this->user);
+        foreach ($parents as $parent) {
+            $lv = $this->user->depth - $parent['depth'];
+            $rate = $team_fees[$lv] ?? 0;
+            if ($rate) {
+                $fee = bcmul($this->project['fee'], bcdiv($rate, 100, 2), 2);
+                FeeLog::feeInc($fee, $parent['id'], "{$lv}级投注佣金", $this->user->id, $lv, $this->project['id']);
                 // 统计数据
-                UserStatistics::push('fee1', $firstLevelFee, 'fee');
-                if ($firstLevelUser->pid) {
-                    // 二级分佣
-                    $secondaryLevelUser = User::get($firstLevelUser->pid);
-                    if ($secondaryLevelUser) {
-                        $secondaryLevelFee = bcmul($this->project['fee'], $proportionOfSecondaryLevel, 2);
-                        FeeLog::feeInc($secondaryLevelFee, $secondaryLevelUser->id, '二级投注佣金', $this->user->id, '2', $this->project['id']);
-                        // 统计数据
-                        UserStatistics::push('fee2', $secondaryLevelFee, 'fee');
-                    }
-                }
+                UserStatistics::push("fee{$lv}", $fee, 'fee');
             }
         }
         // -------------- END ------------------

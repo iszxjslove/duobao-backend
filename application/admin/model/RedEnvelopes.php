@@ -34,7 +34,6 @@ class RedEnvelopes extends Model
     protected static function init()
     {
         self::beforeInsert(static function ($row) {
-//            $data = $row->toArray();
             $admin = Admin::get($row->admin_id);
             if (!$admin) {
                 throw new Exception('管理员不存在');

@@ -1,13 +1,13 @@
-$space-base   ?= 16px
+$space-base ?= 16px
 $space-x-base ?= $space-base
 $space-y-base ?= $space-base
 
 $space-none ?= { x: 0, y: 0 }
-$space-xs   ?= { x: ($space-x-base * .25), y: ($space-y-base * .25) }
-$space-sm   ?= { x: ($space-x-base * .5),  y: ($space-y-base * .5)  }
-$space-md   ?= { x: $space-x-base,         y: $space-y-base         }
-$space-lg   ?= { x: ($space-x-base * 1.5), y: ($space-y-base * 1.5) }
-$space-xl   ?= { x: ($space-x-base * 3),   y: ($space-y-base * 3)   }
+$space-xs ?= { x: ($space-x-base * .25), y: ($space-y-base * .25) }
+$space-sm ?= { x: ($space-x-base * .5),  y: ($space-y-base * .5)  }
+$space-md ?= { x: $space-x-base,         y: $space-y-base         }
+$space-lg ?= { x: ($space-x-base * 1.5), y: ($space-y-base * 1.5) }
+$space-xl ?= { x: ($space-x-base * 3),   y: ($space-y-base * 3)   }
 
 $spaces ?= {
   none: $space-none,
@@ -25,14 +25,14 @@ $breakpoint-sm ?= 1023px
 $breakpoint-md ?= 1439px
 $breakpoint-lg ?= 1919px
 
-$flex-cols      ?= 12
+$flex-cols ?= 12
 $flex-gutter-xs ?= ($space-base * .25)
 $flex-gutter-sm ?= ($space-base * .5)
 $flex-gutter-md ?= $space-base
 $flex-gutter-lg ?= ($space-base * 1.5)
 $flex-gutter-xl ?= ($space-base * 3)
 
-$body-font-size   ?= 14px
+$body-font-size ?= 14px
 $body-line-height ?= 1.5
 
 $flex-gutter ?= {
@@ -159,24 +159,26 @@ $text-weights ?= {
   bolder: 900
 }
 
-$primary   ?= #1976D2
+$primary ?= #1976D2
 $secondary ?= #26A69A
-$accent    ?= #9C27B0
+$accent ?= #9C27B0
 
 // used by dark mode
 $dark-page ?= #121212
-$dark      ?= #1d1d1d
+$dark ?= #1d1d1d
 
-$positive  ?= #21BA45
-$negative  ?= #C10015
-$info      ?= #31CCEC
-$warning   ?= #F2C037
+$positive ?= #21BA45
+$negative ?= #C10015
+$info ?= #31CCEC
+$warning ?= #F2C037
+$danger ?= #e74c3c
+$success ?= #18bc9c
 
-$dimmed-background       ?= rgba(0, 0, 0, .4)
+$dimmed-background ?= rgba(0, 0, 0, .4)
 $light-dimmed-background ?= rgba(255, 255, 255, .6)
 
-$separator-color         ?= rgba(0, 0, 0, .12)
-$separator-dark-color    ?= rgba(255, 255, 255, .28)
+$separator-color ?= rgba(0, 0, 0, .12)
+$separator-dark-color ?= rgba(255, 255, 255, .28)
 
 $red ?= #f44336
 $red-1 ?= #ffebee
@@ -466,35 +468,35 @@ $blue-grey-14 ?= #455a64
 
 $ios-statusbar-height ?= 20px
 
-$z-fab                ?= 990
-$z-side               ?= 1000
-$z-marginals          ?= 2000
-$z-fixed-drawer       ?= 3000
-$z-fullscreen         ?= 6000
-$z-menu               ?= 6000
-$z-top                ?= 7000
-$z-tooltip            ?= 9000
-$z-notify             ?= 9500
-$z-max                ?= 9998
+$z-fab ?= 990
+$z-side ?= 1000
+$z-marginals ?= 2000
+$z-fixed-drawer ?= 3000
+$z-fullscreen ?= 6000
+$z-menu ?= 6000
+$z-top ?= 7000
+$z-tooltip ?= 9000
+$z-notify ?= 9500
+$z-max ?= 9998
 
-$shadow-color         ?= black
-$shadow-transition    ?= box-shadow .28s cubic-bezier(.4, 0, .2, 1)
-$inset-shadow         ?= 0 7px 9px -7px rgba($shadow-color, .7) inset
+$shadow-color ?= black
+$shadow-transition ?= box-shadow .28s cubic-bezier(.4, 0, .2, 1)
+$inset-shadow ?= 0 7px 9px -7px rgba($shadow-color, .7) inset
 
-$elevation-umbra      ?= rgba($shadow-color, .2)
-$elevation-penumbra   ?= rgba($shadow-color, .14)
-$elevation-ambient    ?= rgba($shadow-color, .12)
+$elevation-umbra ?= rgba($shadow-color, .2)
+$elevation-penumbra ?= rgba($shadow-color, .14)
+$elevation-ambient ?= rgba($shadow-color, .12)
 
-$shadow-0  ?= 0 0 0 $elevation-umbra, 0 0 0 $elevation-penumbra, 0 0 0 $elevation-ambient
-$shadow-1  ?= 0 1px 3px $elevation-umbra, 0 1px 1px $elevation-penumbra, 0 2px 1px -1px $elevation-ambient
-$shadow-2  ?= 0 1px 5px $elevation-umbra, 0 2px 2px $elevation-penumbra, 0 3px 1px -2px $elevation-ambient
-$shadow-3  ?= 0 1px 8px $elevation-umbra, 0 3px 4px $elevation-penumbra, 0 3px 3px -2px $elevation-ambient
-$shadow-4  ?= 0 2px 4px -1px $elevation-umbra, 0 4px 5px $elevation-penumbra, 0 1px 10px $elevation-ambient
-$shadow-5  ?= 0 3px 5px -1px $elevation-umbra, 0 5px 8px $elevation-penumbra, 0 1px 14px $elevation-ambient
-$shadow-6  ?= 0 3px 5px -1px $elevation-umbra, 0 6px 10px $elevation-penumbra, 0 1px 18px $elevation-ambient
-$shadow-7  ?= 0 4px 5px -2px $elevation-umbra, 0 7px 10px 1px $elevation-penumbra, 0 2px 16px 1px $elevation-ambient
-$shadow-8  ?= 0 5px 5px -3px $elevation-umbra, 0 8px 10px 1px $elevation-penumbra, 0 3px 14px 2px $elevation-ambient
-$shadow-9  ?= 0 5px 6px -3px $elevation-umbra, 0 9px 12px 1px $elevation-penumbra, 0 3px 16px 2px $elevation-ambient
+$shadow-0 ?= 0 0 0 $elevation-umbra, 0 0 0 $elevation-penumbra, 0 0 0 $elevation-ambient
+$shadow-1 ?= 0 1px 3px $elevation-umbra, 0 1px 1px $elevation-penumbra, 0 2px 1px -1px $elevation-ambient
+$shadow-2 ?= 0 1px 5px $elevation-umbra, 0 2px 2px $elevation-penumbra, 0 3px 1px -2px $elevation-ambient
+$shadow-3 ?= 0 1px 8px $elevation-umbra, 0 3px 4px $elevation-penumbra, 0 3px 3px -2px $elevation-ambient
+$shadow-4 ?= 0 2px 4px -1px $elevation-umbra, 0 4px 5px $elevation-penumbra, 0 1px 10px $elevation-ambient
+$shadow-5 ?= 0 3px 5px -1px $elevation-umbra, 0 5px 8px $elevation-penumbra, 0 1px 14px $elevation-ambient
+$shadow-6 ?= 0 3px 5px -1px $elevation-umbra, 0 6px 10px $elevation-penumbra, 0 1px 18px $elevation-ambient
+$shadow-7 ?= 0 4px 5px -2px $elevation-umbra, 0 7px 10px 1px $elevation-penumbra, 0 2px 16px 1px $elevation-ambient
+$shadow-8 ?= 0 5px 5px -3px $elevation-umbra, 0 8px 10px 1px $elevation-penumbra, 0 3px 14px 2px $elevation-ambient
+$shadow-9 ?= 0 5px 6px -3px $elevation-umbra, 0 9px 12px 1px $elevation-penumbra, 0 3px 16px 2px $elevation-ambient
 $shadow-10 ?= 0 6px 6px -3px $elevation-umbra, 0 10px 14px 1px $elevation-penumbra, 0 4px 18px 3px $elevation-ambient
 $shadow-11 ?= 0 6px 7px -4px $elevation-umbra, 0 11px 15px 1px $elevation-penumbra, 0 4px 20px 3px $elevation-ambient
 $shadow-12 ?= 0 7px 8px -4px $elevation-umbra, 0 12px 17px 2px $elevation-penumbra, 0 5px 22px 4px $elevation-ambient
@@ -511,16 +513,16 @@ $shadow-22 ?= 0 10px 14px -6px $elevation-umbra, 0 22px 35px 3px $elevation-penu
 $shadow-23 ?= 0 11px 14px -7px $elevation-umbra, 0 23px 36px 3px $elevation-penumbra, 0 9px 44px 8px $elevation-ambient
 $shadow-24 ?= 0 11px 15px -7px $elevation-umbra, 0 24px 38px 3px $elevation-penumbra, 0 9px 46px 8px $elevation-ambient
 
-$shadow-up-0  ?= 0 0 0 $elevation-umbra, 0 0 0 $elevation-penumbra, 0 0 0 $elevation-ambient
-$shadow-up-1  ?= 0 -1px 3px $elevation-umbra, 0 -1px 1px $elevation-penumbra, 0 -2px 1px -1px $elevation-ambient
-$shadow-up-2  ?= 0 -1px 5px $elevation-umbra, 0 -2px 2px $elevation-penumbra, 0 -3px 1px -2px $elevation-ambient
-$shadow-up-3  ?= 0 -1px 8px $elevation-umbra, 0 -3px 4px $elevation-penumbra, 0 -3px 3px -2px $elevation-ambient
-$shadow-up-4  ?= 0 -2px 4px -1px $elevation-umbra, 0 -4px 5px $elevation-penumbra, 0 -1px 10px $elevation-ambient
-$shadow-up-5  ?= 0 -3px 5px -1px $elevation-umbra, 0 -5px 8px $elevation-penumbra, 0 -1px 14px $elevation-ambient
-$shadow-up-6  ?= 0 -3px 5px -1px $elevation-umbra, 0 -6px 10px $elevation-penumbra, 0 -1px 18px $elevation-ambient
-$shadow-up-7  ?= 0 -4px 5px -2px $elevation-umbra, 0 -7px 10px 1px $elevation-penumbra, 0 -2px 16px 1px $elevation-ambient
-$shadow-up-8  ?= 0 -5px 5px -3px $elevation-umbra, 0 -8px 10px 1px $elevation-penumbra, 0 -3px 14px 2px $elevation-ambient
-$shadow-up-9  ?= 0 -5px 6px -3px $elevation-umbra, 0 -9px 12px 1px $elevation-penumbra, 0 -3px 16px 2px $elevation-ambient
+$shadow-up-0 ?= 0 0 0 $elevation-umbra, 0 0 0 $elevation-penumbra, 0 0 0 $elevation-ambient
+$shadow-up-1 ?= 0 -1px 3px $elevation-umbra, 0 -1px 1px $elevation-penumbra, 0 -2px 1px -1px $elevation-ambient
+$shadow-up-2 ?= 0 -1px 5px $elevation-umbra, 0 -2px 2px $elevation-penumbra, 0 -3px 1px -2px $elevation-ambient
+$shadow-up-3 ?= 0 -1px 8px $elevation-umbra, 0 -3px 4px $elevation-penumbra, 0 -3px 3px -2px $elevation-ambient
+$shadow-up-4 ?= 0 -2px 4px -1px $elevation-umbra, 0 -4px 5px $elevation-penumbra, 0 -1px 10px $elevation-ambient
+$shadow-up-5 ?= 0 -3px 5px -1px $elevation-umbra, 0 -5px 8px $elevation-penumbra, 0 -1px 14px $elevation-ambient
+$shadow-up-6 ?= 0 -3px 5px -1px $elevation-umbra, 0 -6px 10px $elevation-penumbra, 0 -1px 18px $elevation-ambient
+$shadow-up-7 ?= 0 -4px 5px -2px $elevation-umbra, 0 -7px 10px 1px $elevation-penumbra, 0 -2px 16px 1px $elevation-ambient
+$shadow-up-8 ?= 0 -5px 5px -3px $elevation-umbra, 0 -8px 10px 1px $elevation-penumbra, 0 -3px 14px 2px $elevation-ambient
+$shadow-up-9 ?= 0 -5px 6px -3px $elevation-umbra, 0 -9px 12px 1px $elevation-penumbra, 0 -3px 16px 2px $elevation-ambient
 $shadow-up-10 ?= 0 -6px 6px -3px $elevation-umbra, 0 -10px 14px 1px $elevation-penumbra, 0 -4px 18px 3px $elevation-ambient
 $shadow-up-11 ?= 0 -6px 7px -4px $elevation-umbra, 0 -11px 15px 1px $elevation-penumbra, 0 -4px 20px 3px $elevation-ambient
 $shadow-up-12 ?= 0 -7px 8px -4px $elevation-umbra, 0 -12px 17px 2px $elevation-penumbra, 0 -5px 22px 4px $elevation-ambient
@@ -538,92 +540,92 @@ $shadow-up-23 ?= 0 -11px 14px -7px $elevation-umbra, 0 -23px 36px 3px $elevation
 $shadow-up-24 ?= 0 -11px 15px -7px $elevation-umbra, 0 -24px 38px 3px $elevation-penumbra, 0 -9px 46px 8px $elevation-ambient
 
 
-$generic-border-radius          ?= 4px
-$generic-hover-transition       ?= .3s cubic-bezier(.25, .8, .5, 1)
-$typography-font-family         ?= 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
-$min-line-height                ?= 1.12
+$generic-border-radius ?= 4px
+$generic-hover-transition ?= .3s cubic-bezier(.25, .8, .5, 1)
+$typography-font-family ?= 'Roboto', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
+$min-line-height ?= 1.12
 
-$button-border-radius           ?= 3px
-$button-padding                 ?= 4px 16px
-$button-dense-padding           ?= .285em
-$button-transition              ?= $generic-hover-transition
-$button-font-size               ?= 14px
-$button-line-height             ?= 1.715em
-$button-font-weight             ?= 500
-$button-shadow                  ?= $shadow-2
-$button-shadow-active           ?= $shadow-5
-$button-rounded-border-radius   ?= 28px
-$button-push-border-radius      ?= 7px
+$button-border-radius ?= 3px
+$button-padding ?= 4px 16px
+$button-dense-padding ?= .285em
+$button-transition ?= $generic-hover-transition
+$button-font-size ?= 14px
+$button-line-height ?= 1.715em
+$button-font-weight ?= 500
+$button-shadow ?= $shadow-2
+$button-shadow-active ?= $shadow-5
+$button-rounded-border-radius ?= 28px
+$button-push-border-radius ?= 7px
 
-$chat-message-received-color    ?= black
-$chat-message-received-bg       ?= $green-4
-$chat-message-sent-color        ?= black
-$chat-message-sent-bg           ?= $grey-4
-$chat-message-avatar-size       ?= 48px
-$chat-message-border-radius     ?= $generic-border-radius
-$chat-message-distance          ?= 8px
-$chat-message-text-padding      ?= 8px
+$chat-message-received-color ?= black
+$chat-message-received-bg ?= $green-4
+$chat-message-sent-color ?= black
+$chat-message-sent-bg ?= $grey-4
+$chat-message-avatar-size ?= 48px
+$chat-message-border-radius ?= $generic-border-radius
+$chat-message-distance ?= 8px
+$chat-message-text-padding ?= 8px
 
-$item-base-color                ?= $grey-5
+$item-base-color ?= $grey-5
 
-$editor-border-color            ?= $separator-color
-$editor-border-dark-color       ?= $separator-dark-color
-$editor-content-padding         ?= 10px
-$editor-content-min-height      ?= 10em
-$editor-toolbar-padding         ?= 4px
-$editor-hr-color                ?= $editor-border-color
-$editor-hr-dark-color           ?= $editor-border-dark-color
-$editor-button-gutter           ?= 4px
+$editor-border-color ?= $separator-color
+$editor-border-dark-color ?= $separator-dark-color
+$editor-content-padding ?= 10px
+$editor-content-min-height ?= 10em
+$editor-toolbar-padding ?= 4px
+$editor-hr-color ?= $editor-border-color
+$editor-hr-dark-color ?= $editor-border-dark-color
+$editor-button-gutter ?= 4px
 
-$table-transition               ?= $generic-hover-transition
-$table-border-radius            ?= $generic-border-radius
-$table-box-shadow               ?= $shadow-2
+$table-transition ?= $generic-hover-transition
+$table-border-radius ?= $generic-border-radius
+$table-box-shadow ?= $shadow-2
 
-$table-border-color             ?= $separator-color
-$table-hover-background         ?= rgba(0, 0, 0, .03)
-$table-selected-background      ?= rgba(0, 0, 0, .06)
+$table-border-color ?= $separator-color
+$table-hover-background ?= rgba(0, 0, 0, .03)
+$table-selected-background ?= rgba(0, 0, 0, .06)
 
-$table-dark-border-color        ?= $separator-dark-color
-$table-dark-hover-background    ?= rgba(255, 255, 255, .07)
+$table-dark-border-color ?= $separator-dark-color
+$table-dark-hover-background ?= rgba(255, 255, 255, .07)
 $table-dark-selected-background ?= rgba(255, 255, 255, .1)
 
-$toolbar-min-height             ?= 50px
-$toolbar-padding                ?= 0 12px
-$toolbar-inset-size             ?= 58px
-$toolbar-title-font-size        ?= 21px
-$toolbar-title-font-weight      ?= normal
-$toolbar-title-letter-spacing   ?= .01em
-$toolbar-title-padding          ?= 0 12px
+$toolbar-min-height ?= 50px
+$toolbar-padding ?= 0 12px
+$toolbar-inset-size ?= 58px
+$toolbar-title-font-size ?= 21px
+$toolbar-title-font-weight ?= normal
+$toolbar-title-letter-spacing ?= .01em
+$toolbar-title-padding ?= 0 12px
 
-$layout-border                  ?= 1px solid $separator-color
-$layout-shadow                  ?= 0 0 10px 2px rgba(0,0,0,0.2), 0 0px 10px rgba(0,0,0,0.24)
+$layout-border ?= 1px solid $separator-color
+$layout-shadow ?= 0 0 10px 2px rgba(0, 0, 0, 0.2), 0 0px 10px rgba(0, 0, 0, 0.24)
 
-$menu-background                ?= white
-$menu-box-shadow                ?= $shadow-2
-$menu-max-width                 ?= 95vw
+$menu-background ?= white
+$menu-box-shadow ?= $shadow-2
+$menu-max-width ?= 95vw
 
-$rating-grade-color             ?= $yellow
-$rating-shadow                  ?= 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24)
+$rating-grade-color ?= $yellow
+$rating-shadow ?= 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24)
 
-$tooltip-color                  ?= #fafafa
-$tooltip-background             ?= $grey-7
-$tooltip-padding                ?= 6px 10px
-$tooltip-border-radius          ?= $generic-border-radius
-$tooltip-fontsize               ?= 10px
-$tooltip-mobile-padding         ?= 8px 16px
-$tooltip-mobile-fontsize        ?= 14px
+$tooltip-color ?= #fafafa
+$tooltip-background ?= $grey-7
+$tooltip-padding ?= 6px 10px
+$tooltip-border-radius ?= $generic-border-radius
+$tooltip-fontsize ?= 10px
+$tooltip-mobile-padding ?= 8px 16px
+$tooltip-mobile-fontsize ?= 14px
 
-$option-focus-transition        ?= .22s cubic-bezier(0,0,.2,1)
+$option-focus-transition ?= .22s cubic-bezier(0, 0, .2, 1)
 
-$input-font-size                ?= 14px
-$input-text-color               ?= rgba(0,0,0,.87)
-$input-label-color              ?= rgba(0,0,0,.6)
-$input-autofill-color           ?= inherit
+$input-font-size ?= 14px
+$input-text-color ?= rgba(0, 0, 0, .87)
+$input-label-color ?= rgba(0, 0, 0, .6)
+$input-autofill-color ?= inherit
 
-$img-width                      ?= 100%
-$img-background-repeat          ?= no-repeat
-$img-loading-font-size          ?= 50px
-$img-content-position           ?= absolute
-$img-content-padding            ?= 16px
-$img-content-color              ?= white
-$img-content-background         ?= rgba(0, 0, 0, .47)
+$img-width ?= 100%
+$img-background-repeat ?= no-repeat
+$img-loading-font-size ?= 50px
+$img-content-position ?= absolute
+$img-content-padding ?= 16px
+$img-content-color ?= white
+$img-content-background ?= rgba(0, 0, 0, .47)

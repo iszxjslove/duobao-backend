@@ -8,6 +8,24 @@
   --q-color-info: #31ccec;
   --q-color-warning: #f2c037;
   --q-color-dark: #1d1d1d;
+  --q-color-danger: #e74c3c;
+  --q-color-success: #18bc9c;
+}
+.text-success {
+  color: #18bc9c !important;
+  color: var(--q-color-success) !important;
+}
+.bg-success {
+  background: #18bc9c !important;
+  background: var(--q-color-success) !important;
+}
+.text-danger {
+  color: #e74c3c !important;
+  color: var(--q-color-danger) !important;
+}
+.bg-danger {
+  background: #e74c3c !important;
+  background: var(--q-color-danger) !important;
 }
 .text-dark {
   color: #1d1d1d !important;

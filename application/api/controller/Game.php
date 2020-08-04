@@ -11,6 +11,7 @@ use app\common\controller\Api;
 use app\common\model\IssueSales;
 use app\common\model\Projects;
 use app\common\model\UserStatistics;
+use think\Config;
 use think\Db;
 use think\Exception;
 use app\common\model\User;
@@ -108,11 +109,15 @@ class Game extends Api
         }
 
         // 计算手续费 ---------- START ------
-        if ($totalprice < 100) {
-            $fee = $totalprice * 0.1;
-        } else {
-            $fee = $totalprice * 0.02;
+        $wager_rate = Config::get('site.wager_rate');
+        ksort($wager_rate);
+        $rate = 0;
+        foreach ($wager_rate as $key => $value) {
+            if ($totalprice >= $key) {
+                $rate = $value;
+            }
         }
+        $fee = bcmul($totalprice, bcdiv($rate, 100, 2), 2);
         // 合同金额
         $contract_amount = $totalprice - $fee;
         // --------------- END ----------------
@@ -176,8 +181,9 @@ class Game extends Api
         $output = [];
         try {
             Db::startTrans();
+            $user = $this->auth->getUser();
             // 下注前的操作
-            Hook::listen("game_wager_before", $this->auth, $insertData);
+            Hook::listen("game_wager_before", $user, $insertData);
             // 扣款
             User::payment($totalprice, $this->auth->id, '投注扣款');
             // 下注方案
@@ -187,7 +193,7 @@ class Game extends Api
                 throw new Exception('Bet failed');
             }
             // 下注成功后
-            Hook::listen("game_wager_after", $this->auth, $projects);
+            Hook::listen("game_wager_after", $user, $projects);
 
             $output = [
                 'selected'   => $selected,

@@ -1,25 +1,28 @@
 <!--当前奖期销售数据分析-->
 <script type="text/html" id="issue_sales_tpl">
-    <div style="width: 300px">
+    <div>
         <div class="q-mb-md">奖期<%=issue.issue%></div>
         <% for(let n in numbers){%>
         <% let color = '';
         if(numbers[n] > 0){
-        if(numbers[n] == first){color='progress-bar-danger'};
-        if(numbers[n] == second){color='progress-bar-warning'};
-        if(numbers[n] == third){color='progress-bar-success'};
+        if(numbers[n] == first){color='danger'};
+        if(numbers[n] == second){color='warning'};
+        if(numbers[n] == third){color='success'};
         }%>
         <div class="q-item q-mb-md">
             <div class="q-item-section side q-pr-md">
                 <div class="q-avatar">
-                    <div class="q-avatar-content bg-orange"><%=n%></div>
+                    <div class="q-avatar-content text-white bg-<%=color%>"><%=n%></div>
                 </div>
             </div>
             <div class="q-item-section progress">
-                <div class="progress-bar progress-bar-striped <%=color%> active" role="progressbar" aria-valuenow="45"
+                <div class="progress-bar progress-bar-striped progress-bar-<%=color%> active" role="progressbar" aria-valuenow="45"
                      aria-valuemin="0" aria-valuemax="100" style="width: <%=numbers[n] / first * 100%>%">
                     <%=numbers[n]%>
                 </div>
+            </div>
+            <div class="q-item-section side">
+                预设号码
             </div>
         </div>
         <%}%>
@@ -27,11 +30,12 @@
 </script>
 
 <style>
-    .q-item{
+    .q-item {
         display: flex;
         align-items: center;
     }
-    .q-item-section{
+
+    .q-item-section {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
@@ -39,10 +43,12 @@
         max-width: 100%;
         margin: 0;
     }
-    .q-item-section.side{
+
+    .q-item-section.side {
         width: auto;
     }
-    .q-avatar{
+
+    .q-avatar {
         position: relative;
         vertical-align: middle;
         display: inline-block;
@@ -51,11 +57,13 @@
         height: 20px;
         width: 20px;
     }
-    .q-avatar-content{
+
+    .q-avatar-content {
         border-radius: 4px;
         align-items: center;
         justify-content: center;
         display: flex;
         flex-wrap: wrap;
+        padding: 0 2px;
     }
 </style>

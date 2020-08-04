@@ -115,8 +115,26 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         Layer.close(index);
                     });
                 });
-
             });
+
+            $('.array-field').each(function (i, el) {
+                let tip = $(el).data('tip')
+                if (tip) {
+                    $(el).closest('.row').find('.tip').html(tip)
+                }
+            })
+            $('[data-toggle="switcher"]').on('switcher.bs.change', function (e, val) {
+                if (!val) {
+                    val = $('#' + $(this).data('input-id')).val()
+                }
+                let yes = $(this).data("yes");
+                let no = $(this).data("no");
+                let labels = {}
+                labels[yes] = $(this).data('yes-label');
+                labels[no] = $(this).data('no-label');
+                $(this).find('.switcher-label').text(labels[val])
+            })
+            $('[data-toggle="switcher"]').trigger('switcher.bs.change')
         },
         add: function () {
             Controller.api.bindevent();

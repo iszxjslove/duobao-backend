@@ -5,6 +5,7 @@ namespace app\api\model;
 
 
 use app\common\model\User;
+use app\common\model\UserStatistics;
 use think\Db;
 use think\Exception;
 use think\Model;
@@ -58,6 +59,7 @@ class RedEnvelopes extends Model
             ];
             RedEnvelopesLog::create($insertData);
             User::money($get, $user_id, $redEnvelopes->cate . ' red envelope');
+            UserStatistics::push('red_envelopes', $insertData['get_amount'], 'cash_gift');
             Db::commit();
         } catch (Exception $e) {
             Db::rollback();

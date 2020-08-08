@@ -1,0 +1,72 @@
+<!--周期统计数据-->
+<script type="text/html" id="cycleCountTpl">
+    <div>
+
+    </div>
+</script>
+
+
+<div class="d-card q-ma-xl">
+    <div class="d-card-horn top-left-horn top-right-horn"></div>
+    <div style="height: 300px;width: 450px">fdafda</div>
+    <div class="d-card-horn bottom-left-horn bottom-right-horn"></div>
+</div>
+
+<style>
+
+    .d-card{
+        border: 1px solid #02a6b5;
+        position: relative;
+        background-color: rgba(0,0,0,.5);
+        min-height: 40px;
+    }
+    .d-card .d-card-horn{
+        width: 100%;
+        height: 16px;
+        position: relative;
+    }
+    .d-card .top-left-horn::before{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-top: 2px solid #0a6aa1;
+        border-left: 2px solid #0a6aa1;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .d-card .top-right-horn::after{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-top: 2px solid #0a6aa1;
+        border-right: 2px solid #0a6aa1;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .d-card .bottom-left-horn::before{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-bottom: 2px solid #0a6aa1;
+        border-left: 2px solid #0a6aa1;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    .d-card .bottom-right-horn::after{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-bottom: 2px solid #0a6aa1;
+        border-right: 2px solid #0a6aa1;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+</style>

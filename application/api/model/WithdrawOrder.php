@@ -4,11 +4,11 @@
 namespace app\api\model;
 
 
+use app\common\model\Base;
 use app\common\model\User;
 use think\Config;
-use think\Model;
 
-class WithdrawOrder extends Model
+class WithdrawOrder extends Base
 {
     protected $name = 'withdraw_order';
 
@@ -22,12 +22,14 @@ class WithdrawOrder extends Model
 
     public function getCreateTimeTextAttr($value, $data)
     {
-        return is_numeric($data['create_time']) ? date('Y-m-d H:i:s', $data['create_time']) : $data['create_time'];
+        $value = $value ?: ($data['create_time'] ?? '');
+        return is_numeric($value) ? date('Y-m-d H:i:s', $value) : $value;
     }
 
     public function getUpdateTimeTextAttr($value, $data)
     {
-        return is_numeric($data['update_time']) ? date('Y-m-d H:i:s', $data['update_time']) : $data['update_time'];
+        $value = $value ?: ($data['update_time'] ?? '');
+        return is_numeric($value) ? date('Y-m-d H:i:s', $value) : $value;
     }
 
     public function createOrder($user_id, $amount, $card_id)
@@ -44,12 +46,12 @@ class WithdrawOrder extends Model
         User::money($user_id, -$amount, '提现');
         User::hold_balance($user_id, $amount, '提现预扣');
         return $this->save([
-            'user_id'  => $user_id,
-            'admin_id' => 0,
-            'card_id'  => $card_id,
-            'trade_no' => \NumberPool::center(2)->getOne(),
-            'amount'   => $amount,
-            'fee'      => $fee,
+            'user_id'     => $user_id,
+            'admin_id'    => 0,
+            'card_id'     => $card_id,
+            'trade_no'    => \NumberPool::center(2)->getOne(),
+            'amount'      => $amount,
+            'fee'         => $fee,
             'real_amount' => bcsub($amount, $fee, 2)
         ]);
     }

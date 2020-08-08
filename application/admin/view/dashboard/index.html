@@ -1,299 +1,327 @@
-<style type="text/css">
-    .sm-st {
-        background: #fff;
-        padding: 20px;
-        -webkit-border-radius: 3px;
-        -moz-border-radius: 3px;
-        border-radius: 3px;
-        margin-bottom: 20px;
-        -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
-        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
-    }
-
-    .sm-st-icon {
-        width: 60px;
-        height: 60px;
-        display: inline-block;
-        line-height: 60px;
-        text-align: center;
-        font-size: 30px;
-        background: #eee;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        float: left;
-        margin-right: 10px;
-        color: #fff;
-    }
-
-    .sm-st-info {
-        font-size: 12px;
-        padding-top: 2px;
-    }
-
-    .sm-st-info span {
-        display: block;
-        font-size: 24px;
-        font-weight: 600;
-    }
-
-    .orange {
-        background: #fa8564 !important;
-    }
-
-    .tar {
-        background: #45cf95 !important;
-    }
-
-    .sm-st .green {
-        background: #86ba41 !important;
-    }
-
-    .pink {
-        background: #AC75F0 !important;
-    }
-
-    .yellow-b {
-        background: #fdd752 !important;
-    }
-
-    .stat-elem {
-
-        background-color: #fff;
-        padding: 18px;
-        border-radius: 40px;
-
-    }
-
-    .stat-info {
-        text-align: center;
-        background-color: #fff;
-        border-radius: 5px;
-        margin-top: -5px;
-        padding: 8px;
-        -webkit-box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
-        box-shadow: 0 1px 0px rgba(0, 0, 0, 0.05);
-        font-style: italic;
-    }
-
-    .stat-icon {
-        text-align: center;
-        margin-bottom: 5px;
-    }
-
-    .st-red {
-        background-color: #F05050;
-    }
-
-    .st-green {
-        background-color: #27C24C;
-    }
-
-    .st-violet {
-        background-color: #7266ba;
-    }
-
-    .st-blue {
-        background-color: #23b7e5;
-    }
-
-    .stats .stat-icon {
-        color: #28bb9c;
-        display: inline-block;
-        font-size: 26px;
-        text-align: center;
-        vertical-align: middle;
-        width: 50px;
-        float: left;
-    }
-
-    .stat {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .stat .value {
-        font-size: 20px;
-        line-height: 24px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-weight: 500;
-    }
-
-    .stat .name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .stat.lg .value {
-        font-size: 26px;
-        line-height: 28px;
-    }
-
-    .stat.lg .name {
-        font-size: 16px;
-    }
-
-    .stat-col .progress {
-        height: 2px;
-    }
-
-    .stat-col .progress-bar {
-        line-height: 2px;
-        height: 2px;
-    }
-
-    .item {
-        padding: 30px 0;
-    }
-</style>
 <div class="panel panel-default panel-intro">
-    <div class="panel-heading">
-        {:build_heading(null, false)}
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#one" data-toggle="tab">{:__('Dashboard')}</a></li>
-            <li><a href="#two" data-toggle="tab">{:__('Custom')}</a></li>
-        </ul>
-    </div>
     <div class="panel-body">
-        <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade active in" id="one">
-
-                <div class="row">
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-red"><i class="fa fa-users"></i></span>
-                            <div class="sm-st-info">
-                                <span>{$statistics.register | default=0}</span>
-                                {:__('Total user')}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-violet"><i class="fa fa-book"></i></span>
-                            <div class="sm-st-info">
-                                <span>{$statistics.wager | default=0}</span>
-                                总投注
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-blue"><i class="fa fa-shopping-bag"></i></span>
-                            <div class="sm-st-info">
-                                <span>{$statistics.recharge | default=0}</span>
-                                累计充值
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3 col-xs-6">
-                        <div class="sm-st clearfix">
-                            <span class="sm-st-icon st-green"><i class="fa fa-cny"></i></span>
-                            <div class="sm-st-info">
-                                <span>{$statistics.withdraw | default=0}</span>
-                                累计提现
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div id="echart" class="btn-refresh" style="height:200px;width:100%;"></div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="card sameheight-item stats">
-                            <div class="card-block">
-                                <div class="row row-sm stats-container">
-                                    <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"><i class="fa fa-rocket"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$today_data.register.total | default=0}</div>
-                                            <div class="name"> {:__('Today user signup')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 30%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"><i class="fa fa-shopping-cart"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$todayuserlogin}</div>
-                                            <div class="name"> {:__('Today user login')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-line-chart"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$todayorder}</div>
-                                            <div class="name"> {:__('Today order')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-users"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$unsettleorder}</div>
-                                            <div class="name"> {:__('Unsettle order')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6  stat-col">
-                                        <div class="stat-icon"><i class="fa fa-list-alt"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$sevendnu}</div>
-                                            <div class="name"> {:__('Seven dnu')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-6 stat-col">
-                                        <div class="stat-icon"><i class="fa fa-dollar"></i></div>
-                                        <div class="stat">
-                                            <div class="value"> {$sevendau}</div>
-                                            <div class="name"> {:__('Seven dau')}</div>
-                                        </div>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" style="width: 25%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="data-panel" data-panel="issue_sales"></div>
+        <div class="d-panel d-panel-grey bg-white q-mb-md count-all-quantity">
+            <div class="d-panel-horn top-left-horn top-right-horn"></div>
+            <div class="text-h6 text-center q-pa-md">
+                数据
             </div>
-            <div class="tab-pane fade" id="two">
-                <div class="row">
-                    <div class="col-xs-12">
-                        {:__('Custom zone')}
+            <hr class="q-mt-none q-mx-md">
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-register">
+                    <div class="d-card q-pa-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总会员</div>
+                    </div>
+                </div>
+                <div class="d-col count-payment_amount">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总充值</div>
+                    </div>
+                </div>
+                <div class="d-col count-withdraw_amount">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总提现</div>
                     </div>
                 </div>
             </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-balance">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总余额</div>
+                    </div>
+                </div>
+                <div class="d-col count-bonus">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总赠金</div>
+                    </div>
+                </div>
+                <div class="d-col count-wager_fee">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总佣金</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-wager_points">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总下注手续费</div>
+                    </div>
+                </div>
+                <div class="d-col count-withdraw_fee">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总提现手续费</div>
+                    </div>
+                </div>
+                <div class="d-col count-wager_totalprice">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">总下注</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none">0</div>
+                        <div class="text-grey-8">总利息</div>
+                    </div>
+                </div>
+            </div>
+            <div class="line-title q-mb-md q-mx-md hidden"><span class="line-title-content">实时新增会员</span></div>
+            <div class="d-panel-horn bottom-left-horn bottom-right-horn"></div>
+        </div>
+        <div class="d-panel d-panel-grey bg-white q-mb-md count-people">
+            <div class="d-panel-horn top-left-horn top-right-horn"></div>
+            <div class="text-h6 text-center q-pa-md">
+                数据
+            </div>
+            <hr class="q-mt-none q-mx-md">
+            <div class="text-center q-mb-md">
+                <div class="d-btn-gruop q-mb-md">
+                    <a class="d-btn outline q-mx-xs active" href="javascript:">7天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">15天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">30天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">其它</a>
+                </div>
+                <div>08-23 ~ 09-22</div>
+            </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-register">
+                    <div class="d-card q-pa-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">新增会员</div>
+                    </div>
+                </div>
+                <div class="d-col count-recharge">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">充值人数</div>
+                    </div>
+                </div>
+                <div class="d-col count-projects">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">下注人数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="line-title q-mb-md q-mx-md hidden"><span class="line-title-content">实时新增会员</span></div>
+            <div class="d-panel-horn bottom-left-horn bottom-right-horn"></div>
+        </div>
+        <div class="d-panel d-panel-grey bg-white count-total">
+            <div class="d-panel-horn top-left-horn top-right-horn"></div>
+            <div class="text-h6 text-center q-pa-md">
+                数据
+            </div>
+            <hr class="q-mt-none q-mx-md">
+            <div class="text-center q-mb-md">
+                <div class="d-btn-gruop q-mb-md">
+                    <a class="d-btn outline q-mx-xs active" href="javascript:">7天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">15天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">30天</a>
+                    <a class="d-btn outline q-mx-xs" href="javascript:">其它</a>
+                </div>
+                <div>08-23 ~ 09-22</div>
+            </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-payment_amount">
+                    <div class="d-card q-pa-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">充值金额</div>
+                    </div>
+                </div>
+                <div class="d-col count-withdraw_amount">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">提现金额</div>
+                    </div>
+                </div>
+                <div class="d-col count-first_payment">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">首充人数</div>
+                    </div>
+                </div>
+                <div class="d-col count-wager_totalprice">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">下注金额</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-row text-center q-mx-md">
+                <div class="d-col count-wager_points">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">投注佣金</div>
+                    </div>
+                </div>
+                <div class="d-col count-wager_fee">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">佣金分成</div>
+                    </div>
+                </div>
+                <div class="d-col count-bonus">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">红包赠金</div>
+                    </div>
+                </div>
+                <div class="d-col count-profit">
+                    <div class="d-card q-pa-md q-ml-md q-mb-md">
+                        <div class="h3 q-mt-none count-quantity">0</div>
+                        <div class="text-grey-8">区间盈亏</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-panel-horn bottom-left-horn bottom-right-horn"></div>
         </div>
     </div>
 </div>
-{include file="dashboard/issuesales" /}
-<script>
-    var Orderdata = {
-        column: {:json_encode(array_keys($paylist))},
-        paydata: {:json_encode(array_values($paylist))},
-        createdata: {:json_encode(array_values($createlist))},
-    };
 
-    var AdminId = {$auth->id}
-</script>
+<style>
+    .line-title{
+        position: relative;
+        text-align: center;
+        overflow: hidden;
+    }
+    .line-title span.line-title-content{
+        display: inline-block;
+        padding: 0 16px;
+        position: relative;
+    }
+    .line-title span.line-title-content::before {
+        content: '';
+        position: absolute;
+        display: inline-block;
+        border-top: 1px solid rgb(204,204,204);
+        height: 0;
+        font-size: 0;
+        top: 50%;
+        left: -1000%;
+        width: 1000%;
+        transform: translateY(-50%);
+    }
+    .line-title span.line-title-content::after {
+        content: '';
+        position: absolute;
+        display: inline-block;
+        border-top: 1px solid rgb(204,204,204);
+        height: 0;
+        font-size: 0;
+        top: 50%;
+        right: -1000%;
+        width: 1000%;
+        transform: translateY(-50%);
+    }
+    .d-row{
+        display: flex;
+        justify-content: center;
+        flex-flow:row wrap;
+        align-items:center;
+    }
+    .d-col{
+        width: auto;
+        min-width: 0;
+        max-width: 100%;
+        flex: 10000 1 0;
+    }
+    .d-card{
+        border-radius: 3px;
+        border:1px solid rgb(204,204,204);
+    }
+    .d-btn-gruop{
+        display: flex;
+        justify-content: center;
+    }
+    .d-btn{
+        color: #888888;
+        padding: 3px 5px;
+        min-width: 45px;
+        display: block;
+        border-radius: 3px;
+    }
+    .d-btn.outline{
+        border:1px solid rgb(204,204,204);
+    }
+    .d-panel{
+        border-width: 1px;
+        border-style: solid;
+        position: relative;
+        min-height: 40px;
+    }
+    .d-panel-grey{
+        border-color: rgb(204,204,204);
+        background-color: rgba(204,204,204,.2);
+    }
+    .d-panel-grey .d-panel-horn::before,
+    .d-panel-grey .d-panel-horn::after{
+        border-color: rgb(204,204,204);
+    }
+    .d-panel .d-panel-horn{
+        width: 100%;
+        height: 0;
+        font-size: 0;
+    }
+    .d-panel .top-left-horn::before{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-top-width: 2px;
+        border-top-style: solid;
+        border-left-width: 2px;
+        border-left-style: solid;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .d-panel .top-right-horn::after{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-top-width: 2px;
+        border-top-style: solid;
+        border-right-width: 2px;
+        border-right-style: solid;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .d-panel .bottom-left-horn::before{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        border-left-width: 2px;
+        border-left-style: solid;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    .d-panel .bottom-right-horn::after{
+        content: '';
+        display: inline-block;
+        height: 16px;
+        width: 16px;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        border-right-width: 2px;
+        border-right-style: solid;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
+</style>
+

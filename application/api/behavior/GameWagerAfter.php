@@ -31,12 +31,13 @@ class GameWagerAfter
 
     private function statistics()
     {
-        // 测试
+        // 测试账户
         if ($this->user->group->is_test) {
             return false;
         }
         // 统计下注手续费
-        UserStatistics::push('points', $this->project['fee'], 'wager');
+        UserStatistics::push('wager_points', $this->project['fee'], 'wager');
+        UserStatistics::push('wager_totalprice', $this->project['fee'], 'wager');
         // 奖期销售数据
         IssueSales::push($this->project['issue_id'], $this->project['selected'], $this->project['totalprice'], $this->project['contract_amount']);
 
@@ -50,7 +51,7 @@ class GameWagerAfter
                 $fee = bcmul($this->project['fee'], bcdiv($rate, 100, 2), 2);
                 FeeLog::feeInc($fee, $parent['id'], "{$lv}级投注佣金", $this->user->id, $lv, $this->project['id']);
                 // 统计数据
-                UserStatistics::push("fee{$lv}", $fee, 'fee');
+                UserStatistics::push("wager_fee{$lv}", $fee, 'wager_fee');
             }
         }
         // -------------- END ------------------

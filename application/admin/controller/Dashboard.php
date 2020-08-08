@@ -3,7 +3,11 @@
 namespace app\admin\controller;
 
 use app\api\model\Issue;
+use app\api\model\WithdrawOrder;
 use app\common\controller\Backend;
+use app\common\model\Projects;
+use app\common\model\RechargeOrder;
+use app\common\model\User;
 use app\common\model\UserStatistics;
 use think\Config;
 
@@ -50,26 +54,6 @@ class Dashboard extends Backend
             'addonversion'     => $addonVersion,
             'uploadmode'       => $uploadmode
         ]);
-
-        $UserStatistics = new UserStatistics;
-        // 累计数据
-        $statistics_list = $UserStatistics->group('category')->field('category,sum(total) as total')->select();
-        $statistics = [];
-        foreach ($statistics_list as $item) {
-            $statistics[$item['category']] = $item['total'];
-        }
-        // 十天数据
-        $ten_list = $UserStatistics->where(['belongdate' => ['>', date('Y-m-d', strtotime('-2 day'))]])->select();
-        $ten_data = [];
-        foreach ($ten_list as $item) {
-            $ten_data[$item['belongdate']][$item['category']] = $item->toArray();
-        }
-        // 今日数据
-        $today_data = $ten_data[date('Y-m-d')] ?? [];
-
-        $this->view->assign('ten_data', $ten_data);
-        $this->view->assign('today_data', $today_data);
-        $this->view->assign('statistics', $statistics);
         return $this->view->fetch();
     }
 
@@ -106,5 +90,73 @@ class Dashboard extends Backend
             'second'  => next($sort),
             'third'   => next($sort) ?: 0,
         ];
+    }
+
+    public function statistics()
+    {
+        $this->request->filter('trim');
+        $op = trim($this->request->param('op', 'today'));
+        $range = $this->request->param('range/a');
+        if ($op !== 'between') {
+            $range = null;
+        }
+        $UserStatistics = new UserStatistics;
+        $list = $UserStatistics->whereTime('belongdate', $op, $range)->field(true)->select();
+        $data = [];
+        foreach ($list as $item) {
+            $data[$item['belongdate']][$item['name']] = $item;
+        }
+        return json($data);
+    }
+
+    public function countTotal()
+    {
+        $this->request->filter('trim');
+        $op = trim($this->request->param('op', 'today'));
+        $range = $this->request->param('range/a');
+        if ($op !== 'between') {
+            $range = null;
+        }
+        $UserStatistics = new UserStatistics;
+        $data = $UserStatistics->whereTime('belongdate', $op, $range)->group('name')->field('category,name,sum(total) as total')->select();
+        return json($data);
+    }
+
+    public function countPeople()
+    {
+        $this->request->filter('trim');
+        $op = trim($this->request->get('op', 'today'));
+        $range = $this->request->get('range/a');
+        if ($op !== 'between') {
+            $range = null;
+        }
+        $count['register'] = User::whereTime('jointime', $op, $range)->count();
+        $count['recharge'] = RechargeOrder::whereTime('completion_time', $op, $range)
+            ->group('user_id')
+            ->where(['status' => (new RechargeOrder)->getCurrentTableFieldConfig('status.success.value')])
+            ->count();
+        $count['withdraw'] = WithdrawOrder::whereTime('completion_time', $op, $range)
+            ->group('user_id')
+            ->where(['status' => (new WithdrawOrder)->getCurrentTableFieldConfig('status.success.value')])
+            ->count();
+        $count['projects'] = Projects::whereTime('create_time', $op, $range)
+            ->group('user_id')
+            ->count();
+        return json($count);
+    }
+
+    /**
+     * 总余额
+     */
+    public function totalAmount()
+    {
+        $total_balance = User::sum('money');
+        return json(['balance' => $total_balance]);
+    }
+
+    public function total()
+    {
+        $data = UserStatistics::group('name')->field('category,name,sum(total) as total')->select();
+        return json($data);
     }
 }

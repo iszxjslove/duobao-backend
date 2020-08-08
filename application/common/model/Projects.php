@@ -6,7 +6,7 @@ namespace app\common\model;
 
 use think\Model;
 
-class Projects extends Model
+class Projects extends Base
 {
 
     // 表名

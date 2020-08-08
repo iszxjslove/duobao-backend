@@ -84,11 +84,11 @@
             </div>
             <hr class="q-mt-none q-mx-md">
             <div class="text-center q-mb-md">
-                <div class="d-btn-gruop q-mb-md">
-                    <a class="d-btn outline q-mx-xs active" href="javascript:">7天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">15天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">30天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">其它</a>
+                <div class="d-btn-group q-mb-md select-time">
+                    <a class="d-btn outline q-mx-xs active" data-value="7" href="javascript:">7天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="15" href="javascript:">15天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="30" href="javascript:">30天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="0" href="javascript:">其它</a>
                 </div>
                 <div>08-23 ~ 09-22</div>
             </div>
@@ -122,11 +122,11 @@
             </div>
             <hr class="q-mt-none q-mx-md">
             <div class="text-center q-mb-md">
-                <div class="d-btn-gruop q-mb-md">
-                    <a class="d-btn outline q-mx-xs active" href="javascript:">7天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">15天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">30天</a>
-                    <a class="d-btn outline q-mx-xs" href="javascript:">其它</a>
+                <div class="d-btn-group q-mb-md select-time">
+                    <a class="d-btn outline q-mx-xs active" data-value="7" href="javascript:">7天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="15" href="javascript:">15天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="30" href="javascript:">30天</a>
+                    <a class="d-btn outline q-mx-xs" data-value="0" href="javascript:">其它</a>
                 </div>
                 <div>08-23 ~ 09-22</div>
             </div>
@@ -188,6 +188,10 @@
 </div>
 
 <style>
+    .d-btn-group .active{
+        background-color: #0a6aa1;
+        color: #FFFFFF;
+    }
     .line-title{
         position: relative;
         text-align: center;
@@ -238,7 +242,7 @@
         border-radius: 3px;
         border:1px solid rgb(204,204,204);
     }
-    .d-btn-gruop{
+    .d-btn-group{
         display: flex;
         justify-content: center;
     }

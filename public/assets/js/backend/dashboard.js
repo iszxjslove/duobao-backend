@@ -143,17 +143,57 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
             Controller.api.getCountTotal()
             Controller.api.getTotalAmount()
             Controller.api.getTotal()
+
+            $('.count-people .select-time').on('btn.group.checked', function (e, data) {
+                if(data.value){
+                    let startDate = new Date();
+                    let endDate = new Date();
+                    startDate.setDate(startDate.getDate() - data.value);
+                    endDate.setDate(endDate.getDate());
+                    let start_time = startDate.format("yyyy-MM-dd hh:mm:ss");
+                    let end_time = endDate.format("yyyy-MM-dd hh:mm:ss");
+                    Controller.api.getCountPeople('between', [start_time, end_time])
+                }
+            })
+
+            $('.count-total .select-time').on('btn.group.checked', function (e, data) {
+                if(data.value){
+                    let startDate = new Date();
+                    let endDate = new Date();
+                    startDate.setDate(startDate.getDate() - data.value);
+                    endDate.setDate(endDate.getDate());
+                    let start_time = startDate.format("yyyy-MM-dd hh:mm:ss");
+                    let end_time = endDate.format("yyyy-MM-dd hh:mm:ss");
+                    Controller.api.getCountTotal('between', [start_time, end_time])
+                }
+            })
+
+            $('.d-btn-group').on('click', '.d-btn', function () {
+                let btnGroup = $(this).closest('.d-btn-group')
+                btnGroup.find('.d-btn').removeClass('active')
+                $(this).addClass('active')
+                console.log(btnGroup)
+                console.log($(this).data('value'))
+                btnGroup.data('value', $(this).data('value')).trigger('btn.group.checked', {
+                    value: $(this).data('value'),
+                    el: btnGroup
+                })
+            }).on('btn.group.init', function () {
+                $(this).find('.d-btn.active').trigger('click')
+            }).trigger('btn.group.init')
         },
         api: {
-            getCountPeople: function () {
-                $.get('dashboard/countPeople', {op: 'year', range: ['2020-04-01', '2020-05-01']}, function (ret) {
+            getCountPeople: function (op, range) {
+                if(!op) return false
+                $.get('dashboard/countPeople', {op: op, range: range}, function (ret) {
                     $.each(ret, function (i, el) {
                         $('.count-people .count-' + i + ' .count-quantity').text(el)
                     })
                 })
             },
-            getCountTotal: function () {
-                $.get('dashboard/countTotal', {op: 'year', range: ['2020-04-01', '2020-05-01']}, function (ret) {
+            getCountTotal: function (op, range) {
+                if(!op) return false
+                $.get('dashboard/countTotal', {op: op, range: range}, function (ret) {
                     let bonus = 0;
                     let wager_fee = 0;
                     $.each(ret, function (i, el) {

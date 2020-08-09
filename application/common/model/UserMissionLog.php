@@ -14,6 +14,8 @@ class UserMissionLog extends Model
 
     protected $createTime = 'create_time';
 
+    protected $updateTime = false;
+
     protected $append = [
         'create_time_text',
     ];

@@ -15,7 +15,7 @@ class Zow extends Base
     {
         $scheme = parse_url($domain, PHP_URL_SCHEME);
         $scheme || $scheme = 'http://';
-        $url = url('/api/fastpay/zow/callback', '', '', !!$domain);
+        $url = url('fastpay/zow/callback', '', '', !!$domain);
         return $domain ? ($scheme . $domain . $url) : $url;
     }
 
@@ -23,7 +23,7 @@ class Zow extends Base
     {
         $scheme = parse_url($domain, PHP_URL_SCHEME);
         $scheme || $scheme = 'http://';
-        $url = url('/api/fastpay/zow/notify', '', '', !!$domain);
+        $url = url('fastpay/zow/notify');
         return $domain ? ($scheme . $domain . $url) : $url;
     }
 
@@ -58,19 +58,20 @@ class Zow extends Base
 
     public function buildParams($params)
     {
+        $merchant_config = json_decode($params['merchant_config'], true);
         $native = array(
-            "pay_memberid"    => $params['merchant_id'],   //商户后台API管理获取
+            "pay_memberid"    => $merchant_config['merchant_id'],   //商户后台API管理获取
             "pay_orderid"     => $params['trade_no'],    //订单号
             "pay_amount"      => bcmul($params['amount'], 1, 2),    //交易金额
             "pay_applydate"   => time(),
             "pay_notifyurl"   => $this->getNotifyUrl(),
-            "pay_callbackurl" => $this->getCallbackUrl()
+            "pay_callbackurl" => $this->getCallbackUrl(),
         );
         $native['pay_country'] = 'IN';
         $native['pay_currency'] = 'INR';
         $native['pay_productname'] = $params['product_title'];
         $native["pay_bankcode"] = "924";  //商户后台通道费率页 获取银行编码
-        $native["pay_md5sign"] = $this->makeSign($native, $params['secret']);
+        $native["pay_md5sign"] = $this->makeSign($native, $merchant_config['secret']);
         return $native;
     }
 

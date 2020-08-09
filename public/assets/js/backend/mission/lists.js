@@ -98,7 +98,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
                     if (times_code.visible) {
                         cCodeFormGroup.show()
                         cCodeFormGroup.find('.control-label').text(times_code.label)
-                        if(typeof cCode.selectpicker === 'function'){
+                        if (typeof cCode.selectpicker === 'function') {
                             cCode.selectpicker("refresh");
                         }
                     }
@@ -115,6 +115,31 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
             },
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
+                $(document).on('change', 'input[name="row[method]"]', function () {
+                    let cLevel = $('#c-level')
+                    if ($(this).val() === 'parent') {
+                        cLevel.closest('.form-group').show()
+                        cLevel.val(1)
+                    } else {
+                        cLevel.closest('.form-group').hide()
+                        cLevel.val(0)
+                    }
+                })
+
+                // $('input[name="row[method]"][value="parent"]').prop('checked', true).trigger('change');
+
+                $(document).on('selectpage.bs.change', '#c-mission_config_id', function (e, data) {
+                    let selected = data[$(this).val()];
+                    if (selected) {
+                        if (selected.method) {
+                            $('input[name="row[method]"]').closest('.form-group').hide();
+                            $('input[name="row[method]"][value="' + selected.method + '"]').prop('checked', true).trigger('change');
+                        } else {
+                            $('input[name="row[method]"]').closest('.form-group').show();
+                        }
+                    }
+                    console.log(data[$(this).val()])
+                })
 
                 $('#c-mission_config_id').selectPage({
                     data: 'mission/config',
@@ -122,11 +147,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
                     keyField: 'id',
                     params: {"selectpageFields": "*"},
                     eSelect: function (data) {
-                        $('#c-config_json').text(JSON.stringify(data))
-                        Controller.api.initMissionForm()
+                        let list = {}
+                        list[data.id] = data
+                        $('#c-mission_config_id').trigger('selectpage.bs.change', list)
                     },
                     eAjaxSuccess: function (data) {
                         data.totalRow = typeof data.total !== 'undefined' ? data.total : (typeof data.totalRow !== 'undefined' ? data.totalRow : data.list.length);
+                        let list = {}
+                        $.each(data.list, function (i, el) {
+                            list[el.id] = el;
+                        })
+                        $('#c-mission_config_id').trigger('selectpage.bs.change', list)
                         return data;
                     }
                 });

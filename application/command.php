@@ -21,6 +21,7 @@ return [
     'app\admin\command\Createissue',
     'app\admin\command\CheckSendTask',
     'app\admin\command\Checkbonus',
+    'app\admin\command\CheckSendBonus',
     'app\admin\command\Sendbonus',
     'app\admin\command\sendInterest',
     'app\admin\command\Test',

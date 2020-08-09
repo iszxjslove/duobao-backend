@@ -169,10 +169,10 @@ class Test extends Api
             $user = [];
             for ($u = 1; $u <= $rand; $u++) {
                 $user[] = [
-                    'username'   => Random::alnum(6) . $d . $u,
-                    'createtime' => $time,
+                    'username'        => Random::alnum(6) . $d . $u,
+                    'createtime'      => $time,
                     'financial_money' => 0,
-                    'jointime'   => $time,
+                    'jointime'        => $time,
                 ];
             }
             User::insertAll($user);
@@ -186,10 +186,10 @@ class Test extends Api
         $day = $this->request->request('day', 1);
         Db::execute('TRUNCATE TABLE fa_user_statistics');
         $keys = [
-            'wager_points'                 => 'wager',
-            'wager_totalprice'                 => 'wager',
-            'wager_fee1'                   => 'wager_fee',
-            'wager_fee2'                   => 'wager_fee',
+            'wager_points'           => 'wager',
+            'wager_totalprice'       => 'wager',
+            'wager_fee1'             => 'wager_fee',
+            'wager_fee2'             => 'wager_fee',
             'register'               => 'register',
             'create_red_envelopes'   => 'red_envelopes',
             'recovery_red_envelopes' => 'red_envelopes',

@@ -7,6 +7,7 @@ namespace app\admin\command;
 use app\admin\model\Crontab;
 use app\admin\model\Game;
 use app\admin\model\Issue as IssueModel;
+use app\common\model\IssueSales;
 use app\common\model\Projects;
 use app\common\model\User;
 use think\console\Command;
@@ -178,13 +179,18 @@ class Sendbonus extends Command
         //     3.2  '中奖状态' 状态为:    '中奖'  projects.`isgetprize`   = 1
         //     3.3  '奖金派送' 状态为: 非 '已派'  projects.`prizestatus` != 1
         $this->projectsModel = new Projects();
-        $fields = 'id,user_id,issue,color,code,contract_amount';
+        $fields = 'id,user_id,issue,issue_id,color,code,contract_amount';
         $projectsList = $this->projectsModel->field($fields)->where(['issue' => $issue->issue, 'isgetprize' => 1, 'prizestatus' => 0])->select();
         $iCounts = count($projectsList);  // 实际获取的需处理方案个数
         $output->info("[d] [" . date('Y-m-d H:i:s') . "] Issue='$issue->issue', GotDataCounts='$iCounts' \n");
 
         // 5, 如果获取的结果集为空, 则表示当前奖期已全部'奖金派送'完成. 更新状态值
         if (!$iCounts) { // 奖期标记设置为: 已经完成奖金派发
+            $issueSales = IssueSales::get(['issue_id' => $issue->id]);
+            if ($issueSales) {
+                $issueSales->actual_total_profit = bcsub($issueSales->totalprice, $issueSales->total_actual_expenditure, 2);
+                $issueSales->save();
+            }
             $result = $this->projectsModel->where(['issue' => $issue->issue, 'prizestatus' => 0])->update(['isgetprize' => 2]);
             if ($result === false) { // update 出错
                 return -3002;
@@ -247,6 +253,7 @@ class Sendbonus extends Command
 
             if ($item->bonus) {
                 User::money($item->bonus, $item->user_id, "{$item->issue}: 派发奖金");
+                IssueSales::where(['issue_id' => $item->issue_id])->setInc('total_actual_expenditure', $item->bonus);
                 $item->prizestatus = 1;
                 $item->bonustime = time();
                 $this->iProcessRecord++;

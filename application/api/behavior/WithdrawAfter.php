@@ -4,11 +4,17 @@
 namespace app\api\behavior;
 
 
+use app\common\model\User;
 use app\common\model\UserStatistics;
 
 class WithdrawAfter
 {
+    /**
+     * @var User
+     */
+    protected $user;
 
+    protected $order;
 
     public function run(&$user, $order)
     {
@@ -21,8 +27,9 @@ class WithdrawAfter
      * 任务
      * @param int $amount
      */
-    public function mission($amount = 10)
+    public function mission()
     {
-        UserStatistics::push('withdraw', $amount);
+        User::hold_balance($this->user->id, -$this->order->amount, '提现');
+        UserStatistics::push('withdraw_amount', $this->order->amount);
     }
 }

@@ -41,5 +41,25 @@ return [
                 'miss'    => [2, 'gray', '未中奖'],
             ]
         ]
+    ],
+    'fa_mission'        => [
+        'field' => [
+            'status' => [
+                'default' => [0, 'primary', '未发布'],
+                'up'      => [1, 'success', '已发布'],
+                'down'    => [2, 'gray', '已下架'],
+            ]
+        ]
+    ],
+    'fa_user_mission'   => [
+        'field' => [
+            'status' => [
+                'default' => [0, 'primary', '进行中'],
+                'fail'    => [1, 'gray', '未完成'],
+                'success' => [2, 'success', '已完成']
+            ]
+        ]
     ]
+
+
 ];

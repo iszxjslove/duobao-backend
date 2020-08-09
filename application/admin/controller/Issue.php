@@ -12,7 +12,7 @@ use think\Config;
  */
 class Issue extends Backend
 {
-    
+
     /**
      * Issue模型对象
      * @var \app\admin\model\Issue
@@ -20,6 +20,10 @@ class Issue extends Backend
     protected $model = null;
 
     protected $searchFields = 'issue';
+
+    protected $relationWith = 'sales';
+
+    protected $relationSearch = true;
 
     public function _initialize()
     {
@@ -44,15 +48,15 @@ class Issue extends Backend
     {
         $id = $this->request->post('id');
         $code = $this->request->post('code');
-        if(!$id || !$code){
+        if (!$id || !$code) {
             $this->error('参数错误');
         }
         $digits = Config::get('site.game_code_digits');
-        if(strlen($code) != $digits){
-            $this->error(strlen($code)."号码位数不对，请输入{$digits}位数字");
+        if (strlen($code) != $digits) {
+            $this->error(strlen($code) . "号码位数不对，请输入{$digits}位数字");
         }
         $issue = $this->model::get($id);
-        if(!$issue){
+        if (!$issue) {
             $this->error('奖期不存在');
         }
         $issue->code = $code;
@@ -61,10 +65,10 @@ class Issue extends Backend
         $this->success();
     }
 
-    public function clear_set($ids=null)
+    public function clear_set($ids = null)
     {
         $issue = $this->model::get($ids);
-        if(!$issue || $issue->statuscode !== 1){
+        if (!$issue || $issue->statuscode !== 1) {
             $this->error('奖期不存在或状态不能更改');
         }
         $issue->statuscode = 0;

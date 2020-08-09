@@ -5,9 +5,13 @@ namespace app\api\controller;
 
 
 use app\common\controller\Api;
+use app\common\model\RechargeOrder;
 use fast\Http;
 use fastpay\Wintec;
 use fastpay\Zow;
+use think\Db;
+use think\Exception;
+use think\Log;
 use think\Request;
 
 class Pay extends Api
@@ -20,29 +24,43 @@ class Pay extends Api
         if (!$amount || $amount < 1) {
             $this->error('Wrong amount');
         }
+
+        // 选择支付
         $pay = new Zow();
-        $orderInfo = [
-            'merchant_id'   => '200409159',
-            'trade_no'      => \NumberPool::getOne(),
-            'product_title' => 'Jewellery',
-            'amount'        => $amount,
-            'secret'        => 'wwg5batjlj8yb3wby6gw41ktjxqgvwnl'
-        ];
-        $params = $pay->buildParams($orderInfo);
-        $payUrl = $pay->getPayUrl();
-//        $option[CURLOPT_HTTPHEADER] = ["Content-Type: application/json", "Accept: text/html"];
+        $merchantConfig = ['merchant_id' => '200825122', 'secret' => 'i3pnio1dfbn8jagnyzrzpylb7gfgu9gq'];
+
+        Db::startTrans();
         try {
+            $orderInfo = [
+                'user_id'         => $this->auth->id,
+                'trade_no'        => \NumberPool::getOne(),
+                'amount'          => $amount,
+                'create_time'     => time(),
+                'product_title'   => 'Jewellery',
+                'merchant_config' => json_encode($merchantConfig),
+                'status'          => 0,
+            ];
+            RechargeOrder::create($orderInfo);
+            $params = $pay->buildParams($orderInfo);
+            $payUrl = $pay->getPayUrl();
             $response = Http::post($payUrl, $params);
+
+            Log::write($params);
+            Log::write($response);
+
             if (!$response) {
                 $this->error('recharge fail');
             }
             $response = json_decode($response, true);
+
             if ($response['code'] !== '200' || !$response['url']) {
                 $this->error('Network exception, please try again later');
             }
             $output['payurl'] = $response['url'];
-        } catch (\Exception $e) {
+            Db::commit();
+        } catch (\think\Exception $e) {
             $this->error($e->getMessage());
+            Db::rollback();
         }
         $this->success('', $output);
     }

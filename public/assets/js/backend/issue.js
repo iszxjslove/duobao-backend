@@ -25,7 +25,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             day2.setDate(day2.getDate() + 1);
             let time2 = day2.format("yyyy-MM-dd hh:mm:ss");
 
-            console.log(time1,time2);
+            console.log(time1, time2);
 
             // 初始化表格
             table.bootstrapTable({
@@ -52,6 +52,21 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             operate: 'RANGE',
                             addclass: 'datetimerange',
                             formatter: Table.api.formatter.datetime
+                        },
+                        {
+                            field: 'sales.totalprice',
+                            title: __('总投注'),
+                            operate: false,
+                        },
+                        {
+                            field: 'sales.total_actual_expenditure',
+                            title: __('总派奖'),
+                            operate: false,
+                        },
+                        {
+                            field: 'sales.actual_total_profit',
+                            title: __('总利润'),
+                            operate: false,
                         },
                         {
                             field: 'operate',

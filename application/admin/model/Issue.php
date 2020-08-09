@@ -2,6 +2,7 @@
 
 namespace app\admin\model;
 
+use app\common\model\IssueSales;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
@@ -345,7 +346,7 @@ class Issue extends Model
         }
 
         $where = [
-            'game_id'   => $gid,
+            'game_id'    => $gid,
             'statuscode' => ['<', 2]
         ];
         $result = $this->force('idx_gameid')->where($where)->order('id')->limit(1)->find();
@@ -377,5 +378,10 @@ class Issue extends Model
             return [];
         }
         return $result;
+    }
+
+    public function sales()
+    {
+        return $this->hasOne(IssueSales::class, 'issue_id', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 }

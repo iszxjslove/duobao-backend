@@ -39,16 +39,22 @@ class Mission extends Api
         $row = MissionModel::get($id);
         $now_time = time();
         // 判断任务状态
-        if(!$row || $row->status !== 1 || $row->start_time > $now_time || $row->end_time < $now_time || !$row->still_some || $row->still_some <= 0){
-            $this->error('no mission');
+        if (!$row || $row->status !== $row->getCurrentTableFieldConfig('status.up.value')) {
+            $this->error('no mission' . $row->status);
+        }
+        if (strtotime($row->start_time) > $now_time || strtotime($row->end_time) < $now_time) {
+            $this->error('Time not allowed' . $row->start_time);
+        }
+        if ($row->still_some <= 0) {
+            $this->error('late');
         }
         // 判断重复
-        $my = UserMission::get(['user_id'=>$this->auth->id, 'mission_id'=>$row->id]);
-        if($my){
+        $my = UserMission::get(['user_id' => $this->auth->id, 'mission_id' => $row->id]);
+        if ($my && $my->status === $my->getCurrentTableFieldConfig('status.default.value')) {
             $this->error('no need to repeat');
         }
         $result = UserMission::receive($this->auth->getUser(), $row);
-        if(!$result){
+        if (!$result) {
             $this->error('no receive');
         }
         $this->success();

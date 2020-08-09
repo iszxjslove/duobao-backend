@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echarts-theme', 'template', 'socket'], function ($, undefined, Backend, Datatable, Table, Echarts, undefined, Template, io) {
+define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echarts-theme', 'template', 'socket', 'bootstrap-daterangepicker'], function ($, undefined, Backend, Datatable, Table, Echarts, undefined, Template, io) {
 
     var Controller = {
         index: function () {
@@ -18,17 +18,18 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
             // });
 
 
-            // 加载数据面板
-            // let keysList = []
-            // $('.data-panel').each(function () {
-            //     keysList.push($(this).data('panel'))
-            // })
-            // $.get('dashboard/data', {keys: keysList.join(',')}, function (ret) {
-            //     $.each(ret, function (i, el) {
-            //         console.log(el)
-            //         $('.data-panel[data-panel="issue_sales"]').html(Template(i + '_tpl', el))
-            //     })
-            // })
+            //加载数据面板
+            let keysList = []
+            $('.data-panel').each(function () {
+                keysList.push($(this).data('panel'))
+            })
+            console.log(keysList)
+            $.get('dashboard/data', {keys: keysList.join(',')}, function (ret) {
+                $.each(ret, function (i, el) {
+                    console.log(el)
+                    $('.data-panel[data-panel="issue_sales"]').html(Template(i + '_tpl', el))
+                })
+            })
 
 
             // 基于准备好的dom，初始化echarts实例
@@ -181,6 +182,30 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'table', 'echarts', 'echart
             }).on('btn.group.init', function () {
                 $(this).find('.d-btn.active').trigger('click')
             }).trigger('btn.group.init')
+
+
+            var ranges = {};
+            ranges[__('Today')] = [Moment().startOf('day'), Moment().endOf('day')];
+            ranges[__('Yesterday')] = [Moment().subtract(1, 'days').startOf('day'), Moment().subtract(1, 'days').endOf('day')];
+            ranges[__('This Month')] = [Moment().startOf('month'), Moment().endOf('month')];
+            ranges[__('Last Month')] = [Moment().subtract(1, 'month').startOf('month'), Moment().subtract(1, 'month').endOf('month')];
+            var options = {
+                timePicker: false,
+                autoUpdateInput: false,
+                timePickerSeconds: true,
+                timePicker24Hour: true,
+                autoApply: true,
+                locale: {
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    customRangeLabel: __("Custom Range"),
+                    applyLabel: __("Apply"),
+                    cancelLabel: __("Clear"),
+                },
+                ranges: ranges,
+            };
+            $('.datetimerange').daterangepicker(options, function (a,b,c) {
+                console.log(a,b,c)
+            });
         },
         api: {
             getCountPeople: function (op, range) {

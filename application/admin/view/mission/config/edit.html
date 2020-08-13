@@ -1,81 +1,93 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
 
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Group_name')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('任务组名称')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-group_name" class="form-control" name="row[group_name]" type="text" value="{$row.group_name|htmlentities}">
+            <select id="c-group_name" class="form-control selectpicker" name="row[group_name]"
+                    data-value="{$row.group_name|htmlentities}"></select>
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('任务名称')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-name" class="form-control" name="row[name]" type="text" value="{$row.name|htmlentities}">
+            <select id="c-mission_name" class="form-control selectpicker" name="row[mission_name]"
+                    data-value="{$row.mission_name|htmlentities}"></select>
         </div>
     </div>
     <div class="form-group">
         <label class="control-label col-xs-12 col-sm-2">{:__('Title')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-title" class="form-control" name="row[title]" type="text" value="{$row.title|htmlentities}">
+            <input id="c-title" data-rule="required" class="form-control" name="row[title]" type="text"
+                   value="{$row.title|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Times_cycle')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('统计对象')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-times_cycle" class="form-control" name="row[times_cycle]" type="text" value="{$row.times_cycle|htmlentities}">
+            <!-- parent 奖励给父级，统计下级 -->
+            {:build_radios('row[method]', ['private'=>__('自己'),'parent'=>__('下级'),'optional'=>__('可选')], $row.method)}
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Times_code')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('统计次数')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-times_code" class="form-control" name="row[times_code]" type="text" value="{$row.times_code|htmlentities}">
+            <input id="c-times" data-rule="required" data-tip="-1 不统计次数" class="form-control" name="row[times]"
+                   type="text" value="{$row.times|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_field')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('统计次数标题')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-total_field" class="form-control" name="row[total_field]" type="text" value="{$row.total_field|htmlentities}">
+            <input id="c-times_label" data-relation-id="c-times" data-rule="required(isRequired)" class="form-control"
+                   name="row[times_label]" type="text" value="{$row.times_label|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Total_field_title')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('合计')}:</label>
         <div class="col-xs-12 col-sm-8">
-            <input id="c-total_field_title" class="form-control" name="row[total_field_title]" type="text" value="{$row.total_field_title|htmlentities}">
+            <input id="c-total" data-rule="required" data-tip="-1 不统计合计" class="form-control" name="row[total]"
+                   type="text" value="{$row.total|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Standard_conditions')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('合计字段')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-standard_conditions" class="form-control selectpicker" multiple="" name="row[standard_conditions][]">
-                {foreach name="standardConditionsList" item="vo"}
-                    <option value="{$key}" {in name="key" value="$row.standard_conditions"}selected{/in}>{$vo}</option>
-                {/foreach}
-            </select>
-
+            <input id="c-total_field" data-relation-id="c-total" data-rule="required(isRequired)" class="form-control"
+                   name="row[total_field]" type="text" value="{$row.total_field|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Method')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('合计字段标题')}:</label>
         <div class="col-xs-12 col-sm-8">
-                        
-            <select  id="c-method" class="form-control selectpicker" name="row[method]">
-                {foreach name="methodList" item="vo"}
-                    <option value="{$key}" {in name="key" value="$row.method"}selected{/in}>{$vo}</option>
-                {/foreach}
-            </select>
-
+            <input id="c-total_field_label" data-relation-id="c-total" data-rule="required(isRequired)"
+                   class="form-control" name="row[total_field_label]" type="text"
+                   value="{$row.total_field_label|htmlentities}">
         </div>
     </div>
     <div class="form-group">
-        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <label class="control-label col-xs-12 col-sm-2">{:__('周期选项')}:</label>
         <div class="col-xs-12 col-sm-8">
-            
-            <div class="radio">
-            {foreach name="statusList" item="vo"}
-            <label for="row[status]-{$key}"><input id="row[status]-{$key}" name="row[status]" type="radio" value="{$key}" {in name="key" value="$row.status"}checked{/in} /> {$vo}</label> 
-            {/foreach}
-            </div>
-
+            <dl class="fieldlist" data-name="row[cycle]">
+                <dd>
+                    <ins>键名</ins>
+                    <ins>键值</ins>
+                </dd>
+                <dd>
+                    <a href="javascript:" class="btn btn-sm btn-success btn-append">
+                        <i class="fa fa-plus"></i>
+                        {:__('Append')}
+                    </a>
+                </dd>
+                <textarea name="row[cycle]" class="form-control hide" cols="30" rows="5">
+                    {$row.cycle|htmlentities}
+                </textarea>
+            </dl>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('状态')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', ['normal'=>__('正常'),'hidden'=>__('隐藏')],$row.status)}
         </div>
     </div>
     <div class="form-group layer-footer">

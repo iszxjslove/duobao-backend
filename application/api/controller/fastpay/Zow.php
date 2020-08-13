@@ -18,6 +18,20 @@ class Zow extends Controller
 {
     public function notify()
     {
+
+//        通知格式
+//        'memberid' => '200825122',
+//        'orderid' => '1596137374642000000059',
+//        'transaction_id' => '20200809163202504948',
+//        'amount' => '10.0000',
+//        'datetime' => '20200809163334',
+//        'returncode' => '00',
+//        'sign' => '13AACB74892E38C89F3799AF790E23FE',
+//        'attach' => '',
+//        'userid' => '',
+
+
+
         $data = [
           'post' => $this->request->post(),
           'get' => $this->request->get(),

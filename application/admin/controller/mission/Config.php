@@ -11,7 +11,7 @@ use app\common\controller\Backend;
  */
 class Config extends Backend
 {
-    
+
     /**
      * Config模型对象
      * @var \app\admin\model\mission\Config
@@ -22,8 +22,6 @@ class Config extends Backend
     {
         parent::_initialize();
         $this->model = new \app\admin\model\mission\Config;
-        $this->view->assign("standardConditionsList", $this->model->getStandardConditionsList());
-        $this->view->assign("methodList", $this->model->getMethodList());
         $this->view->assign("statusList", $this->model->getStatusList());
     }
 
@@ -37,6 +35,6 @@ class Config extends Backend
      * 因此在当前控制器中可不用编写增删改查的代码,除非需要自己控制这部分逻辑
      * 需要将application/admin/library/traits/Backend.php中对应的方法复制到当前控制器,然后进行修改
      */
-    
+
 
 }

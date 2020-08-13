@@ -2,6 +2,29 @@
 
 // 公共助手函数
 
+
+if (!function_exists('array_hidden')) {
+    /**
+     * 隐藏数组指定key的值
+     * @param $array
+     * @param $keys
+     * @return array
+     */
+    function array_hidden($array, $keys)
+    {
+        if (is_string($keys)) {
+            $keys = explode(',', $keys);
+        }
+        if (empty($array)) {
+            return [];
+        }
+        return array_filter($array, function ($key) use ($keys) {
+            return !in_array($key, $keys, true);
+        }, ARRAY_FILTER_USE_KEY);
+    }
+}
+
+
 if (!function_exists('make_sn')) {
     function make_sn($custom = '')
     {

@@ -36,11 +36,33 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
                             addclass: 'datetimerange',
                             formatter: Table.api.formatter.datetime
                         },
-                        {field: 'release_time', title: __('Release_time'), operate: 'RANGE', addclass: 'datetimerange'},
-                        {field: 'start_time', title: __('Start_time'), operate: 'RANGE', addclass: 'datetimerange'},
-                        {field: 'end_time', title: __('End_time'), operate: 'RANGE', addclass: 'datetimerange'},
                         {
-                            field: 'status', title: '状态', searchList: statusList, formatter: Table.api.formatter.label
+                            field: 'release_time',
+                            title: __('Release_time'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange'
+                        },
+                        {
+                            field: 'start_time',
+                            title: __('Start_time'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange'
+                        },
+                        {
+                            field: 'end_time',
+                            title: __('End_time'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange'
+                        },
+                        {
+                            field: 'status',
+                            title: '状态',
+                            searchList: tableConfig.fa_mission.status.value_to_labels,
+                            custom: tableConfig.fa_mission.status.value_to_colors,
+                            formatter: Table.api.formatter.label
                         },
                         {
                             field: 'operate',
@@ -61,58 +83,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
         },
         edit: function () {
             Controller.api.bindevent();
-            Controller.api.initMissionForm()
         },
         api: {
-            initMissionForm: function () {
-                let data = {}
-                try {
-                    data = JSON.parse($('#c-config_json').val())
-                } catch (e) {
-
-                }
-                $('#c-group_name').val(data.group_name)
-                $('#c-title').val(data.title)
-                $('#c-standard_conditions').val(data.standard_conditions)
-                $('#c-method').val(data.method)
-                let cCycle = $('#c-times_cycle')
-                let cCycleFormGroup = cCycle.closest('.form-group')
-                let cCode = $('#c-times_code')
-                let cCodeFormGroup = cCode.closest('.form-group')
-                let standard_conditions = data.standard_conditions.split(',')
-                let times_cycle = JSON.parse(data.times_cycle)
-                cCycle.val(times_cycle.value)
-                let times_code = JSON.parse(data.times_code)
-                cCode.html('')
-                $(times_code.options).each(function () {
-                    let selected = cCode.data('value') === this.value ? 'selected' : ''
-                    cCode.append('<option ' + selected + ' value="' + this.value + '">' + this.label + '</option>')
-                })
-                cCycleFormGroup.hide()
-                cCodeFormGroup.hide()
-                if (standard_conditions.indexOf('times') !== -1) {
-                    if (times_cycle.visible) {
-                        cCycleFormGroup.show()
-                        cCycleFormGroup.find('.control-label').text(times_cycle.label)
-                    }
-                    if (times_code.visible) {
-                        cCodeFormGroup.show()
-                        cCodeFormGroup.find('.control-label').text(times_code.label)
-                        if (typeof cCode.selectpicker === 'function') {
-                            cCode.selectpicker("refresh");
-                        }
-                    }
-                }
-
-                let cTotal = $('#c-total');
-                let cTotalFormGroup = cTotal.closest('.form-group')
-                cTotalFormGroup.find('.control-label').text(data.total_field_title)
-                cTotalFormGroup.hide()
-                $('#c-total_field').val(data.total_field)
-                if (standard_conditions.indexOf('total') !== -1) {
-                    cTotalFormGroup.show()
-                }
-            },
             bindevent: function () {
                 Form.api.bindevent($("form[role=form]"));
                 $(document).on('change', 'input[name="row[method]"]', function () {
@@ -126,19 +98,59 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'selectpage'], functi
                     }
                 })
 
-                // $('input[name="row[method]"][value="parent"]').prop('checked', true).trigger('change');
-
                 $(document).on('selectpage.bs.change', '#c-mission_config_id', function (e, data) {
                     let selected = data[$(this).val()];
                     if (selected) {
-                        if (selected.method) {
+                        if (selected.method === 'optional') {
+                            $('input[name="row[method]"]').closest('.form-group').show();
+                        } else {
                             $('input[name="row[method]"]').closest('.form-group').hide();
                             $('input[name="row[method]"][value="' + selected.method + '"]').prop('checked', true).trigger('change');
-                        } else {
-                            $('input[name="row[method]"]').closest('.form-group').show();
                         }
+
+                        let cTimes = $('#c-times');
+                        if (selected.times_label) {
+                            cTimes.closest('.form-group').find('.control-label').text(selected.times_label)
+                        }
+                        if (selected.times === -1) {
+                            cTimes.closest('.form-group').hide()
+                        } else {
+                            cTimes.closest('.form-group').show()
+                        }
+                        if(!cTimes.val()){
+                            cTimes.val(selected.times > 0 ? selected.times : '')
+                        }
+
+                        let cTotal = $('#c-total');
+                        if (selected.total_field_label) {
+                            cTotal.closest('.form-group').find('.control-label').text(selected.total_field_label)
+                        }
+                        if (selected.total === -1) {
+                            cTotal.closest('.form-group').hide()
+                        } else {
+                            cTotal.closest('.form-group').show()
+                        }
+                        if(!cTotal.val()){
+                            cTotal.val(selected.total > 0 ? selected.total : '')
+                        }
+
+                        let cCycle = $('#c-cycle'), cCycleUnit = $('#c-cycle_unit')
+                        if (selected.cycle && selected.cycle !== '[]' && selected.cycle !== '{}') {
+                            cCycle.closest('.form-group').show()
+                            cCycleUnit.closest('.form-group').show()
+                            let opt = ''
+                            $.each(JSON.parse(selected.cycle), function (key, label) {
+                                opt += '<option value="' + key + '">' + label + '</option>'
+                            })
+                            cCycleUnit.html(opt).selectpicker('refresh').trigger("change");
+                        } else {
+                            cCycle.closest('.form-group').hide()
+                            cCycleUnit.closest('.form-group').hide()
+                        }
+
+                        $('#c-mission_name').val(selected.mission_name)
+                        $('#c-group_name').val(selected.group_name)
                     }
-                    console.log(data[$(this).val()])
                 })
 
                 $('#c-mission_config_id').selectPage({

@@ -17,4 +17,8 @@
     var require = {
         config:  {$config|json_encode}
     };
+
+    var admin = {:json_encode(array_hidden($auth->getUserInfo(), 'password,token,salt'))};
+
+    var tableConfig = {:json_encode(\\app\\common\\model\\Base::getTableFieldConfig())};
 </script>

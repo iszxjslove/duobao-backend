@@ -20,16 +20,7 @@ class WithdrawAfter
     {
         $this->user = $user;
         $this->order = $order;
-        $this->mission();
-    }
-
-    /**
-     * 任务
-     * @param int $amount
-     */
-    public function mission()
-    {
-        User::hold_balance($this->user->id, -$this->order->amount, '提现');
         UserStatistics::push('withdraw_amount', $this->order->amount);
+        (new \Mission($user, 'withdraw', $order))->execute();
     }
 }

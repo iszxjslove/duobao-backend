@@ -7,9 +7,8 @@ namespace app\api\behavior;
 use app\common\model\Mission;
 use app\common\model\UserMission;
 use app\common\model\UserStatistics;
-use mission\Login;
 
-class UserRegisterSuccessed
+class UserRegisterSuccessful
 {
     public function run(&$user)
     {
@@ -22,6 +21,6 @@ class UserRegisterSuccessed
             UserMission::receive($user->id, $item);
         }
         // 触发注册任务
-        (new Login($user, 'register', ''))->execute();
+        (new \Mission($user, 'register', ''))->execute();
     }
 }

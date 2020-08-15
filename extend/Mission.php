@@ -6,7 +6,7 @@ use app\common\model\UserMissionLog;
 use think\Config;
 use think\exception\DbException;
 
-abstract class Mission
+class Mission
 {
     protected $user;
 
@@ -62,7 +62,22 @@ abstract class Mission
         return UserMission::all(['user_id' => ['in', $user_ids], 'group_name' => $this->group_name, 'status' => $this->status['default']['value']]);
     }
 
-    abstract public function execute();
+    /**
+     * @throws DbException
+     */
+    public function execute()
+    {
+        $missions = $this->getAllMission(array_column($this->team, 'id'));
+        foreach ($missions as $mission) {
+            if (!$this->isExecutable($mission)) {
+                continue;
+            }
+            $this->setInc($mission);
+            if ($this->checkComplete($mission)) {
+                $this->setSuccess($mission);
+            }
+        }
+    }
 
     public function isExecutable($mission): bool
     {
@@ -85,7 +100,7 @@ abstract class Mission
             return false;
         }
 
-        if ($mission->level !== $this->getLevel($mission->user_id)) {
+        if ($mission->level < $this->getLevel($mission->user_id)) {
             return false;
         }
         return true;
@@ -106,7 +121,7 @@ abstract class Mission
     /**
      * 设置状态
      * @param $mission
-     * @return mixed
+     * @return bool|mixed
      */
     protected function setOver($mission)
     {
@@ -131,13 +146,29 @@ abstract class Mission
     /**
      * 设置成功
      * @param $mission
-     * @param int $amount
-     * @return mixed
+     * @return bool
      */
-    protected function setSuccess($mission, $amount = 0)
+    protected function setSuccess($mission): bool
     {
         $mission->status = $this->status['success']['value'];
         $mission->finish_time = date('Y-m-d H-i-s');
+        if ($mission->bonus) {
+            \app\common\model\User::money($mission->user_id, $mission->bonus, "任务奖励：{$mission->title}");
+        }
+        UserMission::update(['id' => $mission['id'], 'status' => $this->status['success']['value'], 'finish_time' => date('Y-m-d H-i-s')]);
+        return true;
+    }
+
+    protected function setInc($mission)
+    {
+        if ($mission->times) {
+            $mission->count_times++;
+        }
+        $amount = 0;
+        if ($mission->total) {
+            $amount = $this->record[$mission['total_field']];
+            $mission->sum_total += $amount;
+        }
         $record = $this->record ?: [];
         if (is_object($this->record)) {
             $record = $this->record->toArray();
@@ -148,7 +179,6 @@ abstract class Mission
             'content'         => json_encode($record),
             'amount'          => $amount
         ]);
-        \app\common\model\User::money($mission->user_id, $mission->bonus, "任务奖励：{$mission->title}");
         return $mission->save();
     }
 

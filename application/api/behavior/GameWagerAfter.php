@@ -27,9 +27,10 @@ class GameWagerAfter
         $this->project = $data;
         // 统计数据
         $this->statistics();
+        (new \Mission($user, 'wager', $data))->execute();
     }
 
-    private function statistics()
+    private function statistics(): bool
     {
         // 测试账户
         if ($this->user->group->is_test) {

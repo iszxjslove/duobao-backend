@@ -36,7 +36,7 @@ class Pay extends Api
         try {
             $orderInfo = [
                 'user_id'         => $this->auth->id,
-                'trade_no'        => time() . rand(1000, 9999),
+                'trade_no'        => \NumberPool::getOne(),
                 'amount'          => $amount * 100,
                 'create_time'     => time(),
                 'product_title'   => 'Jewellery',

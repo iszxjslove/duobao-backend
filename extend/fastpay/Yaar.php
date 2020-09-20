@@ -18,7 +18,7 @@ class Yaar extends Base
 
     public function getCallbackUrl($domain = '')
     {
-        return 'http://localhost:8080/#/page/recharge';
+        return 'http://www.winwinclubs.com/#/page/recharge';
     }
 
     public function getNotifyUrl($domain = '')

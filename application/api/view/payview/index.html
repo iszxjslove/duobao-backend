@@ -7,15 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<!--<body onLoad="document.payForm.submit();">-->
-<body>
+<body onLoad="document.payForm.submit();">
 <form class="form-inline" method="post" action="{$payurl}" name="payForm">
     <?php
                 foreach ($params as $key => $val) {
-    echo '<input name="' . $key . '" value="' . $val . '" />';
+    echo '<input name="' . $key . '" value="' . $val . '" type="hidden" />';
     }
     ?>
-    <button type="submit">SUBMIT</button>
 </form>
 </body>
 </html>

@@ -6,6 +6,7 @@ namespace app\api\controller;
 
 use app\common\controller\Api;
 use app\common\model\RechargeOrder;
+use app\common\model\UserBank;
 use fast\Http;
 use fastpay\Wintec;
 use fastpay\Yaar;
@@ -22,6 +23,7 @@ class Pay extends Api
     public function unified()
     {
         $amount = $this->request->request('amount');
+        $channel = $this->request->request('channel');
         if (!$amount || $amount < 1) {
             $this->error('Wrong amount');
         }
@@ -36,7 +38,7 @@ class Pay extends Api
         try {
             $orderInfo = [
                 'user_id'         => $this->auth->id,
-                'trade_no'        => \NumberPool::getOne(),
+                'trade_no'        => time(),
                 'amount'          => bcmul($amount, 1, 2),
                 'create_time'     => time(),
                 'product_title'   => 'Jewellery',
@@ -45,10 +47,19 @@ class Pay extends Api
             ];
             RechargeOrder::create($orderInfo);
             $option = [
-                'channelId' => 8035,
+                'channelId' => $channel,
                 'currency'  => 'inr',
                 'version'   => '1.0'
             ];
+            if((int)$channel === 8036){
+                $bankId = $this->request->request('bankId');
+                $bank = UserBank::get($bankId);
+                if(!$bank){
+                    $this->error('no bank card');
+                }
+                $option['depositName'] = $bank->actual_name;
+                $option['depositAccount'] = $bank->account_number;
+            }
             $params = $pay->buildParams(array_merge($orderInfo, $option));
             $params['payUrl'] = $pay->getPayUrl();
 //            $response = Http::post($params['payUrl'], $params);

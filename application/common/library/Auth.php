@@ -431,7 +431,10 @@ class Auth
         $allowFields = $this->getAllowFields();
         $userinfo = array_intersect_key($data, array_flip($allowFields));
         $userinfo = array_merge($userinfo, Token::get($this->_token));
-        $userinfo['test'] = $this->_user->group->is_test;
+        $group = UserGroup::get($this->_user->group_id);
+        if($group){
+            $userinfo['test'] = $group->is_test;
+        }
         $userinfo['financial_money'] = $this->_user->finance ? $this->_user->finance->balance : 0;
         return $userinfo;
     }

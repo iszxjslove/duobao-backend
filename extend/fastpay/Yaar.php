@@ -68,6 +68,18 @@ class Yaar extends Base
             'returnUrl'       => $this->getCallbackUrl(),
             'version'         => $params['version'],
         ];
+
+        $extra = [];
+        if (!empty($params['depositAccount'])) {
+            $extra["depositAccount"] = $params['depositAccount'];
+        }
+
+        if (!empty($params['depositName'])) {
+            $extra["depositName"] = $params['depositName'];
+        }
+        if(!empty($extra)){
+            $data['extra'] = json_encode($extra);
+        }
         $data['sign'] = $this->makeSign($data, $merchant_config['secret']);
         return $data;
     }

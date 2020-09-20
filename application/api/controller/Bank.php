@@ -41,12 +41,7 @@ class Bank extends Api
         $params['user_id'] = $this->auth->id;
         $validate = new \think\Validate([
             'actual_name' => 'require',
-            'ifsc_code' => 'require',
             'account_number' => 'require|unique:user_bank',
-            'country'    => 'require',
-            'city' => 'require',
-            'address' => 'require',
-            'mobile_number' => 'require'
         ]);
         if(!$validate->check($params)){
             $this->error($validate->getError());

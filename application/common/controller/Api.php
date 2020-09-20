@@ -99,7 +99,6 @@ class Api
 
         // 控制器初始化
         $this->_initialize();
-
         // 前置操作方法
         if ($this->beforeActionList) {
             foreach ($this->beforeActionList as $method => $options) {

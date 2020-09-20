@@ -22,7 +22,8 @@ class UserGroup extends Model
     protected static function init()
     {
         self::beforeWrite(static function ($row) {
-            if($row->is_default ===  1){
+            $row->is_default = $row->is_default ? 1 : 0;
+            if ($row->is_default) {
                 self::where(['is_default' => 1])->update(['is_default' => 0]);
             }
         });

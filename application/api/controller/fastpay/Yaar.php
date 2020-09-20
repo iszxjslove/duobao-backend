@@ -42,7 +42,7 @@ class Yaar extends Api
                 $amount = bcdiv($data['amount'], 100, 2);
                 $diff = $order->amount - $amount;
                 if ($diff < -1 || $diff > 1) {
-//                    throw new \Exception('Amount verification failed');
+                    throw new \Exception('Amount verification failed');
                 }
                 $order->amount = $amount;
                 User::money($order->user_id, $amount, 'yaar payment');

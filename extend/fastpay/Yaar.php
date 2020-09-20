@@ -58,7 +58,7 @@ class Yaar extends Base
     {
         $merchant_config = json_decode($params['merchant_config'], true);
         $data = [
-            'amount'          => $params['amount'],
+            'amount'          => bcmul($params['amount'], 100),
             'appId'           => $merchant_config['appId'],
             'channelId'       => $params['channelId'],
             'currency'        => $params['currency'],
@@ -69,7 +69,6 @@ class Yaar extends Base
             'version'         => $params['version'],
         ];
         $data['sign'] = $this->makeSign($data, $merchant_config['secret']);
-//        $data['signString'] = self::parseSignStr($data) . '&key=' . $merchant_config['secret'];
         return $data;
     }
 

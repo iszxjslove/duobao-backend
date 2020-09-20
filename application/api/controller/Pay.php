@@ -37,7 +37,7 @@ class Pay extends Api
             $orderInfo = [
                 'user_id'         => $this->auth->id,
                 'trade_no'        => \NumberPool::getOne(),
-                'amount'          => $amount * 100,
+                'amount'          => bcmul($amount, 1, 2),
                 'create_time'     => time(),
                 'product_title'   => 'Jewellery',
                 'merchant_config' => json_encode($merchantConfig),

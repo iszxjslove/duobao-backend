@@ -5,6 +5,7 @@ namespace app\index\controller;
 use app\common\controller\Frontend;
 use app\common\model\RechargeOrder;
 use fast\Http;
+use fastpay\Tm;
 use fastpay\Yaar;
 
 class Payment extends Frontend
@@ -42,13 +43,34 @@ class Payment extends Frontend
         $result = $pay->payin($orderInfo);
         $response = Http::get($result['gateway'], $result['params']);
         $response = json_decode($response, true);
-        if ($response && !empty($response['errCode'])) {
+        if(!$response){
+            $this->error('System error');
+        }
+        if (!empty($response['errCode'])) {
             $errs = [
                 '0034' => 'Invalid Deposit Name',
                 '0035' => 'Invalid Deposit Account'
             ];
             $msg = $errs[$response['errCode']] ?? 'Error code:' . $response['errCode'];
             $this->error($msg);
+        }
+        $this->assign('payurl', $result['gateway']);
+        $this->assign('params', $result['params']);
+        return $this->view->fetch('index');
+    }
+
+    public function tm()
+    {
+        $pay = new Tm();
+        $orderInfo = $this->order->toArray();
+        $result = $pay->payin($orderInfo);
+        $response = Http::get($result['gateway'], $result['params']);
+        $response = json_decode($response, true);
+        if(!$response){
+            $this->error('System error');
+        }
+        if ((string)$response['status'] !== '1') {
+            $this->error($response['msg']);
         }
         $this->assign('payurl', $result['gateway']);
         $this->assign('params', $result['params']);

@@ -72,7 +72,6 @@ class Createissue extends Command
 
     protected function configure()
     {
-
         $this->setName('createissue')->setDescription('创建奖期')
             ->addOption('gid', 'g', Option::VALUE_REQUIRED, '游戏ID', null)
             ->addOption('first_issue', 'f', Option::VALUE_OPTIONAL, '第一期奖期号', 'auto')

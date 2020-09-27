@@ -7,6 +7,7 @@ use app\common\library\Ems;
 use app\common\library\Sms;
 use fast\Random;
 use think\Config;
+use think\Hook;
 use think\Validate;
 
 /**
@@ -127,11 +128,10 @@ class User extends Api
             $this->error(__('Mobile is incorrect'));
         }
 
-        // TODO/my 测试后把短信验证打开
-//        $ret = Sms::check($mobile, $code, 'register');
-//        if (!$ret) {
-//            $this->error(__('Captcha is incorrect'));
-//        }
+        $ret = Sms::check($mobile, $code, 'register');
+        if (!$ret) {
+            $this->error(__('Captcha is incorrect'));
+        }
 
         $ret = $this->auth->register($username, $password, $email, $mobile, $extend);
         if ($ret) {
@@ -288,9 +288,14 @@ class User extends Api
             $this->error(__('Invalid parameters'));
         }
         if ($type === 'mobile') {
-//            if (!Validate::regex($mobile, "^1\d{10}$")) {
-//                $this->error(__('Mobile is incorrect'));
-//            }
+            if (Hook::get('check_mobile')) {
+                $result = Hook::listen('check_mobile', $mobile, null, true);
+                if (!$result) {
+                    $this->error('Invalid phone number');
+                }
+            }elseif(!Validate::regex($mobile, "^1\d{10}$")){
+                $this->error('Invalid phone number');
+            }
             $user = \app\common\model\User::get(['mobile' => $mobile]);
             if (!$user) {
                 $this->error(__('User not found'));
@@ -301,9 +306,9 @@ class User extends Api
             }
             Sms::flush($mobile, 'resetpwd');
         } else {
-//            if (!Validate::is($email, "email")) {
-//                $this->error(__('Email is incorrect'));
-//            }
+            if (!Validate::is($email, "email")) {
+                $this->error(__('Email is incorrect'));
+            }
             $user = \app\common\model\User::get(['email' => $email]);
             if (!$user) {
                 $this->error(__('User not found'));

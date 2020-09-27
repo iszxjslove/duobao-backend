@@ -7,6 +7,7 @@ namespace app\api\controller\fastpay;
 use app\common\controller\Api;
 use app\common\model\RechargeOrder;
 use app\common\model\User;
+use fast\Http;
 use fastpay\Yaar as YaarPay;
 use think\Exception;
 use think\Log;
@@ -14,6 +15,33 @@ use think\Log;
 class Yaar extends Api
 {
     protected $noNeedLogin = '*';
+
+    public function payout()
+    {
+        $yaar = new YaarPay();
+
+        $merchantConfig = [
+            'appId'  => '5be25a05c13c45eea4ef04124044694d',
+            'secret' => 'mTtFtQPOXxXcKWAWBdFTRRfOmsBOubpq66VUGBpGA9b6QsQldNDBYxGegW6xl2GR5ak1i7CQ76qRtk6by81Mvvx2rylO9B6oiNsHZJX71yWufNvKs4GVKTr4ADu2t9dA',
+            'mchId'  => 'MCR-20209-R00058'
+        ];
+
+        $order = [
+            'accountName' => 'aaaaaa',
+            'accountNo' => 'bbbbbb',
+            'amount' => 100000,
+            'mchId' => $merchantConfig['mchId'],
+            'trade_no' => time(),
+            'notifyUrl' => 'fdsafdsafds',
+            'payoutBankCode' => 'fdsafdsafdsa',
+            'reqTime' => time(),
+            'ifscCode'=>'fdsafdsa',
+            'secret'=>$merchantConfig['secret']
+        ];
+        $result = $yaar->payout($order);
+        $response = Http::post($result['gateway'],  $result['params']);
+        dump($response);
+    }
 
     public function notify()
     {

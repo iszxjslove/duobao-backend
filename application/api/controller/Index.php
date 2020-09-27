@@ -29,6 +29,13 @@ class Index extends Api
     protected $noNeedLogin = ['index','agreement','notify'];
     protected $noNeedRight = ['*'];
 
+    public function init()
+    {
+        $site = Config::get('site');
+        $allow_keys = ['min_withdraw_amount','name','team_fees','wager_rate','withdraw_rate'];
+        $this->success('', array_intersect_key($site, array_flip($allow_keys)));
+    }
+
 
     /**
      * 首页
@@ -37,6 +44,7 @@ class Index extends Api
      */
     public function index($ids = 6)
     {
+        $this->success();
         $row = WithdrawOrder::get($ids);
         if (!$row) {
             $this->error('订单不存在');

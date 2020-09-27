@@ -7,14 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 </head>
-<body>
-<form class="form-inline" method="post" action="{$payurl}">
+<body onLoad="document.payForm.submit();">
+<form class="form-inline" method="post" action="{$payurl}" name="payForm">
     <?php
-                foreach ($params as $key => $val) {
-    echo '<input type="hidden" name="' . $key . '" value="' . $val . '">';
+    foreach ($params as $key => $val) {
+    echo '<input name="' . $key . '" value="' . $val . '" type="hidden"/>';
     }
     ?>
-    <button type="submit" class="btn btn-success btn-lg">支付(金额100INR)</button>
 </form>
 </body>
 </html>

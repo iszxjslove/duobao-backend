@@ -27,38 +27,46 @@ class Sms extends Api
         $event = $this->request->request("event");
         $event = $event ? $event : 'register';
 
-        if (!$mobile || !\think\Validate::regex($mobile, "^1\d{10}$")) {
-            $this->error(__('手机号不正确'));
+        if (!$mobile) {
+            $this->error('Invalid phone number');
+        }
+        if (Hook::get('check_mobile')) {
+            $result = Hook::listen('check_mobile', $mobile, null, true);
+            if (!$result) {
+                $this->error('Invalid phone number');
+            }
+        }elseif(!\think\Validate::regex($mobile, "^1\d{10}$")){
+            $this->error('Invalid phone number');
         }
         $last = Smslib::get($mobile, $event);
         if ($last && time() - $last['createtime'] < 60) {
-            $this->error(__('发送频繁'));
+            $this->error('Send frequently');
         }
         $ipSendTotal = \app\common\model\Sms::where(['ip' => $this->request->ip()])->whereTime('createtime', '-1 hours')->count();
         if ($ipSendTotal >= 5) {
-            $this->error(__('发送频繁'));
+            $this->error('Send frequently');
         }
         if ($event) {
             $userinfo = User::getByMobile($mobile);
             if ($event == 'register' && $userinfo) {
                 //已被注册
-                $this->error(__('已被注册'));
+                $this->error('Registered');
             } elseif (in_array($event, ['changemobile']) && $userinfo) {
                 //被占用
-                $this->error(__('已被占用'));
+                $this->error('Occupied');
             } elseif (in_array($event, ['changepwd', 'resetpwd']) && !$userinfo) {
                 //未注册
-                $this->error(__('未注册'));
+                $this->error('unregistered');
             }
         }
         if (!Hook::get('sms_send')) {
-            $this->error(__('请在后台插件管理安装短信验证插件'));
+            $this->error('System error');
         }
         $ret = Smslib::send($mobile, null, $event);
         if ($ret) {
-            $this->success(__('发送成功'));
+            $this->success('Sent successfully');
         } else {
-            $this->error(__('发送失败，请检查短信配置是否正确'));
+            $this->error('Invalid phone number');
         }
     }
 

@@ -5,9 +5,12 @@ namespace app\api\controller;
 
 
 use app\common\controller\Api;
+use app\common\model\Fastpay;
+use app\common\model\FastpayAccount;
 use app\common\model\RechargeOrder;
 use app\common\model\UserBank;
 use fast\Http;
+use fastpay\Tm;
 use fastpay\Wintec;
 use fastpay\Yaar;
 use fastpay\Zow;
@@ -20,7 +23,105 @@ class Pay extends Api
 {
     protected $noNeedLogin = '*';
 
+    public function paytype()
+    {
+        $list = FastpayAccount::getUsable();
+        foreach ($list as $key => $item) {
+            $item->hidden(['private_secret', 'public_secret', 'mch_id']);
+        }
+        $this->success('', $list);
+    }
+
     public function unified()
+    {
+        $amount = $this->request->post('amount', 0, 'intval');
+        $account_id = $this->request->post('account_id', 0, 'intval');
+        $bank_id = $this->request->post('bank_id', 0, 'intval');
+        $account = FastpayAccount::get($account_id);
+        if (!$account || $account->status !== 1) {
+            $this->error('Access maintenance');
+        }
+        $channel = $account->channel;
+        $fastpay = $account->fastpay;
+        if ($channel->min_amount && $amount < $channel->min_amount) {
+            $this->error('Minimum amount ' . $channel->min_amount);
+        }
+        if ($channel->max_amount && $amount > $channel->max_amount) {
+            $this->error('Maximum amount ' . $channel->max_amount);
+        }
+        if ($channel->pay_type === 'bank' && !$bank_id) {
+            $this->error('Please select bank card');
+        }
+        $other_params = [];
+        if ($bank_id) {
+            $other_params['bank'] = UserBank::get($bank_id);
+            if (!$other_params['bank']) {
+                $this->error('Invalid card');
+            }
+        }
+        $recharge = new RechargeOrder;
+        $order = $recharge->createOrder($this->auth->id, $amount, $account->toArray(), $other_params);
+        if (!$order) {
+            $this->error('Order creation failed');
+        }
+        $payurl = url('/index/payment/' . $fastpay->en_name, ['trade_no' => $order->trade_no], '', 'www');
+        $this->success('', ['payurl' => $payurl]);
+    }
+
+    public function unified_tm()
+    {
+        $amount = $this->request->request('amount');
+        $channel = $this->request->request('channel');
+        if (!$amount || $amount < 1) {
+            $this->error('Wrong amount');
+        }
+        $pay = new Tm();
+        $merchantConfig = [
+            'secret'     => 'b8e438bcd53a4f4e601743dba058f71a67239f24',
+            'customerid' => '20080182'
+        ];
+
+        Db::startTrans();
+        try {
+            $orderInfo = [
+                'user_id'         => $this->auth->id,
+                'trade_no'        => time(),
+                'amount'          => bcmul($amount, 1, 2),
+                'create_time'     => time(),
+                'product_title'   => 'Jewellery',
+                'merchant_config' => json_encode($merchantConfig),
+                'status'          => 0,
+            ];
+            RechargeOrder::create($orderInfo);
+            $option = [
+                'version' => '1.0'
+            ];
+            $params = $pay->buildParams(array_merge($orderInfo, $option));
+            $payUrl = $pay->getPayUrl();
+            $response = Http::post($payUrl, $params);
+            dump($response);
+            dump($params);
+            exit;
+//
+//            if (!$response) {
+//                $this->error('recharge fail');
+//            }
+////            $response = json_decode($response, true);
+//            $this->error('', $response);
+//            if ($response['code'] !== '200' || !$response['url']) {
+//                $this->error('Network exception, please try again later');
+//            }
+
+            $output['payurl'] = url('payview/index') . '?' . http_build_query($params);
+            Db::commit();
+        } catch (\think\Exception $e) {
+            $this->error($e->getMessage());
+            Db::rollback();
+        }
+        $this->success('', $output);
+    }
+
+    public function unified_back3()
     {
         $amount = $this->request->request('amount');
         $channel = $this->request->request('channel');
@@ -51,10 +152,10 @@ class Pay extends Api
                 'currency'  => 'inr',
                 'version'   => '1.0'
             ];
-            if((int)$channel === 8036){
+            if ((int)$channel === 8036) {
                 $bankId = $this->request->request('bankId');
                 $bank = UserBank::get($bankId);
-                if(!$bank){
+                if (!$bank) {
                     $this->error('no bank card');
                 }
                 $option['depositName'] = $bank->actual_name;
@@ -74,7 +175,7 @@ class Pay extends Api
 //                $this->error('Network exception, please try again later');
 //            }
 
-            $output['payurl'] = url('payview/index').'?'. http_build_query($params);
+            $output['payurl'] = url('payview/index') . '?' . http_build_query($params);
             Db::commit();
         } catch (\think\Exception $e) {
             $this->error($e->getMessage());

@@ -4,16 +4,69 @@
 namespace fastpay;
 
 
-class Yaar extends Base
+class Yaar
 {
+    protected $type = '';
+
+    protected $env = 'dev';
+
+    public function payin($orderInfo)
+    {
+        $this->type = 'payin';
+        $merchant_config = $orderInfo['merchant_config'];
+        $other_params = $orderInfo['other_params'];
+        $params = [
+            'amount'     => bcmul($orderInfo['amount'], 100),
+            'appId'      => $merchant_config['app_id'],
+            'channelId'  => $merchant_config['channel']['channel_value'],
+            'currency'   => $other_params['currency'],
+            'mchId'      => $merchant_config['mch_id'],
+            'mchOrderNo' => $orderInfo['trade_no'],
+            'notifyUrl'  => $this->getNotifyUrl(),
+            'returnUrl'  => $this->getCallbackUrl(),
+            'version'    => $other_params['version'],
+        ];
+        $extra = [];
+        if (!empty($other_params['bank']['account_number'])) {
+            $extra["depositAccount"] = $other_params['bank']['account_number'];
+        }
+
+        if (!empty($other_params['bank']['actual_name'])) {
+            $extra["depositName"] = $other_params['bank']['actual_name'];
+        }
+        if (!empty($extra)) {
+            $params['extra'] = json_encode($extra);
+        }
+        $params['sign'] = $this->makeSign($params, $merchant_config['private_secret']);
+        return ['gateway' => $this->getPayUrl(), 'params' => $params];
+    }
+
+    public function payout($orderInfo)
+    {
+        $this->type = 'payout';
+        $merchant_config = $orderInfo['merchant_config'];
+        $params = [
+            'accountName'    => $orderInfo['card_data']['actual_name'],
+            'accountNo'      => $orderInfo['card_data']['account_number'],
+            'amount'         => (int)$orderInfo['amount'],
+            'mchId'          => $merchant_config['mch_id'],
+            'mchOrderNo'     => $orderInfo['trade_no'],
+            'notifyUrl'      => $this->getNotifyUrl(),
+            'payoutBankCode' => $orderInfo['card_data']['bank_code'],
+            'reqTime'        => time(),
+            'ifscCode'       => $orderInfo['card_data']['ifsc_code']
+        ];
+        $params['sign'] = $this->makeSign($params, $merchant_config['private_secret']);
+        return ['gateway' => $this->getPayUrl(), 'params' => $params];
+    }
+
     public function getPayUrl()
     {
-//        https://api.247yp.site/api/v1/payin/pay_info
-//        https://api.247yp.site/api/v1/payin/pay_info
-//        https://pre-prod.api.247yp.site/api/v1/payin/pay_info
-//        https://pre-prod.api.247yp.site/api/v1/payin/pay_info
-
-        return 'https://pre-prod.api.247yp.site/api/v1/payin/pay_info';
+        $urls = [
+            'payin'  => 'https://api.247yp.site/api/v1/payin/pay_info',
+            'payout' => 'https://api.247yp.site/api/agentpay/apply'
+        ];
+        return $urls[$this->type];
     }
 
     public function getCallbackUrl($domain = '')
@@ -58,15 +111,15 @@ class Yaar extends Base
     {
         $merchant_config = json_decode($params['merchant_config'], true);
         $data = [
-            'amount'          => bcmul($params['amount'], 100),
-            'appId'           => $merchant_config['appId'],
-            'channelId'       => $params['channelId'],
-            'currency'        => $params['currency'],
-            'mchId'           => $merchant_config['mchId'],
-            'mchOrderNo'      => $params['trade_no'],
-            'notifyUrl'       => $this->getNotifyUrl(),
-            'returnUrl'       => $this->getCallbackUrl(),
-            'version'         => $params['version'],
+            'amount'     => bcmul($params['amount'], 100),
+            'appId'      => $merchant_config['appId'],
+            'channelId'  => $params['channelId'],
+            'currency'   => $params['currency'],
+            'mchId'      => $merchant_config['mchId'],
+            'mchOrderNo' => $params['trade_no'],
+            'notifyUrl'  => $this->getNotifyUrl(),
+            'returnUrl'  => $this->getCallbackUrl(),
+            'version'    => $params['version'],
         ];
 
         $extra = [];
@@ -77,7 +130,7 @@ class Yaar extends Base
         if (!empty($params['depositName'])) {
             $extra["depositName"] = $params['depositName'];
         }
-        if(!empty($extra)){
+        if (!empty($extra)) {
             $data['extra'] = json_encode($extra);
         }
         $data['sign'] = $this->makeSign($data, $merchant_config['secret']);

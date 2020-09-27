@@ -305,7 +305,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                             content: Template("paytpl", ret.data),
                             shade: 0.8,
                             area: area,
-                            skin: 'layui-layer-msg layui-layer-pay',
+                            skin: 'layui-layer-msg layui-layer-payment',
                             title: false,
                             closeBtn: true,
                             btn: false,

@@ -4,14 +4,15 @@
 namespace app\api\controller;
 
 
+use addons\smswinic\library\Smswinic;
 use app\api\model\WithdrawOrder;
 use app\common\controller\Api;
-use app\common\model\Base;
 use app\common\model\Projects;
 use app\common\model\RechargeOrder;
 use app\common\model\UserStatistics;
 use app\common\model\User;
 use fast\Random;
+use sms\Winic;
 use think\Db;
 
 class Test extends Api
@@ -20,8 +21,31 @@ class Test extends Api
 
     public function test()
     {
-        $aa = (new WithdrawOrder)->getCurrentTableFieldConfig('status.success.value');
-        dump($aa);
+//        $recharge = new RechargeOrder;
+//        $order = $recharge->createOrder(1, 10000, ['aaa'], ['bbbb']);
+//
+//        $order = $recharge->get(1);
+//        if($order && $order->status !== 1){
+//            $order->status = 1;
+//            $order->save();
+//        }
+//
+//        dump($order->toArray());
+//        $sms = new Winic();
+        $mobile = '+918182002000';
+        $event = 'register';
+////        $code = '85263552157';
+//        $response = $sms->sendInternationalMessages($code, 'hello,847584');
+//        dump($response);
+
+        $sms = Smswinic::instance();
+        $sms->mobile($mobile);
+        $sms->msg('hello,'.time());
+        $ret = $sms->send();
+        if(!$ret) {
+            dump($sms->getError());
+        }
+        dump($ret);
     }
 
     public function count()

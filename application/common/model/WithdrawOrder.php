@@ -76,7 +76,7 @@ class WithdrawOrder extends Model
         $order = [
             'user_id'         => $uid,
             'admin_id'        => '',
-            'trade_no'        => '21' . time() . Random::alnum(4),
+            'trade_no'        => '21' . time() . Random::numeric(4),
             'amount'          => $amount,
             'fee'             => $fee,
             'real_amount'     => bcsub($amount - $fee, 2),

@@ -41,19 +41,19 @@ class Payment extends Frontend
         $orderInfo['other_params']['currency'] = 'inr';
         $orderInfo['other_params']['version'] = '1.0';
         $result = $pay->payin($orderInfo);
-        $response = Http::get($result['gateway'], $result['params']);
-        $response = json_decode($response, true);
-        if(!$response){
-            $this->error('System error');
-        }
-        if (!empty($response['errCode'])) {
-            $errs = [
-                '0034' => 'Invalid Deposit Name',
-                '0035' => 'Invalid Deposit Account'
-            ];
-            $msg = $errs[$response['errCode']] ?? 'Error code:' . $response['errCode'];
-            $this->error($msg);
-        }
+//        $response = Http::get($result['gateway'], $result['params']);
+//        $output = json_decode($response, true);
+//        if(!$output){
+//            $this->error('System error');
+//        }
+//        if (!empty($output['errCode'])) {
+//            $errs = [
+//                '0034' => 'Invalid Deposit Name',
+//                '0035' => 'Invalid Deposit Account'
+//            ];
+//            $msg = $errs[$output['errCode']] ?? 'Error code:' . $output['errCode'];
+//            $this->error($msg);
+//        }
         $this->assign('payurl', $result['gateway']);
         $this->assign('params', $result['params']);
         return $this->view->fetch('index');

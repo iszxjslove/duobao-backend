@@ -34,7 +34,7 @@ class RechargeOrder extends Base
     {
         $order = [
             'user_id'         => $uid,
-            'trade_no'        => '10' . time() . Random::alnum(4),
+            'trade_no'        => '10' . time() . Random::numeric(4),
             'amount'          => $amount,
             'merchant_config' => $merchant,
             'other_params'    => $other_params

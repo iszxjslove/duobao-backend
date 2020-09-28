@@ -64,7 +64,7 @@ class Pay extends Api
         if (!$order) {
             $this->error('Order creation failed');
         }
-        $payurl = url('/index/payment/' . $fastpay->en_name, ['trade_no' => $order->trade_no], '', 'www');
+        $payurl = url('/index/payment/' . $fastpay->en_name, ['trade_no' => $order->trade_no], '', 'home');
         $this->success('', ['payurl' => $payurl]);
     }
 

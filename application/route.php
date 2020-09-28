@@ -21,6 +21,7 @@ return [
     '__domain__'  => [
         'admin'        => 'admin',
         'api'          => 'api',
+        'home'         => 'index',
         '192.168.0.9'  => 'api',
         'api.duobao'   => 'api',
         'admin.duobao' => 'admin'

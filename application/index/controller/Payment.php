@@ -31,6 +31,8 @@ class Payment extends Frontend
             if (!$this->order) {
                 $this->error('Order does not exist');
             }
+        }else{
+            $this->error('Params Error');
         }
     }
 

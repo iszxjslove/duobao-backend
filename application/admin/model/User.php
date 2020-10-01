@@ -42,6 +42,15 @@ class User extends Model
                     unset($row->password);
                 }
             }
+            //如果有修改密码
+            if (isset($changed['payment_password'])) {
+                if ($changed['payment_password']) {
+                    $row->payment_password = md5($changed['payment_password']);
+                    $row->salt = $salt;
+                } else {
+                    unset($row->payment_password);
+                }
+            }
         });
 
 

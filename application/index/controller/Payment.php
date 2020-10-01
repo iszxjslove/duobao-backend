@@ -5,6 +5,7 @@ namespace app\index\controller;
 use app\common\controller\Frontend;
 use app\common\model\RechargeOrder;
 use fast\Http;
+use fastpay\Fushrshin;
 use fastpay\Tm;
 use fastpay\Yaar;
 
@@ -34,6 +35,16 @@ class Payment extends Frontend
         }else{
             $this->error('Params Error');
         }
+    }
+
+    public function fushrshin()
+    {
+        $pay = new Fushrshin();
+        $orderInfo = $this->order->toArray();
+        $result = $pay->payin($orderInfo);
+        $this->assign('payurl', $result['gateway']);
+        $this->assign('params', $result['params']);
+        return $this->view->fetch('index');
     }
 
     public function yaar()
@@ -78,4 +89,5 @@ class Payment extends Frontend
         $this->assign('params', $result['params']);
         return $this->view->fetch('index');
     }
+
 }

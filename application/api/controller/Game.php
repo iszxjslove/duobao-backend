@@ -185,7 +185,10 @@ class Game extends Api
             // 下注前的操作
             Hook::listen("game_wager_before", $user, $insertData);
             // 扣款
-            User::payment($totalprice, $this->auth->id, '投注扣款');
+            $res = User::payment($totalprice, $this->auth->id, '投注扣款');
+            if(!$res){
+                throw new Exception('aaa');
+            }
             // 下注方案
             $projects = new Projects();
             $projects->data($insertData)->save();
@@ -194,7 +197,6 @@ class Game extends Api
             }
             // 下注成功后
             Hook::listen("game_wager_after", $user, $projects);
-
             $output = [
                 'selected'   => $selected,
                 'money'      => $money,

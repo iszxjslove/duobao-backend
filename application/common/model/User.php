@@ -127,7 +127,7 @@ class User extends Model
             }
             throw new Exception('Insufficient Balance');
         }
-        self::money(-$money, $user_id, $memo);
+        self::money($user_id, -$money, $memo);
         return true;
     }
 

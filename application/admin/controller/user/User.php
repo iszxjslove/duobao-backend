@@ -68,7 +68,18 @@ class User extends Backend
     {
         if ($this->request->isPost()) {
             $this->token();
+            $params = $this->request->post("row/a");
+            $params['jointime'] = time();
+            $salt = \fast\Random::alnum();
+            $params['password'] = \app\common\library\Auth::instance()->getEncryptPassword($params['password'], $salt);
+            $params['salt'] = $salt;
+            if ($params['payment_password']) {
+                $params['payment_password'] = md5($params['payment_password']);
+            }
+            $this->request->post(['row' => $params]);
         }
+        $this->modelValidate = true;
+        $this->view->assign('groupList', build_select('row[group_id]', \app\admin\model\UserGroup::column('id,name'), '', ['class' => 'form-control selectpicker']));
         return parent::add();
     }
 

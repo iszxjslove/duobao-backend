@@ -1,6 +1,6 @@
 <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
     {:token()}
-    <input type="hidden" name="row[id]" value="{$row.id}">
+    <input type="hidden" name="row[id]" value="">
     <div class="form-group">
         <label for="c-group_id" class="control-label col-xs-12 col-sm-2">{:__('Group')}:</label>
         <div class="col-xs-12 col-sm-4">
@@ -10,32 +10,37 @@
     <div class="form-group">
         <label for="c-username" class="control-label col-xs-12 col-sm-2">{:__('Username')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input id="c-username" data-rule="required" class="form-control" name="row[username]" type="text" value="{$row.username|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="c-nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
-        <div class="col-xs-12 col-sm-4">
-            <input id="c-nickname" class="form-control" name="row[nickname]" type="text" value="{$row.nickname|htmlentities}">
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="c-password" class="control-label col-xs-12 col-sm-2">{:__('Password')}:</label>
-        <div class="col-xs-12 col-sm-4">
-            <input id="c-password" data-rule="password" class="form-control" name="row[password]" type="text" value="" placeholder="{:__('Leave password blank if dont want to change')}" autocomplete="new-password" />
+            <input id="c-username" data-rule="required" class="form-control" name="row[username]" type="text" value="">
         </div>
     </div>
     <div class="form-group">
         <label for="c-mobile" class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
         <div class="col-xs-12 col-sm-4">
-            <input id="c-mobile" data-rule="" class="form-control" name="row[mobile]" type="text" value="{$row.mobile|htmlentities}">
+            <input id="c-mobile" data-rule="" class="form-control" name="row[mobile]" type="text" value="">
         </div>
     </div>
-
     <div class="form-group">
-        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <label for="c-nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-nickname" class="form-control" name="row[nickname]" type="text" value="">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-password" class="control-label col-xs-12 col-sm-2">{:__('Password')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-password" data-rule="required;password" class="form-control" name="row[password]" type="text" value="" autocomplete="new-password" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-payment_password" class="control-label col-xs-12 col-sm-2">{:__('支付密码')}:</label>
+        <div class="col-xs-12 col-sm-4">
+            <input id="c-payment_password" data-rule="required;password" class="form-control" name="row[payment_password]" type="text" value="" autocomplete="new-password" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
         <div class="col-xs-12 col-sm-8">
-            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')], $row['status'])}
+            {:build_radios('row[status]', ['normal'=>__('Normal'), 'hidden'=>__('Hidden')])}
         </div>
     </div>
     <div class="form-group layer-footer">

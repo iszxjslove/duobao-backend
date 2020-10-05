@@ -17,3 +17,7 @@
 .issue-color{
     margin: 0 2px;
 }
+
+.bootstrap-tagsinput{
+    min-width: 100% !important;
+}

@@ -4,22 +4,37 @@
 namespace app\common\model;
 
 
+use app\api\controller\Fastpay;
 use think\Model;
 
 class FastpayAccount extends Model
 {
     protected $name = 'fastpay_account';
 
-    public static function getUsable()
+    protected $autoWriteTimestamp = 'int';
+
+    protected $createTime = 'create_time';
+
+    protected $updateTime = 'update_time';
+
+    protected $append = ['fastpay_config','channel_type'];
+
+    protected function getFastpayConfigAttr($value, $data)
     {
-        $list = self::where(['status' => 1])
-            ->with(['fastpay'=>static function($query){
-                $query->withField('en_name,ch_name');
-            },'channel'=>static function($query){
-                $query->withField('channel_value,channel_label,desc,pay_type,min_amount,max_amount');
-            }])
-            ->select();
-        return $list;
+        $list = $this->getFastpay();
+        return !empty($data['fastpay']) ? $list[$data['fastpay']] : '';
+    }
+
+    protected function getChannelTypeAttr($value, $data)
+    {
+        $list = $this->getFastpay('payin');
+        $channels = !empty($data['fastpay']) ? $list[$data['fastpay']] : '';
+        return !empty($data['channel']) ? $channels['payin']['channel'][$data['channel']]['type'] : '';
+    }
+
+    public function getFastpay($type = ''): array
+    {
+        return Fastpay::selectFastpay($type);
     }
 
     public function channel()

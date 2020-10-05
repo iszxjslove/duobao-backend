@@ -25,10 +25,16 @@ class Pay extends Api
 
     public function paytype()
     {
-        $list = FastpayAccount::getUsable();
-        foreach ($list as $key => $item) {
-            $item->hidden(['private_secret', 'public_secret', 'mch_id']);
+        $list = FastpayAccount::where(['status' => 1])
+            ->field('id,fastpay,channel,amount_list,min_amount,max_amount,custom_amount,desc,status,title')
+            ->select();
+        if($list){
+            $list = collection((array)$list)->toArray();
         }
+        foreach ($list as $key=> &$item) {
+            unset($item['fastpay_config']);
+        }
+        unset($item);
         $this->success('', $list);
     }
 
@@ -41,15 +47,13 @@ class Pay extends Api
         if (!$account || $account->status !== 1) {
             $this->error('Access maintenance');
         }
-        $channel = $account->channel;
-        $fastpay = $account->fastpay;
-        if ($channel->min_amount && $amount < $channel->min_amount) {
-            $this->error('Minimum amount ' . $channel->min_amount);
+        if ($account->min_amount > 0 && $amount < $account->min_amount) {
+            $this->error('Minimum amount ' . $account->min_amount);
         }
-        if ($channel->max_amount && $amount > $channel->max_amount) {
-            $this->error('Maximum amount ' . $channel->max_amount);
+        if ($account->max_amount > 0 && $amount > $account->max_amount) {
+            $this->error('Maximum amount ' . $account->max_amount);
         }
-        if ($channel->pay_type === 'bank' && !$bank_id) {
+        if ($account->channel_type === 'bank' && !$bank_id) {
             $this->error('Please select bank card');
         }
         $other_params = [];
@@ -64,7 +68,7 @@ class Pay extends Api
         if (!$order) {
             $this->error('Order creation failed');
         }
-        $payurl = url('payment/' . $fastpay->en_name, ['trade_no' => $order->trade_no], '', 'home');
+        $payurl = url(implode('/', ['pay', $account->fastpay, 'payin']), ['trade_no' => $order->trade_no]);
         $this->success('', ['payurl' => $payurl]);
     }
 

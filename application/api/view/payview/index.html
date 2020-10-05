@@ -1,19 +1,19 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body onLoad="document.payForm.submit();">
-<form class="form-inline" method="post" action="{$payurl}" name="payForm">
+<form ref="form" class="form-inline" method="post" action="{$payurl}" name="payForm">
     <?php
-                foreach ($params as $key => $val) {
-    echo '<input name="' . $key . '" value="' . $val . '" type="hidden" />';
+    foreach ($params as $key => $val) {
+    echo '<input name="' . $key . '" value="' . $val . '" type="hidden"/>';
     }
     ?>
 </form>
-</body>
-</html>
+
+<script>
+    new Vue({
+        el: '#q-app',
+        data: function () {},
+        methods: {},
+        mounted(){
+            this.$q.loading.show()
+            this.$refs.form.submit()
+        }
+    })
+</script>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="__CDN__/assets/libs/quasar/icons.css" rel="stylesheet"
+          type="text/css">
+    <link href="__CDN__/assets/libs/quasar/quasar.min.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<script src="__CDN__/assets/libs/quasar/vue.min.js"></script>
+<script src="__CDN__/assets/libs/quasar/quasar.umd.modern.min.js"></script>
+<script src="__CDN__/assets/libs/quasar/zh-hans.umd.min.js"></script>
+<script src="__CDN__/assets/libs/jquery/dist/jquery.js"></script>
+
+<div id="q-app">
+    <q-layout view="hHh lpR fFf">
+        <q-page-container>
+            {__CONTENT__}
+        </q-page-container>
+    </q-layout>
+</div>
+<script>
+    window.quasarConfig = {
+        brand: { // this will NOT work on IE 11
+            primary: '#e46262',
+            // ... or all other brand colors
+        },
+        notify: {}, // default set of options for Notify Quasar plugin
+        loading: {}, // default set of options for Loading Quasar plugin
+        loadingBar: {}, // settings for LoadingBar Quasar plugin
+        // ..and many more (check Installation card on each Quasar component/directive/plugin)
+    }
+</script>
+<script>
+    $('q-page-container').find('script').each(function (i, el) {
+        $(el).remove();
+        $('body').append(el)
+    })
+    Quasar.lang.set(Quasar.lang.zhHans)
+</script>
+
+</body>
+</html>

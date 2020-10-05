@@ -403,6 +403,13 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                         });
                     });
                 }
+            },
+            tagsinput: function (form) {
+                if ($("[data-role='tagsinput']", form).size() > 0) {
+                    require(['bootstrap-tagsinput'], function () {
+                        $("input[data-role='tagsinput']").tagsinput('items')
+                    });
+                }
             }
         },
         api: {
@@ -505,6 +512,8 @@ define(['jquery', 'bootstrap', 'upload', 'validator'], function ($, undefined, U
                 events.slider(form);
 
                 events.switcher(form);
+
+                events.tagsinput(form);
             },
             custom: {}
         },

@@ -26,13 +26,13 @@ use think\Request;
  */
 class Index extends Api
 {
-    protected $noNeedLogin = ['index','agreement','notify'];
+    protected $noNeedLogin = ['index', 'agreement', 'notify', 'test'];
     protected $noNeedRight = ['*'];
 
     public function init()
     {
         $site = Config::get('site');
-        $allow_keys = ['min_withdraw_amount','name','team_fees','wager_rate','withdraw_rate'];
+        $allow_keys = ['min_withdraw_amount', 'name', 'team_fees', 'wager_rate', 'withdraw_rate'];
         $this->success('', array_intersect_key($site, array_flip($allow_keys)));
     }
 
@@ -56,7 +56,7 @@ class Index extends Api
             $params = [
                 'mchid'        => $mchid, //	商户号
                 'out_trade_no' => \NumberPool::getOne(), //	订单号
-                'money'        =>$row->real_amount, //	金额
+                'money'        => $row->real_amount, //	金额
                 'notifyurl'    => url('index/notify'), //	回调地址
                 'cnapscode'    => 123, //	印度税卡
                 'bankname'     => '32', //	银行名称

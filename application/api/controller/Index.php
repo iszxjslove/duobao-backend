@@ -10,6 +10,8 @@ use app\common\model\IssueSales;
 use app\common\model\Test;
 use app\common\model\UserMission;
 use app\common\model\UserMissionLog;
+use app\common\model\YuEBaoOrder;
+use app\common\model\YuEBaoProducts;
 use Endroid\QrCode\QrCode;
 use fast\Http;
 use fast\Random;
@@ -34,6 +36,16 @@ class Index extends Api
         $site = Config::get('site');
         $allow_keys = ['min_withdraw_amount', 'name', 'team_fees', 'wager_rate', 'withdraw_rate'];
         $this->success('', array_intersect_key($site, array_flip($allow_keys)));
+    }
+
+    public function test()
+    {
+        $product = YuEBaoProducts::get(3);
+        if(!$product){
+            exit('product is empty');
+        }
+        $result = YuEBaoOrder::transferIn($product, 1, 100000);
+        dump($result->toArray());
     }
 
 

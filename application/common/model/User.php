@@ -14,6 +14,45 @@ use think\Model;
 
 /**
  * 会员模型
+ * Class User
+ * @package app\common\model
+ * @property int id ID
+ * @property int pid 上级ID
+ * @property string referrer 推荐码
+ * @property int group_id 组别ID
+ * @property string username 用户名
+ * @property string nickname 昵称
+ * @property string password 密码
+ * @property string salt 密码盐
+ * @property string payment_password 支付密码
+ * @property string email 电子邮箱
+ * @property string mobile 手机号
+ * @property string avatar 头像
+ * @property int level 等级
+ * @property int gender 性别
+ * @property string birthday 生日
+ * @property string bio 格言
+ * @property float money 余额
+ * @property float hold_balance 冻结余额
+ * @property float financial_money 余额宝
+ * @property int score 积分
+ * @property int successions 连续登录天数
+ * @property int maxsuccessions 最大连续登录天数
+ * @property int prevtime 上次登录时间
+ * @property int logintime 登录时间
+ * @property string loginip 登录IP
+ * @property int loginfailure 失败次数
+ * @property string joinip 加入IP
+ * @property int jointime 加入时间
+ * @property int createtime 创建时间
+ * @property int updatetime 更新时间
+ * @property string token Token
+ * @property string status 状态
+ * @property string verification 验证
+ * @property int first_recharge 首充
+ * @property int depth 深度
+ * @property int lft 左范围
+ * @property int rgt 右范围
  */
 class User extends Model
 {
@@ -100,35 +139,29 @@ class User extends Model
      * @param $money
      * @param $user_id
      * @param $memo
-     * @param bool $other 余额不足是否扣余额宝
-     * @return bool
+     * @param bool $yuebao 余额不足是否扣余额宝
      * @throws DbException
      * @throws Exception
      */
-    public static function payment($money, $user_id, $memo, $other = true)
+    public static function payment($user_id, $money, $memo, $yuebao = true)
     {
         $user = self::get($user_id);
         if (!$user || $money <= 0) {
-            throw new Exception('system error');
+            throw new Exception('error 1002');
         }
-        if ($user->money < $money) {
-            // 余额不足
-            if ($other === true) {
-                $diffMoney = $money - $user->money;
-                if ($user->financial_money < $diffMoney) {
-                    // 如果余额宝里的钱也不够
-                    throw new Exception('Insufficient Balance');
-                }
-                if ($user->money > 0) {
-                    self::money(-$user->money, $user_id, $memo);
-                }
-                self::financial_money(-$diffMoney, $user_id, $memo);
-                return true;
+        $after = 0;
+        $change = $money;
+        if ($user->money <= $money) {
+            if (!$yuebao) {
+                throw new Exception('Insufficient Balance');
             }
-            throw new Exception('Insufficient Balance');
+            $change = $user->money;
+            $after = function_exists('bcsub') ? bcsub($money, $change, 2) : $money - $change;
         }
-        self::money($user_id, -$money, $memo);
-        return true;
+        self::money($user_id, -$change, $memo);
+        if ($after > 0) {
+            YuEBaoOrder::transferOut($user_id, $after, $memo);
+        }
     }
 
     /**
@@ -140,7 +173,7 @@ class User extends Model
     public static function money(int $user_id, $money, $memo)
     {
         $user = self::get($user_id);
-        if($user && $money){
+        if ($user && $money) {
             $before = $user->money;
             $after = function_exists('bcadd') ? bcadd($user->money, $money, 2) : $user->money + $money;
             //更新会员信息

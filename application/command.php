@@ -10,6 +10,8 @@
 // | Author: yunwuxin <448901948@qq.com>
 // +----------------------------------------------------------------------
 
+use app\admin\command\InsertModelDoc;
+
 return [
     'app\admin\command\Crud',
     'app\admin\command\Menu',
@@ -26,5 +28,5 @@ return [
     'app\admin\command\sendInterest',
     'app\admin\command\Test',
     'app\admin\command\Quasar',
-
+    InsertModelDoc::class,
 ];

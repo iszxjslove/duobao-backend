@@ -131,13 +131,20 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     let amounts = fastpay.amounts
                     let cAmountList = $('#c-amount_list')
                     let cChannel = $('#c-channel')
+                    let cVersion = $('#c-version')
                     if (amounts && !cAmountList.data('change') && action === 'add') {
                         setDefaultAmount(cAmountList, 'removeAll')
                         setDefaultAmount(cAmountList, 'items')
                         setDefaultAmount(cAmountList, 'add', amounts)
                     }
-                    if(fastpay.payin.version && action === 'add'){
-                        $('#c-version').val(fastpay.payin.version)
+                    if(fastpay.payin.version){
+                        let versions = {}
+                        fastpay.payin.version.map(v=>{
+                            versions[v] = {label:v}
+                        })
+                        cVersion.html(Template('fastpayOptionTpl', {list: versions, value: cVersion.data('value')}))
+                    }else{
+                        cVersion.hide()
                     }
                     cChannel.html(Template('fastpayOptionTpl', {list: fastpay.payin.channel, value: cChannel.data('value')}))
                     if (cChannel.selectpicker) {

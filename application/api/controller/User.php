@@ -5,6 +5,7 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\library\Ems;
 use app\common\library\Sms;
+use app\common\model\YuEBao;
 use fast\Random;
 use think\Config;
 use think\Hook;
@@ -29,7 +30,9 @@ class User extends Api
      */
     public function index()
     {
-        $this->success('', $this->auth->getUserinfo());
+        $userinfo = $this->auth->getUserinfo();
+        $userinfo['yuebao'] = YuEBao::get(['user_id' => $userinfo['id']]);
+        $this->success('', $userinfo);
     }
 
     /**
@@ -293,7 +296,7 @@ class User extends Api
                 if (!$result) {
                     $this->error('Invalid phone number');
                 }
-            }elseif(!Validate::regex($mobile, "^1\d{10}$")){
+            } elseif (!Validate::regex($mobile, "^1\d{10}$")) {
                 $this->error('Invalid phone number');
             }
             $user = \app\common\model\User::get(['mobile' => $mobile]);

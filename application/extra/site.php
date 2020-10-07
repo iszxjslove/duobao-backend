@@ -27,6 +27,7 @@ return array (
     'dictionary' => 'Dictionary',
     'user' => 'User',
     'game' => '游戏配置',
+    'yuebao' => '余额宝',
   ),
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',

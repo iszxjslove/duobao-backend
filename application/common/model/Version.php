@@ -4,6 +4,21 @@ namespace app\common\model;
 
 use think\Model;
 
+/**
+ * Class Version
+ * @package app/common/model
+ * @property int id ID
+ * @property string oldversion 旧版本号
+ * @property string newversion 新版本号
+ * @property string packagesize 包大小
+ * @property string content 升级内容
+ * @property string downloadurl 下载地址
+ * @property int enforce 强制更新
+ * @property int createtime 创建时间
+ * @property int updatetime 更新时间
+ * @property int weigh 权重
+ * @property string status 状态
+ */
 class Version extends Model
 {
 

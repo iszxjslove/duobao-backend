@@ -40,7 +40,7 @@ class Yaar extends Fastpay
                 'min_amount' => 0,
                 'max_amount' => 0,
                 'amounts'    => '1000,2000,5000,10000,15000,20000',
-                'version'    => '1.0'
+                'version'    => ['1.0']
             ]
         ];
     }

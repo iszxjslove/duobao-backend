@@ -7,7 +7,10 @@ namespace app\api\controller;
 use app\common\controller\Api;
 use app\common\model\RechargeOrder;
 use think\Config;
+use think\Db;
+use think\Hook;
 use think\Loader;
+use think\Log;
 use think\View;
 
 /**
@@ -53,9 +56,18 @@ abstract class Fastpay extends Api
      */
     protected $notifyRequestMethod = 'param';
 
+    protected $notifyReturnMsg = 'ok';
+
     /**
-     *
+     * @var string 订单号
      */
+    protected $trade_no = '';
+
+    /**
+     * @var string 错误信息
+     */
+    private $_error = '';
+
     protected function _initialize()
     {
         if (!is_array($this->noNeedLogin)) {
@@ -102,25 +114,55 @@ abstract class Fastpay extends Api
     {
         $method = $this->notifyRequestMethod;
         $params = $this->request->$method();
+        Db::startTrans();
         try {
             if (!$params) {
+                $this->setError('参数错误');
                 throw new \Exception('fail');
             }
-            if (!$result = $this->handleNotify($params)) {
-                throw new \Exception('fail 1001');
+            $this->getNotifyOrder($params);
+            if (!$this->order) {
+                $this->setError('订单不存在');
+                throw new \Exception('fail');
             }
-            die($result);
+            if ($this->order->status !== 0) {
+                $this->setError('订单不需要处理');
+                throw new \Exception($this->notifyReturnMsg);
+            }
+            if (!$amount = $this->handleNotify($params, $this->order)) {
+                throw new \Exception('fail');
+            }
+            if ((float)$amount !== (float)$this->order->amount) {
+                $this->setError("支付金额不对[notify: {$amount},order: {$this->order->amount}]");
+                throw new \Exception('fail');
+            }
+            $this->order->amount = $amount;
+            $this->order->status = 1;
+            $this->order->save();
+            \app\common\model\User::money($this->order->user_id, $amount, 'recharge');
+            Db::commit();
+            // 充值成功后
+            $user = \app\common\model\User::get($this->order->user_id);
+            Hook::listen("recharge_after", $user, $this->order);
+            die($this->notifyReturnMsg);
         } catch (\Exception $e) {
+            Db::rollback();
+            if ($params) {
+                Log::info(json_encode($params));
+            }
+            if ($this->order) {
+                Log::info(json_encode(collection((array)$this->order)->toArray()));
+            }
+            Log::error($this->getError());
             die($e->getMessage());
         }
     }
 
-    /**
-     *
-     */
     public function callback()
     {
-        echo 'ok;';
+        $url = Config::get('site.frontend_url') . 'my';
+        header("Location: {$url}",TRUE,301);
+        exit;
     }
 
     public static function selectFastpay($type = ''): array
@@ -187,7 +229,13 @@ abstract class Fastpay extends Api
      * @param $params
      * @return mixed
      */
-    abstract protected function handleNotify($params);
+    abstract protected function handleNotify($params, $orderInfo);
+
+    /**
+     * @param $params
+     * @return mixed
+     */
+    abstract protected function getNotifyOrder($params);
 
     /**
      * @return mixed
@@ -214,6 +262,14 @@ abstract class Fastpay extends Api
         return url($this->parseRoutePath() . '/callback');
     }
 
+    protected function setOrder($trade_no)
+    {
+        if (!$trade_no) {
+            $trade_no = $this->request->param('trade_no');
+        }
+        $this->order = RechargeOrder::getByTradeNo($trade_no);
+    }
+
     /**
      * @return RechargeOrder
      */
@@ -222,16 +278,20 @@ abstract class Fastpay extends Api
         if ($this->order) {
             return $this->order;
         }
-        $this->model = new RechargeOrder;
-        $trade_no = $this->request->param('trade_no');
-        if ($trade_no) {
-            $this->order = $this->model->getByTradeNo($trade_no);
-            if (!$this->order) {
-                $this->error('Order does not exist');
-            }
-        } else {
-            $this->error('Params Error');
+        $this->setOrder(false);
+        if (!$this->order) {
+            $this->error('Order does not exist');
         }
         return $this->order;
+    }
+
+    protected function setError($msg = '')
+    {
+        $this->_error = $msg;
+    }
+
+    public function getError(): string
+    {
+        return $this->_error;
     }
 }

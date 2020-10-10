@@ -8,6 +8,12 @@ use app\api\controller\Fastpay;
 
 class Fushrshin extends Fastpay
 {
+    protected function getNotifyOrder($params)
+    {
+        $this->setOrder($params['out_trade_no']);
+        return $this->order;
+    }
+
     public static function getInfo(): array
     {
         return [
@@ -35,12 +41,18 @@ class Fushrshin extends Fastpay
         ];
     }
 
-    protected function handleNotify($params)
+    protected function handleNotify($params, $orderInfo)
     {
-        if ($params) {
-            return 'ok';
+        $merchant_config = $orderInfo['merchant_config'];
+        if ($this->makeSign($params, $merchant_config['private_secret']) !== $params['sign']) {
+            $this->setError('签名错误');
+            return false;
         }
-        return true;
+        if (strtolower($params['status']) !== 'success') {
+            $this->setError('支付失败');
+            return false;
+        }
+        return $params['amount'];
     }
 
 

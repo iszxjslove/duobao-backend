@@ -10,6 +10,12 @@ use app\common\model\User;
 
 class Yaar extends Fastpay
 {
+    protected function getNotifyOrder($params)
+    {
+        $this->setOrder($params['orderId']);
+        return $this->order;
+    }
+
     public static function getInfo(): array
     {
         return [
@@ -88,58 +94,17 @@ class Yaar extends Fastpay
         return strtoupper(md5($string . 'key=' . $secret));
     }
 
-
-    public function payoutaaa()
+    protected function handleNotify($params, $orderInfo)
     {
-        $merchantConfig = [
-            'appId'  => '5be25a05c13c45eea4ef04124044694d',
-            'secret' => 'mTtFtQPOXxXcKWAWBdFTRRfOmsBOubpq66VUGBpGA9b6QsQldNDBYxGegW6xl2GR5ak1i7CQ76qRtk6by81Mvvx2rylO9B6oiNsHZJX71yWufNvKs4GVKTr4ADu2t9dA',
-            'mchId'  => 'MCR-20209-R00058'
-        ];
-
-        $order = [
-            'accountName'    => 'aaaaaa',
-            'accountNo'      => 'bbbbbb',
-            'amount'         => 100000,
-            'mchId'          => $merchantConfig['mchId'],
-            'trade_no'       => time(),
-            'notifyUrl'      => 'fdsafdsafds',
-            'payoutBankCode' => 'fdsafdsafdsa',
-            'reqTime'        => time(),
-            'ifscCode'       => 'fdsafdsa',
-            'secret'         => $merchantConfig['secret']
-        ];
-    }
-
-    protected function handleNotify($params)
-    {
-        if ((int)$params['status'] === 2) {
-            $order = RechargeOrder::getByTradeNo($params['mchOrderNo']);
-            if (!$order) {
-                throw new \Exception('fail');
-            }
-            if ($order->status === 1) {
-                die('OK');
-            }
-            if ($order->status !== 0) {
-                throw new \Exception('fail');
-            }
-            $merchant_config = json_decode($order['merchant_config'], true);
-            $yaar = new YaarPay();
-            $sign = $yaar->makeSign($params, $merchant_config['secret']);
-            if ($sign !== $params['sign']) {
-                throw new \Exception('Invalid Signature');
-            }
-            $amount = bcdiv($params['amount'], 100, 2);
-            $diff = $order->amount - $amount;
-            if ($diff < -1 || $diff > 1) {
-                throw new \Exception('Amount verification failed');
-            }
-            $order->amount = $amount;
-            User::money($order->user_id, $amount, 'yaar payment');
-            $order->status = 1;
-            $order->save();
-            die('OK');
+        $merchant_config = $orderInfo['merchant_config'];
+        if ($this->makeSign($params, $merchant_config['private_secret']) !== $params['sign']) {
+            $this->setError('签名错误');
+            return false;
         }
+        if ((int)$params['status'] !== 2) {
+            $this->setError('支付失败');
+            return false;
+        }
+        return bcdiv($params['amount'], 100, 2);
     }
 }

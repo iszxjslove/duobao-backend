@@ -8,6 +8,12 @@ use app\api\controller\Fastpay;
 
 class Tm extends Fastpay
 {
+    protected function getNotifyOrder($params)
+    {
+        $this->setOrder($params['orderId']);
+        return $this->order;
+    }
+
     public static function getInfo(): array
     {
         return [
@@ -67,9 +73,18 @@ class Tm extends Fastpay
         return md5($string . $secret);
     }
 
-    protected function handleNotify($params)
+    protected function handleNotify($params, $orderInfo)
     {
-        // TODO: Implement handleNotify() method.
+        $merchant_config = $orderInfo['sdorderno'];
+        if ($this->makeSign($params, $merchant_config['private_secret']) !== $params['sign']) {
+            $this->setError('签名错误');
+            return false;
+        }
+        if (strtolower($params['status']) !== 'success') {
+            $this->setError('支付失败');
+            return false;
+        }
+        return $params['total_fee'];
     }
 
 }

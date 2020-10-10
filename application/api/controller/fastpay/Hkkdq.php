@@ -78,29 +78,23 @@ class Hkkdq extends Fastpay
         return md5(http_build_query($params_filter) . $secret);
     }
 
-    protected function handleNotify($params)
+    protected function getNotifyOrder($params)
     {
-        $order = RechargeOrder::get(['trade_no' => $params['orderId']]);
-        if (!$order || $order->status !== 0) {
-            return false;
-        }
-        $merchant_config = $order['merchant_config'];
+        $this->setOrder($params['orderId']);
+        return $this->order;
+    }
+
+    protected function handleNotify($params, $orderInfo)
+    {
+        $merchant_config = $orderInfo['merchant_config'];
         if ($this->makeSign($params, $merchant_config['private_secret']) !== $params['sign']) {
+            $this->setError('签名错误');
             return false;
         }
         if (strtolower($params['status']) !== 'success') {
+            $this->setError('支付失败');
             return false;
         }
-        try {
-            Db::startTrans();
-            $order->status = 1;
-            $order->amount = $params['amount'];
-            $order->save();
-            User::money($order->user_id, $params['amount'], 'hkkdq recharge');
-            Db::commit();
-        } catch (Exception $e) {
-            Db::rollback();
-        }
-        return 'ok';
+        return $params['amount'];
     }
 }

@@ -37,7 +37,7 @@ return array (
   'mail_verify_type' => '2',
   'mail_from' => '10000@qq.com',
   'apiurl' => 'http://192.168.10.188:18080/',
-  'frontend_url' => 'http://192.168.10.188:8080/#/',
+  'frontend_url' => 'http://localhost:8080/#/',
   'max_team_level' => '3',
   'team_fees' => 
   array (

@@ -9,6 +9,21 @@ use think\Exception;
 use think\exception\DbException;
 use think\Model;
 
+
+
+/**
+ * Class UserHoldBalance
+ * @package app/common/model
+ * @property int id 冻结订单ID
+ * @property int user_id 用户ID
+ * @property float money 金额
+ * @property string memo 备注
+ * @property int admin_id 管理员ID
+ * @property string admin_name 管理员名称
+ * @property int create_time 创建时间
+ * @property int update_time 更新时间
+ * @property int status 状态0释放1冻结
+ */
 class UserHoldBalance extends Model
 {
     protected $name = 'user_hold_balance_order';

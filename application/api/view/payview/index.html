@@ -1,4 +1,4 @@
-<form ref="form" class="form-inline" method="post" action="{$payurl}" name="payForm">
+<form ref="form" id="form" class="form-inline" method="post" action="{$payurl}">
     <?php
     foreach ($params as $key => $val) {
     echo '<input name="' . $key . '" value="' . $val . '" type="hidden"/>';

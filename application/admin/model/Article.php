@@ -7,6 +7,24 @@ use think\Log;
 use think\Model;
 
 
+
+
+/**
+ * Class Article
+ * @package app/admin/model
+ * @property int id 文章ID
+ * @property int category_id 文章分类
+ * @property string name 变量名称
+ * @property string type 文章类型
+ * @property string title 文章标题
+ * @property string subtitle 副标题
+ * @property string thumbnail 缩略图
+ * @property string content 内容
+ * @property int create_time 创建时间
+ * @property int update_time 更新时间
+ * @property int need_login 1 需要登录 0 不需要
+ * @property string status 状态
+ */
 class Article extends Model
 {
 

@@ -9,6 +9,20 @@ use think\Db;
 use think\Exception;
 use think\Model;
 
+
+
+/**
+ * Class FeeLog
+ * @package app/api/model
+ * @property int id 佣金ID
+ * @property int user_id 用户ID
+ * @property float money 佣金
+ * @property int from_user_id 来源用户ID
+ * @property int level 层级
+ * @property int from_order_id 来源订单ID
+ * @property int create_time 创建时间
+ * @property string memo 备注
+ */
 class FeeLog extends Model
 {
     protected $name = 'user_fee_log';

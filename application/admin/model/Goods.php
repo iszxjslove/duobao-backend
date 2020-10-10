@@ -5,6 +5,20 @@ namespace app\admin\model;
 use think\Model;
 
 
+
+
+/**
+ * Class Goods
+ * @package app/admin/model
+ * @property int id 商品ID
+ * @property string picture 图片
+ * @property string title 标题
+ * @property float selling_price 销售价格
+ * @property float market_price 市场价格
+ * @property int stocks 库存
+ * @property string desc 详情
+ * @property string status 状态
+ */
 class Goods extends Model
 {
 

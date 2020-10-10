@@ -5,6 +5,21 @@ namespace app\admin\model;
 use app\admin\library\Auth;
 use think\Model;
 
+
+
+/**
+ * Class AdminLog
+ * @package app/admin/model
+ * @property int id ID
+ * @property int admin_id 管理员ID
+ * @property string username 管理员名字
+ * @property string url 操作页面
+ * @property string title 日志标题
+ * @property string content 内容
+ * @property string ip IP
+ * @property string useragent User-Agent
+ * @property int createtime 操作时间
+ */
 class AdminLog extends Model
 {
 

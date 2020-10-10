@@ -98,9 +98,6 @@ abstract class Fastpay extends Api
         return $this->view->fetch('payview/index');
     }
 
-    /**
-     *
-     */
     final public function notify()
     {
         $method = $this->notifyRequestMethod;

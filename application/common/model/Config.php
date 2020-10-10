@@ -6,6 +6,16 @@ use think\Model;
 
 /**
  * 配置模型
+ * @property int id 
+ * @property string name 变量名
+ * @property string group 分组
+ * @property string title 变量标题
+ * @property string tip 变量描述
+ * @property string type 类型:string,text,int,bool,array,datetime,date,file
+ * @property string value 变量值
+ * @property string content 变量字典数据
+ * @property string rule 验证规则
+ * @property string extend 扩展属性
  */
 class Config extends Model
 {

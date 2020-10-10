@@ -11,12 +11,13 @@ use think\Model;
 /**
  * Class YuEBao
  * @package app\common\model
- * @property int $user_id
- * @property float balance
- * @property float $sum_interest
- * @property int $update_time
- * @property int $create_time
- * @property string status
+ * @property int id 金融账户ID
+ * @property int user_id 用户ID
+ * @property float balance 余额
+ * @property float sum_interest 总收益
+ * @property int update_time 更新时间
+ * @property int create_time 开通时间
+ * @property string status 状态 normal 正常 hold 冻结
  */
 class YuEBao extends Model
 {

@@ -7,6 +7,18 @@ use think\Model;
 
 /**
  * 地区数据模型
+ * @property int id ID
+ * @property int pid 父id
+ * @property string shortname 简称
+ * @property string name 名称
+ * @property string mergename 全称
+ * @property int level 层级 0 1 2 省市区县
+ * @property string pinyin 拼音
+ * @property string code 长途区号
+ * @property string zip 邮编
+ * @property string first 首字母
+ * @property string lng 经度
+ * @property string lat 纬度
  */
 class Area extends Model
 {

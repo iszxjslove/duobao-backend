@@ -13,6 +13,25 @@ use think\Model;
 /**
  * Class YuEBaoOrder
  * @package app/common/model
+ * @property int id 金融订单ID
+ * @property int user_id 用户ID
+ * @property float principal_amount 本金金额
+ * @property float remaining_principal_amount 剩余本金金额
+ * @property float profit 收益
+ * @property int profit_unit 收益单位
+ * @property int next_interest_time 下一次计息时间
+ * @property string interest_where 利息去向
+ * @property string interest_method 计息方式
+ * @property string principal_where 本金去向
+ * @property string period 周期
+ * @property string period_unit 周期单位
+ * @property float sum_interest 总利息
+ * @property int expiry_time 到期时间
+ * @property int end_time 终止时间
+ * @property int update_time 更新时间
+ * @property int create_time 创建时间
+ * @property int status 状态 1 计息中 2 已结束
+ * @method static self where($field, $op = null, $condition = null)
  * @property int id 金融订单ID
  * @property int user_id 用户ID
  * @property float principal_amount 本金金额
@@ -31,7 +50,6 @@ use think\Model;
  * @property int update_time 更新时间
  * @property int create_time 创建时间
  * @property int status 状态 1 计息中 2 已结束
- * @method static self where($field, $op = null, $condition = null)
  */
 class YuEBaoOrder extends Model
 {

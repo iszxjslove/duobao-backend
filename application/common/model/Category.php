@@ -10,6 +10,20 @@ use think\Model;
 
 /**
  * 分类模型
+ * @property int id 
+ * @property int pid 父ID
+ * @property string type 栏目类型
+ * @property string name 
+ * @property string nickname 
+ * @property string flag 
+ * @property string image 图片
+ * @property string keywords 关键字
+ * @property string description 描述
+ * @property string diyname 自定义名称
+ * @property int createtime 创建时间
+ * @property int updatetime 更新时间
+ * @property int weigh 权重
+ * @property string status 状态
  */
 class Category extends Model
 {

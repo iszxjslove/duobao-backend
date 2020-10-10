@@ -8,6 +8,29 @@ use think\Exception;
 use think\Model;
 
 
+
+
+/**
+ * Class RedEnvelopes
+ * @package app/admin/model
+ * @property int id 红包ID
+ * @property int admin_id 管理员ID
+ * @property string cate 红包类型
+ * @property float amount 红包金额
+ * @property int number 红包数量
+ * @property int remaining_number 剩余数量
+ * @property float total_amount 总金额
+ * @property float remaining_amount 剩余金额
+ * @property string title 标题
+ * @property string cover 封面
+ * @property int create_time 创建时间
+ * @property string last_time 最后一个领取时间
+ * @property int expiry_time 过期时间
+ * @property int claim_status 领取状态 0 未领取 1 领取中 2 已领完
+ * @property int return_status 退还状态 0 未退还 1 已退还
+ * @property string token 红包密码
+ * @property string code 红包码
+ */
 class RedEnvelopes extends Model
 {
 

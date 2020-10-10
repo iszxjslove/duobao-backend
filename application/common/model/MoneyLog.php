@@ -6,6 +6,13 @@ use think\Model;
 
 /**
  * 会员余额日志模型
+ * @property int id 
+ * @property int user_id 会员ID
+ * @property float money 变更余额
+ * @property float before 变更前余额
+ * @property float after 变更后余额
+ * @property string memo 备注
+ * @property int createtime 创建时间
  */
 class MoneyLog Extends Model
 {

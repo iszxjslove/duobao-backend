@@ -9,6 +9,30 @@ use app\api\model\Issue;
 use think\Exception;
 use think\Model;
 
+
+
+/**
+ * Class IssueSales
+ * @package app/common/model
+ * @property int id 统计ID
+ * @property int issue_id 奖期ID
+ * @property string issue 奖期号
+ * @property float totalprice 总收入
+ * @property string total_contract_amount 总合同金额
+ * @property string belongdate 属于哪天的奖期
+ * @property float EE0 数字0预计支出
+ * @property float EE1 数字1预计支出
+ * @property float EE2 数字2预计支出
+ * @property float EE3 数字3预计支出
+ * @property float EE4 数字4预计支出
+ * @property float EE5 数字5预计支出
+ * @property float EE6 数字6预计支出
+ * @property float EE7 数字7预计支出
+ * @property float EE8 数字8预计支出
+ * @property float EE9 数字9预计支出
+ * @property float total_actual_expenditure 实际支出总额
+ * @property float actual_total_profit 本期利润总额
+ */
 class IssueSales extends Model
 {
     protected $name = 'issue_sales';

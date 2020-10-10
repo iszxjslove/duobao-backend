@@ -6,6 +6,13 @@ use think\Model;
 
 /**
  * 会员积分日志模型
+ * @property int id 
+ * @property int user_id 会员ID
+ * @property int score 变更积分
+ * @property int before 变更前积分
+ * @property int after 变更后积分
+ * @property string memo 备注
+ * @property int createtime 创建时间
  */
 class ScoreLog Extends Model
 {

@@ -5,6 +5,22 @@ namespace app\api\model\finance;
 use think\Model;
 
 
+
+
+/**
+ * Class Products
+ * @package app/api/model/finance
+ * @property int id 金融产品ID
+ * @property string type 类型
+ * @property string title 标题
+ * @property string desc 描述
+ * @property int period 周期
+ * @property string period_unit 周期单位
+ * @property float rate 利率
+ * @property string interest_where 利息去向
+ * @property string interest_settlement_time 结息时间
+ * @property string status 状态
+ */
 class Products extends Model
 {
 

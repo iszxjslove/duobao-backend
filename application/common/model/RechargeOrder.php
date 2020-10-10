@@ -11,6 +11,16 @@ use think\Model;
  * Class RechargeOrder
  * @package app\common\model
  * @method getByTradeNo($trade_no)
+ * @property int id 充值订单ID
+ * @property int user_id 用户ID
+ * @property string trade_no 订单号
+ * @property float amount 订单金额
+ * @property string merchant_config 商户配置
+ * @property string other_params 其它参数
+ * @property int create_time 创建时间
+ * @property int completion_time 完成时间
+ * @property int update_time 更新时间
+ * @property int status 状态
  */
 class RechargeOrder extends Base
 {

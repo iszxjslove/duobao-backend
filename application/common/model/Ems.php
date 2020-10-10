@@ -6,6 +6,13 @@ use think\Model;
 
 /**
  * 邮箱验证码
+ * @property int id ID
+ * @property string event 事件
+ * @property string email 邮箱
+ * @property string code 验证码
+ * @property int times 验证次数
+ * @property string ip IP
+ * @property int createtime 创建时间
  */
 class Ems Extends Model
 {

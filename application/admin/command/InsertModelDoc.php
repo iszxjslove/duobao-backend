@@ -57,7 +57,7 @@ class InsertModelDoc extends Command
                 $namespace = str_replace(rtrim(APP_PATH, DS), Config::get('app_namespace'), dirname($file));
                 /* @var Model $class */
                 $className = basename($file, '.php');
-                $class = str_replace(DS, '\\', DS . $namespace . DS . $className);
+                $class = str_replace('/', '\\', DS . $namespace . DS . $className);
                 if (!is_callable($class, 'getFieldsType')) {
                     continue;
                 }
@@ -96,7 +96,7 @@ class InsertModelDoc extends Command
                     $docs = "\r\n\r\n" . implode("\r\n", $docs) . "\r\nclass {$className}";
                     $file_content = file_get_contents($file);
                     $new_content = preg_replace("/(\s*\/\*{2}[\s\S]+?\*\/\s+)*?class\s+?{$className}/", $docs, $file_content);
-                    if($new_content !== $file_content){
+                    if ($new_content !== $file_content) {
                         file_put_contents($file, $new_content);
                         $count++;
                         $output->comment($file);

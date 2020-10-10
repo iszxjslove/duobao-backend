@@ -28,5 +28,5 @@ return [
     'app\admin\command\sendInterest',
     'app\admin\command\Test',
     'app\admin\command\Quasar',
-    InsertModelDoc::class,
+    InsertModelDoc::class
 ];

@@ -26,7 +26,6 @@ class Sms extends Api
         $mobile = $this->request->request("mobile");
         $event = $this->request->request("event");
         $event = $event ? $event : 'register';
-
         if (!$mobile) {
             $this->error('Invalid phone number');
         }

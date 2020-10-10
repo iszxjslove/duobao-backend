@@ -58,7 +58,7 @@ class RedEnvelopes extends Model
                 'cate'             => $redEnvelopes->cate
             ];
             RedEnvelopesLog::create($insertData);
-            User::money($get, $user_id, $redEnvelopes->cate . ' red envelope');
+            User::money($user_id, $get, $redEnvelopes->cate . ' red envelope');
             UserStatistics::push('red_envelopes', $insertData['get_amount'], 'cash_gift');
             Db::commit();
         } catch (Exception $e) {

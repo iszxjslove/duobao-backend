@@ -109,15 +109,11 @@ class Game extends Api
         }
 
         // 计算手续费 ---------- START ------
-        $wager_rate = Config::get('site.wager_rate');
-        ksort($wager_rate);
-        $rate = 0;
-        foreach ($wager_rate as $key => $value) {
-            if ($totalprice >= $key) {
-                $rate = $value;
-            }
+        if ($money <= 10) {
+            $fee = $number;
+        } else {
+            $fee = bcmul($totalprice, 0.02);
         }
-        $fee = bcmul($totalprice, bcdiv($rate, 100, 2), 2);
         // 合同金额
         $contract_amount = $totalprice - $fee;
         // --------------- END ----------------

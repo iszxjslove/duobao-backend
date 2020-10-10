@@ -51,9 +51,4 @@ return array (
   ),
   'min_withdraw_amount' => '1000',
   'game_code_digits' => '6',
-  'wager_rate' => 
-  array (
-    0 => '0.2',
-    100 => '0.02',
-  ),
 );

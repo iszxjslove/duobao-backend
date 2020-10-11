@@ -63,18 +63,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             buttons: [
                                 {
                                     name: 'detail',
-                                    text: __('弹出窗口打开'),
-                                    title: __('弹出窗口打开'),
+                                    text: __('变动余额'),
+                                    title: __('变动余额'),
                                     classname: 'btn btn-xs btn-primary btn-dialog',
-                                    icon: 'fa fa-list',
-                                    url: 'auth/admin/money',
-                                    callback: function (data) {
-                                        Layer.alert("接收到回传数据：" + JSON.stringify(data), {title: "回传数据"});
-                                    },
-                                    visible: function (row) {
-                                        //返回true时按钮显示,返回false隐藏
-                                        return true;
-                                    }
+                                    url: 'auth/admin/money'
                                 }
                             ]
                         }

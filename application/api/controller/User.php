@@ -127,9 +127,9 @@ class User extends Api
         if ($email && !Validate::is($email, "email")) {
             $this->error(__('Email is incorrect'));
         }
-        if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
-            $this->error(__('Mobile is incorrect'));
-        }
+//        if ($mobile && !Validate::regex($mobile, "^1\d{10}$")) {
+//            $this->error(__('Mobile is incorrect'));
+//        }
 
         $ret = Sms::check($mobile, $code, 'register');
         if (!$ret) {

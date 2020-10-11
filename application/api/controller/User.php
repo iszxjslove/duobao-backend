@@ -70,9 +70,9 @@ class User extends Api
         if (!$mobile || !$captcha) {
             $this->error(__('Invalid parameters'));
         }
-        if (!Validate::regex($mobile, "^1\d{10}$")) {
-            $this->error(__('Mobile is incorrect'));
-        }
+//        if (!Validate::regex($mobile, "^1\d{10}$")) {
+//            $this->error(__('Mobile is incorrect'));
+//        }
         if (!Sms::check($mobile, $captcha, 'mobilelogin')) {
             $this->error(__('Captcha is incorrect'));
         }

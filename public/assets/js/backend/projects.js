@@ -42,6 +42,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 }
                             }, operate: false
                         },
+                        {field: 'code', title: __('Code'), operate: false},
                         {field: 'singleprice', title: __('Singleprice'), operate: false},
                         {field: 'multiple', title: __('倍数'), operate: false},
                         {field: 'totalprice', title: __('投注总金额'), operate: false},

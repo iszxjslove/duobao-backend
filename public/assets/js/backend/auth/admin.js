@@ -29,20 +29,55 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                 url: $.fn.bootstrapTable.defaults.extend.index_url,
                 columns: [
                     [
-                        {field: 'state', checkbox: true, },
+                        {field: 'state', checkbox: true,},
                         {field: 'id', title: 'ID'},
                         {field: 'username', title: __('Username')},
                         {field: 'nickname', title: __('Nickname')},
-                        {field: 'groups_text', title: __('Group'), operate:false, formatter: Table.api.formatter.label},
-                        {field: 'email', title: __('Email')},
+                        {
+                            field: 'groups_text',
+                            title: __('Group'),
+                            operate: false,
+                            formatter: Table.api.formatter.label
+                        },
+                        {field: 'money', title: __('Money')},
                         {field: 'status', title: __("Status"), formatter: Table.api.formatter.status},
-                        {field: 'logintime', title: __('Login time'), formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: function (value, row, index) {
-                                if(row.id == Config.admin.id){
+                        {
+                            field: 'logintime',
+                            title: __('Login time'),
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: function (value, row, index) {
+                                if (row.id == Config.admin.id) {
                                     return '';
                                 }
                                 return Table.api.formatter.operate.call(this, value, row, index);
-                            }}
+                            },
+                            buttons: [
+                                {
+                                    name: 'detail',
+                                    text: __('弹出窗口打开'),
+                                    title: __('弹出窗口打开'),
+                                    classname: 'btn btn-xs btn-primary btn-dialog',
+                                    icon: 'fa fa-list',
+                                    url: 'auth/admin/money',
+                                    callback: function (data) {
+                                        Layer.alert("接收到回传数据：" + JSON.stringify(data), {title: "回传数据"});
+                                    },
+                                    visible: function (row) {
+                                        //返回true时按钮显示,返回false隐藏
+                                        return true;
+                                    }
+                                }
+                            ]
+                        }
                     ]
                 ]
             });
@@ -55,6 +90,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
         },
         edit: function () {
             Form.api.bindevent($("form[role=form]"));
+        },
+        money: function () {
+            Form.api.bindevent($("form[role=form]"));
+            $(document).on('change', 'input[name=money]', function () {
+                let changeMoney = $('#change-money'), money = changeMoney.data('money')
+                money = money ? parseFloat(money) : 0;
+                let value = parseFloat($(this).val())
+                let after = money + value
+                let color = after > 0 ? 'green' : 'red'
+                changeMoney.html("(" + after + ")").css({color})
+            })
         }
     };
     return Controller;

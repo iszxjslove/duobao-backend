@@ -60,7 +60,7 @@ class Admin extends Model
     {
         $admin = self::get($admin_id);
         if ($admin && $money) {
-            $before = $admin->money;
+            $before = $admin->money ?: 0;
             //$after = $admin->money + $money;
             $after = function_exists('bcadd') ? bcadd($admin->money, $money, 2) : $admin->money + $money;
             //更新会员信息

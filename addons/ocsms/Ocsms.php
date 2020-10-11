@@ -73,7 +73,7 @@ class Ocsms extends Addons
 
     public function checkMobile($mobile)
     {
-        return $mobile;
+        return TRUE;
     }
 
     /**

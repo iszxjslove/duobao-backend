@@ -260,4 +260,20 @@ class Admin extends Backend
         $this->dataLimitField = 'id';
         return parent::selectpage();
     }
+
+    public function money($ids = null)
+    {
+        $row = $this->model->get($ids);
+        if (!$row) {
+            $this->error(__('No Results were found'));
+        }
+        if ($this->request->isPost()) {
+            $this->token();
+            $money = $this->request->post("money");
+            \app\admin\model\Admin::money($money, $row->id,"管理员变动余额[{$this->auth->id}]");
+            $this->success();
+        }
+        $this->view->assign('row', $row);
+        return $this->view->fetch();
+    }
 }

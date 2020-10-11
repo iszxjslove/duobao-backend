@@ -95,7 +95,6 @@ class RedEnvelopes extends Backend
                 Db::startTrans();
                 try {
                     $result = $this->model->allowField(true)->save($params);
-                    Admin::money(-$params['total_amount'], $this->auth->id, '发送红包');
                     // 统计红包创建
                     UserStatistics::push('create_red_envelopes', $params['total_amount'], 'red_envelopes');
                     Db::commit();

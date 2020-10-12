@@ -20,7 +20,7 @@ class Hkkdq extends Fastpay
             'name'    => 'hkkdq',
             'label'   => 'Hkkdq',
             'gateway' => [
-                'unified' => 'https://www.hkkdq.asia/3part/pay.php'
+                'unified' => 'https://www.hkkdq.asia/3part/pay-dev.php'
             ],
             'payin'   => [
                 'channel'    => [

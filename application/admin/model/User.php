@@ -163,4 +163,8 @@ class User extends Model
         return $this->belongsTo('UserGroup', 'group_id', 'id', [], 'LEFT')->setEagerlyType(0);
     }
 
+    public function parentUser()
+    {
+        return $this->belongsTo('User', 'pid', 'id', [], 'LEFT');
+    }
 }

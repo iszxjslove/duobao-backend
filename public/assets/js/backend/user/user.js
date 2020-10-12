@@ -26,18 +26,65 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id'), sortable: true},
                         {field: 'group.name', title: __('Group')},
+                        {
+                            field: 'parent_user', title: __('上级'), operate: false, formatter: function (val, row) {
+                                if(val){
+                                    return val.username
+                                }
+                                return '-'
+                            }
+                        },
                         {field: 'username', title: __('Username'), operate: 'LIKE'},
-                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE'},
+                        {field: 'nickname', title: __('Nickname'), operate: 'LIKE', visible: false},
                         {field: 'mobile', title: __('Mobile'), operate: 'LIKE'},
                         {field: 'money', title: __('Money'), operate: false},
-                        {field: 'successions', title: __('Successions'), visible: false, operate: 'BETWEEN', sortable: true},
-                        {field: 'maxsuccessions', title: __('Maxsuccessions'), visible: false, operate: 'BETWEEN', sortable: true},
-                        {field: 'logintime', title: __('Logintime'), visible: false,formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
-                        {field: 'loginip', title: __('Loginip'), visible: false,formatter: Table.api.formatter.search},
-                        {field: 'jointime', title: __('Jointime'), visible: false,formatter: Table.api.formatter.datetime, operate: 'RANGE', addclass: 'datetimerange', sortable: true},
-                        {field: 'joinip', title: __('Joinip'), visible: false,formatter: Table.api.formatter.search},
-                        {field: 'status', title: __('Status'), formatter: Table.api.formatter.status, searchList: {normal: __('Normal'), hidden: __('Hidden')}},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {
+                            field: 'successions',
+                            title: __('Successions'),
+                            visible: false,
+                            operate: 'BETWEEN',
+                            sortable: true
+                        },
+                        {
+                            field: 'maxsuccessions',
+                            title: __('Maxsuccessions'),
+                            visible: false,
+                            operate: 'BETWEEN',
+                            sortable: true
+                        },
+                        {
+                            field: 'logintime',
+                            title: __('Logintime'),
+                            visible: false,
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {field: 'loginip', title: __('Loginip'), visible: false, formatter: Table.api.formatter.search},
+                        {
+                            field: 'jointime',
+                            title: __('Jointime'),
+                            visible: false,
+                            formatter: Table.api.formatter.datetime,
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true
+                        },
+                        {field: 'joinip', title: __('Joinip'), visible: false, formatter: Table.api.formatter.search},
+                        {
+                            field: 'status',
+                            title: __('Status'),
+                            formatter: Table.api.formatter.status,
+                            searchList: {normal: __('Normal'), hidden: __('Hidden')}
+                        },
+                        {
+                            field: 'operate',
+                            title: __('Operate'),
+                            table: table,
+                            events: Table.api.events.operate,
+                            formatter: Table.api.formatter.operate
+                        }
                     ]
                 ]
             });

@@ -3,6 +3,9 @@
 namespace addons\ocsms\library;
 
 
+use fast\Http;
+use think\Log;
+
 class Ocsms
 {
     protected static $instance = null;
@@ -88,7 +91,7 @@ class Ocsms
 
     private static function request($gateway, $params, $type = 'get')
     {
-        $response = \fast\Http::$type($gateway, $params);
+        $response = Http::$type($gateway, $params);
         $response = trim($response);
         if ($response) {
             $response =  json_decode($response,true);

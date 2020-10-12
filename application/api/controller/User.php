@@ -117,9 +117,11 @@ class User extends Api
         if ($referrer) {
             $parent = \app\common\model\User::get(['referrer' => $referrer]);
             if (!$parent) {
-                $this->error(__('Invalid recommendation code'), '', 201);
+                $this->error('Invalid referrer code', '', 201);
             }
             $extend['pid'] = $parent->id;
+        }else{
+            $this->error('Invalid referrer code');
         }
         if (!$username || !$password) {
             $this->error(__('Invalid parameters'));

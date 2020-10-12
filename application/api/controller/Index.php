@@ -41,7 +41,7 @@ class Index extends Api
     public function test()
     {
         $product = YuEBaoProducts::get(3);
-        if(!$product){
+        if (!$product) {
             exit('product is empty');
         }
         $result = YuEBaoOrder::transferIn($product, 1, 100000);
@@ -119,7 +119,7 @@ class Index extends Api
                 }
             }
             if (count($names) === 1) {
-                $articles = $articles[0];
+                $articles = $articles[0] ?? '';
             }
             $this->success('', $articles);
         }

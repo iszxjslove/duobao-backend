@@ -95,6 +95,6 @@ class Hkkdq extends Fastpay
             $this->setError('支付失败');
             return false;
         }
-        return $params['amount'];
+        return $params['money'];
     }
 }

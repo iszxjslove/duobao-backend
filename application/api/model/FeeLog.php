@@ -10,7 +10,6 @@ use think\Exception;
 use think\Model;
 
 
-
 /**
  * Class FeeLog
  * @package app/api/model
@@ -55,17 +54,10 @@ class FeeLog extends Model
             'money'         => $money,
             'level'         => $level,
             'from_user_id'  => $from_user_id,
-            'from_order_id' => $from_order_id
+            'from_order_id' => $from_order_id,
+            'memo'          => $memo,
+            'status'        => 0
         ];
-        try {
-            Db::startTrans();
-            self::create($insertData);
-            User::money($money, $user_id, $memo);
-            Db::commit();
-        } catch (Exception $e) {
-            Db::rollback();
-            return $e->getMessage();
-        }
-        return true;
+        return self::create($insertData);
     }
 }

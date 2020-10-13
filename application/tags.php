@@ -12,27 +12,35 @@
 // 应用行为扩展定义文件
 return [
     // 应用初始化
-    'app_init'     => [],
+    'app_init'       => [],
     // 应用开始
-    'app_begin'    => [],
+    'app_begin'      => [],
     // 应用调度
-    'app_dispatch' => [
+    'app_dispatch'   => [
         'app\\common\\behavior\\Common',
     ],
     // 模块初始化
-    'module_init'  => [
+    'module_init'    => [
         'app\\common\\behavior\\Common',
     ],
     // 插件开始
-    'addon_begin'  => [
+    'addon_begin'    => [
         'app\\common\\behavior\\Common',
     ],
     // 操作开始执行
-    'action_begin' => [],
+    'action_begin'   => [],
     // 视图内容过滤
-    'view_filter'  => [],
+    'view_filter'    => [],
     // 日志写入
-    'log_write'    => [],
+    'log_write'      => [],
     // 应用结束
-    'app_end'      => []
+    'app_end'        => [],
+    // 充值后
+    'recharge_after' => [
+        \app\api\behavior\RechargeAfter::class
+    ],
+    // 提现后
+    'withdraw_after' => [
+        \app\api\behavior\WithdrawAfter::class
+    ],
 ];

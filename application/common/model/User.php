@@ -2,6 +2,7 @@
 
 namespace app\common\model;
 
+use fast\Random;
 use Nested;
 use PDOStatement;
 use think\Collection;

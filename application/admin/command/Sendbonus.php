@@ -252,7 +252,7 @@ class Sendbonus extends Command
             }
 
             if ($item->bonus) {
-                User::money($item->bonus, $item->user_id, "{$item->issue}: 派发奖金");
+                User::money($item->user_id, $item->bonus, "{$item->issue}: 派发奖金");
                 IssueSales::where(['issue_id' => $item->issue_id])->setInc('total_actual_expenditure', $item->bonus);
                 $item->prizestatus = 1;
                 $item->bonustime = time();

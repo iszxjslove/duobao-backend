@@ -4,9 +4,6 @@ namespace app\admin\model\finance;
 
 use think\Model;
 
-
-
-
 /**
  * Class Account
  * @package app/admin/model/finance

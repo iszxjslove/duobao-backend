@@ -4,6 +4,11 @@ namespace app\admin\controller\user;
 
 use app\common\controller\Backend;
 use app\common\library\Auth;
+use fast\Random;
+use think\Db;
+use think\Exception;
+use think\exception\PDOException;
+use think\exception\ValidateException;
 
 /**
  * 会员管理
@@ -69,14 +74,52 @@ class User extends Backend
         if ($this->request->isPost()) {
             $this->token();
             $params = $this->request->post("row/a");
-            $params['jointime'] = time();
-            $salt = \fast\Random::alnum();
-            $params['password'] = \app\common\library\Auth::instance()->getEncryptPassword($params['password'], $salt);
-            $params['salt'] = $salt;
-            if ($params['payment_password']) {
-                $params['payment_password'] = md5($params['payment_password']);
+            if ($params) {
+                $result = false;
+                Db::startTrans();
+                try {
+                    $params['jointime'] = time();
+                    $salt = \fast\Random::alnum();
+                    $userAuth = \app\common\library\Auth::instance();
+                    if (!$userAuth) {
+                        throw new \Exception('创建失败');
+                    }
+                    $params['password'] = $userAuth->getEncryptPassword($params['password'], $salt);
+                    $params['salt'] = $salt;
+                    if ($params['payment_password']) {
+                        $params['payment_password'] = md5($params['payment_password']);
+                    }
+                    $params = $this->preExcludeFields($params);
+                    $this->model->allowField(true);
+                    $nested = new \Nested($this->model);
+                    $userId = $nested->insert($params['pid'] ?? 0, $params);
+                    if (!$userId) {
+                        throw new \Exception($nested->getError());
+                    }
+                    $user = $this->model::get($userId);
+                    if (!$user) {
+                        throw new \Exception('没有找到用户');
+                    }
+                    $user->referrer = Random::id2code($user->id);
+                    $result = $user->save();
+                    Db::commit();
+                } catch (ValidateException $e) {
+                    Db::rollback();
+                    $this->error($e->getMessage());
+                } catch (PDOException $e) {
+                    Db::rollback();
+                    $this->error($e->getMessage());
+                } catch (\Exception $e) {
+                    Db::rollback();
+                    $this->error($e->getMessage());
+                }
+                if ($result !== false) {
+                    $this->success();
+                } else {
+                    $this->error(__('No rows were inserted'));
+                }
             }
-            $this->request->post(['row' => $params]);
+            $this->error(__('Parameter %s can not be empty', ''));
         }
         $this->modelValidate = true;
         $this->view->assign('groupList', build_select('row[group_id]', \app\admin\model\UserGroup::column('id,name'), '', ['class' => 'form-control selectpicker']));

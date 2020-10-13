@@ -16,17 +16,9 @@ return [
     'user_login_successful'    => [
         UserLoginSuccessful::class
     ],
-    // 充值后
-    'recharge_after'           => [
-        RechargeAfter::class
-    ],
     // 投注后
     'game_wager_after'         => [
         GameWagerAfter::class
-    ],
-    // 提现后
-    'withdraw_after'           => [
-        WithdrawAfter::class
-    ],
+    ]
 ];
 

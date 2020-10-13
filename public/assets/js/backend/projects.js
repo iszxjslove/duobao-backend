@@ -48,15 +48,27 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'totalprice', title: __('投注总金额'), operate: false},
                         {field: 'bonus', title: __('中奖金额'), operate: false},
                         {
+                            field: 'no_code',
+                            title: __('开奖状态'),
+                            searchList: {0: '未开奖', 1: '已开奖'},
+                            custom:{0:'black',1:'green'},
+                            formatter: function (value, row, index) {
+                                value = value ? 1 : 0
+                                return Table.api.formatter.status.call(this, value, row, index)
+                            }
+                        },
+                        {
                             field: 'isgetprize',
                             title: __('中奖状态'),
                             searchList: {0: '未判断', 1: '中奖', 2: '未中奖'},
+                            custom:{0:'black',1:'green',2:'gray'},
                             formatter: Table.api.formatter.status
                         },
                         {
                             field: 'prizestatus',
                             title: __('派奖状态'),
                             searchList: {0: '未派', 1: '已派'},
+                            custom:{0:'gray',1:'green'},
                             formatter: Table.api.formatter.status
                         },
                         {

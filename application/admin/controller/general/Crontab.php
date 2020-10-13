@@ -1,6 +1,6 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\general;
 
 use app\common\controller\Backend;
 
@@ -14,14 +14,14 @@ class Crontab extends Backend
     
     /**
      * Crontab模型对象
-     * @var \app\admin\model\Crontab
+     * @var \app\admin\model\general\Crontab
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = new \app\admin\model\Crontab;
+        $this->model = new \app\admin\model\general\Crontab;
 
     }
 

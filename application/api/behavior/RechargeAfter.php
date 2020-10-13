@@ -9,6 +9,7 @@ use app\common\model\UserMission;
 use app\common\model\UserStatistics;
 use think\Config;
 use think\Exception;
+use think\Log;
 
 class RechargeAfter
 {

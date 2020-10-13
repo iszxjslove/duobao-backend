@@ -1,35 +1,34 @@
 <?php
 
-namespace app\admin\model\user;
+namespace app\admin\model\fastpay;
 
+use app\admin\model\User;
 use think\Model;
 
+
+
+
 /**
- * Class Fee
- * @package app/admin/model/user
- * @property int id 佣金ID
+ * Class RechargeOrder
+ * @package app/admin/model/fastpay
+ * @property int id 充值订单ID
  * @property int user_id 用户ID
- * @property float money 佣金
- * @property int from_user_id 来源用户ID
- * @property int level 层级
- * @property int from_order_id 来源订单ID
+ * @property string trade_no 订单号
+ * @property float amount 订单金额
+ * @property string merchant_config 商户配置
+ * @property string other_params 其它参数
  * @property int create_time 创建时间
- * @property string memo 备注
+ * @property int completion_time 完成时间
  * @property int update_time 更新时间
- * @property int receive_time 领取时间
- * @property int apply_id 提取记录
  * @property int status 状态
  */
-class Fee extends Model
+class RechargeOrder extends Model
 {
 
-    
-
-    
 
     // 表名
-    protected $name = 'user_fee_log';
-    
+    protected $name = 'recharge_order';
+
     // 自动写入时间戳字段
     protected $autoWriteTimestamp = false;
 
@@ -41,18 +40,21 @@ class Fee extends Model
     // 追加属性
     protected $append = [
         'create_time_text',
-        'update_time_text',
-        'receive_time_text'
+        'completion_time_text',
+        'update_time_text'
     ];
-    
-
-    
-
 
 
     public function getCreateTimeTextAttr($value, $data)
     {
         $value = $value ? $value : (isset($data['create_time']) ? $data['create_time'] : '');
+        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+    }
+
+
+    public function getCompletionTimeTextAttr($value, $data)
+    {
+        $value = $value ? $value : (isset($data['completion_time']) ? $data['completion_time'] : '');
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
@@ -63,14 +65,12 @@ class Fee extends Model
         return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
     }
 
-
-    public function getReceiveTimeTextAttr($value, $data)
+    protected function setCreateTimeAttr($value)
     {
-        $value = $value ? $value : (isset($data['receive_time']) ? $data['receive_time'] : '');
-        return is_numeric($value) ? date("Y-m-d H:i:s", $value) : $value;
+        return $value === '' ? null : ($value && !is_numeric($value) ? strtotime($value) : $value);
     }
 
-    protected function setCreateTimeAttr($value)
+    protected function setCompletionTimeAttr($value)
     {
         return $value === '' ? null : ($value && !is_numeric($value) ? strtotime($value) : $value);
     }
@@ -80,10 +80,9 @@ class Fee extends Model
         return $value === '' ? null : ($value && !is_numeric($value) ? strtotime($value) : $value);
     }
 
-    protected function setReceiveTimeAttr($value)
+
+    public function user()
     {
-        return $value === '' ? null : ($value && !is_numeric($value) ? strtotime($value) : $value);
+        return $this->belongsTo(User::class, 'user_id', 'id', '', 'LEFT')->setEagerlyType(0);
     }
-
-
 }

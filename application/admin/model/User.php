@@ -4,6 +4,7 @@ namespace app\admin\model;
 
 use app\common\model\MoneyLog;
 use app\common\model\ScoreLog;
+use fast\Random;
 use think\Model;
 
 /**
@@ -64,6 +65,15 @@ class User extends Model
         'jointime_text'
     ];
 
+
+    public $nestedConfig = [
+        'leftKey'    => 'lft',
+        'rightKey'   => 'rgt',
+        'levelKey'   => 'depth',
+        'parentKey'  => 'pid',
+        'primaryKey' => 'id',
+    ];
+
     public function getOriginData()
     {
         return $this->origin;
@@ -105,6 +115,10 @@ class User extends Model
                 $origin = $row->getOriginData();
                 ScoreLog::create(['user_id' => $row['id'], 'score' => $changedata['score'] - $origin['score'], 'before' => $origin['score'], 'after' => $changedata['score'], 'memo' => '管理员变更积分']);
             }
+        });
+        self::afterInsert(function ($row) {
+            $pk = $row->getPk();
+            $row->getQuery()->where($pk, $row[$pk])->update(['referrer' => Random::id2code($row[$pk])]);
         });
     }
 

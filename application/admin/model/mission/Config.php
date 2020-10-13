@@ -4,9 +4,6 @@ namespace app\admin\model\mission;
 
 use think\Model;
 
-
-
-
 /**
  * Class Config
  * @package app/admin/model/mission

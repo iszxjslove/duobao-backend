@@ -4,9 +4,6 @@ namespace app\admin\model\finance;
 
 use think\Model;
 
-
-
-
 /**
  * Class Order
  * @package app/admin/model/finance

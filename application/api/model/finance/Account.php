@@ -5,9 +5,6 @@ namespace app\api\model\finance;
 use app\common\model\User;
 use think\Model;
 
-
-
-
 /**
  * Class Account
  * @package app/api/model/finance

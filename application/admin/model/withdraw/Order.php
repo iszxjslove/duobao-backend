@@ -7,6 +7,27 @@ use app\admin\model\User;
 use think\Model;
 
 
+
+
+/**
+ * Class Order
+ * @package app/admin/model/withdraw
+ * @property int id 提现记录ID
+ * @property int user_id 用户ID
+ * @property int admin_id 管理员ID
+ * @property string trade_no 交易号
+ * @property float amount 金额
+ * @property float fee 手续费
+ * @property float real_amount 实付金额
+ * @property float channel_fee 通道手续费
+ * @property string card_data 银行卡数据
+ * @property string merchant_config 商户参数
+ * @property string result_data 结果数据
+ * @property int create_time 创建时间
+ * @property int update_time 更新时间
+ * @property int completion_time 完成时间
+ * @property int status 状态
+ */
 class Order extends Model
 {
 

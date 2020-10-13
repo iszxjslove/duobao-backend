@@ -4,9 +4,6 @@ namespace app\admin\model;
 
 use think\Model;
 
-
-
-
 /**
  * Class Game
  * @package app/admin/model

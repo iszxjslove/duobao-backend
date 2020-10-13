@@ -7,8 +7,6 @@ namespace app\api\model;
 use app\common\model\IssueSales;
 use think\Model;
 
-
-
 /**
  * Class Issue
  * @package app/api/model

@@ -6,8 +6,6 @@ namespace app\common\model;
 
 use think\Model;
 
-
-
 /**
  * Class UserMission
  * @package app/common/model

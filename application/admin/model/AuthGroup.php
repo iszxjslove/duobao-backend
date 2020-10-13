@@ -4,8 +4,6 @@ namespace app\admin\model;
 
 use think\Model;
 
-
-
 /**
  * Class AuthGroup
  * @package app/admin/model

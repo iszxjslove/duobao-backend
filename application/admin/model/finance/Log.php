@@ -5,6 +5,19 @@ namespace app\admin\model\finance;
 use think\Model;
 
 
+
+
+/**
+ * Class Log
+ * @package app/admin/model/finance
+ * @property int id 
+ * @property int user_id 会员ID
+ * @property float money 变更余额
+ * @property float before 变更前余额
+ * @property float after 变更后余额
+ * @property string memo 备注
+ * @property int create_time 创建时间
+ */
 class Log extends Model
 {
 

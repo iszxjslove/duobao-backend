@@ -10,8 +10,6 @@ use think\Db;
 use think\Exception;
 use think\Model;
 
-
-
 /**
  * Class RedEnvelopes
  * @package app/api/model

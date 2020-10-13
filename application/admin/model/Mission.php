@@ -5,9 +5,6 @@ namespace app\admin\model;
 use app\common\model\Base;
 use think\Model;
 
-
-
-
 /**
  * Class Mission
  * @package app/admin/model

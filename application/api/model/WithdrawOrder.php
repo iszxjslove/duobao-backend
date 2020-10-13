@@ -8,8 +8,6 @@ use app\common\model\Base;
 use app\common\model\User;
 use think\Config;
 
-
-
 /**
  * Class WithdrawOrder
  * @package app/api/model

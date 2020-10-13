@@ -5,6 +5,24 @@ namespace app\admin\model\mission;
 use think\Model;
 
 
+
+
+/**
+ * Class Config
+ * @package app/admin/model/mission
+ * @property int id 任务配置ID
+ * @property string group_name 任务分组
+ * @property string mission_name 任务名称
+ * @property string title 任务标题
+ * @property string method 统计方式
+ * @property int times 次数-1为不显示
+ * @property string times_label 次数标题
+ * @property int total 合计量-1为不显示
+ * @property string total_field 合计字段
+ * @property string total_field_label 合计字段标题
+ * @property string cycle 任务周期
+ * @property string status 状态
+ */
 class Config extends Model
 {
 

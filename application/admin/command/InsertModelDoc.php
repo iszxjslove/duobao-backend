@@ -139,8 +139,9 @@ class InsertModelDoc extends Command
      * @param array $files
      * @return array|false|mixed
      */
-    public static function getModelFiles($path, $names = [], &$files = [])
+    public static function getModelFiles($path, $names = [])
     {
+        $files = [];
         if (!is_dir($path)) {
             return false;
         }
@@ -152,7 +153,11 @@ class InsertModelDoc extends Command
             }
             $filepath = $path . '/' . $v;
             if (is_dir($filepath)) {
-                return self::getModelFiles($filepath, $names, $files);
+                $list = self::getModelFiles($filepath, $names);
+                foreach ($list as $item) {
+                    $files[] = $item;
+                }
+                continue;
             }
             $name = basename($filepath, '.php');
             if ($names && !in_array($name, $names, true)) {

@@ -4,9 +4,6 @@ namespace app\admin\model;
 
 use think\Model;
 
-
-
-
 /**
  * Class Projects
  * @package app/admin/model

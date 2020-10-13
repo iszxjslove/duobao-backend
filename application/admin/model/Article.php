@@ -6,9 +6,6 @@ use app\common\library\Str;
 use think\Log;
 use think\Model;
 
-
-
-
 /**
  * Class Article
  * @package app/admin/model

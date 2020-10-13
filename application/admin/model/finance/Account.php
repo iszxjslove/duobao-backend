@@ -5,6 +5,19 @@ namespace app\admin\model\finance;
 use think\Model;
 
 
+
+
+/**
+ * Class Account
+ * @package app/admin/model/finance
+ * @property int id 金融账户ID
+ * @property int user_id 用户ID
+ * @property float balance 余额
+ * @property float contract_amount 合同金额 弃
+ * @property float interest 利息 弃
+ * @property int create_time 开通时间
+ * @property string status 状态 normal 正常 hold 冻结
+ */
 class Account extends Model
 {
 

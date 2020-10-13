@@ -6,8 +6,6 @@ namespace app\common\model;
 
 use think\Model;
 
-
-
 /**
  * Class UserFinanceOrder
  * @package app/common/model

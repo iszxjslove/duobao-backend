@@ -4,8 +4,6 @@ namespace app\common\model;
 
 use think\Model;
 
-
-
 /**
  * Class Attachment
  * @package app/common/model

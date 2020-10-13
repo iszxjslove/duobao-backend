@@ -4,9 +4,6 @@ namespace app\admin\model;
 
 use think\Model;
 
-
-
-
 /**
  * Class FastpayAccount
  * @package app/admin/model

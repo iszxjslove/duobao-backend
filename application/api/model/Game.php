@@ -4,8 +4,6 @@ namespace app\api\model;
 
 use think\Model;
 
-
-
 /**
  * Class Game
  * @package app/api/model

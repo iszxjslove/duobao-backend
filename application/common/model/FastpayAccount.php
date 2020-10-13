@@ -7,8 +7,6 @@ namespace app\common\model;
 use app\api\controller\Fastpay;
 use think\Model;
 
-
-
 /**
  * Class FastpayAccount
  * @package app/common/model

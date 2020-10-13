@@ -9,7 +9,6 @@ use think\Db;
 use think\Exception;
 use think\Model;
 
-
 /**
  * Class FeeLog
  * @package app/api/model
@@ -21,6 +20,10 @@ use think\Model;
  * @property int from_order_id 来源订单ID
  * @property int create_time 创建时间
  * @property string memo 备注
+ * @property int update_time 更新时间
+ * @property int receive_time 领取时间
+ * @property int apply_id 提取记录
+ * @property int status 状态
  */
 class FeeLog extends Model
 {

@@ -1,27 +1,27 @@
 <?php
 
-namespace app\admin\controller;
+namespace app\admin\controller\user;
 
 use app\common\controller\Backend;
 
 /**
- * 团队奖励
+ * 会员余额变动管理
  *
  * @icon fa fa-circle-o
  */
-class TeamBonus extends Backend
+class Money extends Backend
 {
     
     /**
-     * TeamBonus模型对象
-     * @var \app\admin\model\TeamBonus
+     * Money模型对象
+     * @var \app\admin\model\user\Money
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = new \app\admin\model\TeamBonus;
+        $this->model = new \app\admin\model\user\Money;
 
     }
 

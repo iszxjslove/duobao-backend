@@ -7,9 +7,6 @@ use think\Config;
 use think\Exception;
 use think\Model;
 
-
-
-
 /**
  * Class RedEnvelopes
  * @package app/admin/model

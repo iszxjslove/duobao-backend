@@ -6,8 +6,6 @@ namespace app\common\model;
 
 use think\Model;
 
-
-
 /**
  * Class UserBank
  * @package app/common/model

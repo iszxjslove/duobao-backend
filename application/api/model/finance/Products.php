@@ -4,9 +4,6 @@ namespace app\api\model\finance;
 
 use think\Model;
 
-
-
-
 /**
  * Class Products
  * @package app/api/model/finance

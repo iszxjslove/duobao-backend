@@ -6,8 +6,6 @@ use app\common\model\MoneyLog;
 use app\common\model\ScoreLog;
 use think\Model;
 
-
-
 /**
  * Class User
  * @package app/admin/model

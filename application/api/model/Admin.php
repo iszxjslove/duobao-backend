@@ -6,8 +6,6 @@ namespace app\api\model;
 
 use think\Model;
 
-
-
 /**
  * Class Admin
  * @package app/api/model

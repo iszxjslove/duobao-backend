@@ -6,7 +6,6 @@ namespace app\api\controller;
 
 use app\api\model\FeeLog;
 use app\common\controller\Api;
-use app\common\model\TeamBonus;
 use app\common\model\TeamBonusApply;
 use think\Config;
 use app\common\model\User;
@@ -107,15 +106,17 @@ class Promotion extends Api
 
     public function applyToBalance()
     {
-        FeeLog::where(['user_id' => $this->auth->id, 'status' => 0])->update(['status' => -1]);
-        $amount = FeeLog::where(['user_id' => $this->auth->id, 'status' => -1])->sum('amount');
         Db::startTrans();
         try {
-            $log = TeamBonusApply::create(['user_id' => $this->auth->id, 'amount' => $amount]);
-            User::money($this->auth->id, $amount, 'bonus apply to balance');
+            FeeLog::where(['user_id' => $this->auth->id, 'status' => 0])->update(['status' => -1]);
+            $amount = FeeLog::where(['user_id' => $this->auth->id, 'status' => -1])->sum('money');
+            if($amount <= 0){
+                throw new Exception('no bonus');
+            }
+            $log = TeamBonusApply::create(['user_id' => $this->auth->id, 'amount' => $amount, 'status' => 0]);
             FeeLog::where(['user_id' => $this->auth->id, 'status' => -1])->update(['status' => 1, 'apply_id' => $log->id, 'receive_time' => time()]);
             Db::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             $this->error($e->getMessage());
         }

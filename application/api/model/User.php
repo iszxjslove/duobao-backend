@@ -3,9 +3,6 @@
 
 namespace app\api\model;
 
-
-
-
 /**
  * Class User
  * @package app/api/model

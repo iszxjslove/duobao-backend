@@ -5,13 +5,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'team_bonus/index' + location.search,
-                    add_url: 'team_bonus/add',
-                    edit_url: 'team_bonus/edit',
-                    del_url: 'team_bonus/del',
-                    multi_url: 'team_bonus/multi',
-                    import_url: 'team_bonus/import',
-                    table: 'team_bonus',
+                    index_url: 'user/fee/index' + location.search,
+                    table: 'user_fee_log',
                 }
             });
 
@@ -27,14 +22,16 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {checkbox: true},
                         {field: 'id', title: __('Id')},
                         {field: 'user_id', title: __('User_id')},
+                        {field: 'money', title: __('Money'), operate:'BETWEEN'},
                         {field: 'from_user_id', title: __('From_user_id')},
                         {field: 'level', title: __('Level')},
-                        {field: 'amount', title: __('Amount'), operate:'BETWEEN'},
+                        {field: 'from_order_id', title: __('From_order_id')},
                         {field: 'create_time', title: __('Create_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
+                        {field: 'memo', title: __('Memo')},
                         {field: 'update_time', title: __('Update_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
                         {field: 'receive_time', title: __('Receive_time'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
+                        {field: 'apply_id', title: __('Apply_id')},
                         {field: 'status', title: __('Status')},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
                     ]
                 ]
             });

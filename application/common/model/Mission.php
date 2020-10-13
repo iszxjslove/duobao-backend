@@ -7,8 +7,6 @@ namespace app\common\model;
 use think\exception\DbException;
 use think\Model;
 
-
-
 /**
  * Class Mission
  * @package app/common/model

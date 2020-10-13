@@ -5,8 +5,6 @@ namespace app\admin\model;
 use fast\Tree;
 use think\Model;
 
-
-
 /**
  * Class UserRule
  * @package app/admin/model

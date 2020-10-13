@@ -6,8 +6,6 @@ namespace app\admin\model;
 
 use think\Model;
 
-
-
 /**
  * Class AdminMoneyLog
  * @package app/admin/model

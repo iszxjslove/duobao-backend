@@ -8,9 +8,6 @@ use think\db\exception\ModelNotFoundException;
 use think\exception\DbException;
 use think\Model;
 
-
-
-
 /**
  * Class Issue
  * @package app/admin/model

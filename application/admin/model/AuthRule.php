@@ -5,8 +5,6 @@ namespace app\admin\model;
 use think\Cache;
 use think\Model;
 
-
-
 /**
  * Class AuthRule
  * @package app/admin/model

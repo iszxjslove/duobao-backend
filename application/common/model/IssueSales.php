@@ -9,8 +9,6 @@ use app\api\model\Issue;
 use think\Exception;
 use think\Model;
 
-
-
 /**
  * Class IssueSales
  * @package app/common/model

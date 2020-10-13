@@ -9,8 +9,6 @@ use think\Exception;
 use think\exception\DbException;
 use think\Model;
 
-
-
 /**
  * Class UserHoldBalance
  * @package app/common/model

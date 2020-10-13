@@ -1,27 +1,27 @@
 <?php
 
-namespace app\admin\controller\admin;
+namespace app\admin\controller\user;
 
 use app\common\controller\Backend;
 
 /**
- * 会员余额变动管理
+ * 用户佣金记录管理
  *
  * @icon fa fa-circle-o
  */
-class Money extends Backend
+class Fee extends Backend
 {
     
     /**
-     * Money模型对象
-     * @var \app\admin\model\admin\Money
+     * Fee模型对象
+     * @var \app\admin\model\user\Fee
      */
     protected $model = null;
 
     public function _initialize()
     {
         parent::_initialize();
-        $this->model = new \app\admin\model\admin\Money;
+        $this->model = new \app\admin\model\user\Fee;
 
     }
 

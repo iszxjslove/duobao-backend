@@ -5,12 +5,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             // 初始化表格参数配置
             Table.api.init({
                 extend: {
-                    index_url: 'admin/money/index' + location.search,
-                    add_url: 'admin/money/add',
-                    edit_url: 'admin/money/edit',
-                    del_url: 'admin/money/del',
-                    multi_url: 'admin/money/multi',
-                    import_url: 'admin/money/import',
+                    index_url: 'auth/money/index' + location.search,
                     table: 'admin_money_log',
                 }
             });
@@ -31,8 +26,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'before', title: __('Before'), operate:'BETWEEN'},
                         {field: 'after', title: __('After'), operate:'BETWEEN'},
                         {field: 'memo', title: __('Memo')},
-                        {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime},
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate, formatter: Table.api.formatter.operate}
+                        {field: 'createtime', title: __('Createtime'), operate:'RANGE', addclass:'datetimerange', formatter: Table.api.formatter.datetime}
                     ]
                 ]
             });

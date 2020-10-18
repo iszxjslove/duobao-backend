@@ -25,6 +25,8 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'id', title: __('Id'), sortable: true},
+                        {field: 'referrer', title: __('推广码')},
+                        {field: 'agent_level', title: __('等级'), operate: false},
                         {field: 'group.name', title: __('Group')},
                         {
                             field: 'parent_user', title: __('上级'), operate: false, formatter: function (val, row) {

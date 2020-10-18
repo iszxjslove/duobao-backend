@@ -83,6 +83,16 @@ class Backend extends Controller
     protected $dataLimitFieldAutoFill = true;
 
     /**
+     * @var bool 数据过滤
+     */
+    protected $dataFilter = false;
+
+    /**
+     * @var array 数据过滤条件
+     */
+    protected $dataFilterCondition = [];
+
+    /**
      * 是否开启Validate验证
      */
     protected $modelValidate = false;
@@ -286,6 +296,12 @@ class Backend extends Controller
         $adminIds = $this->getDataLimitAdminIds();
         if (is_array($adminIds)) {
             $where[] = [$tableName . $this->dataLimitField, 'in', $adminIds];
+        }
+        if ($this->dataFilter) {
+//            foreach ($this->dataFilterCondition as $field => $condition) {
+//                $where[] = [$tableName . $field, $condition];
+//            }
+            $where = array_merge($where, $this->dataFilterCondition);
         }
         if ($search) {
             $searcharr = is_array($searchfields) ? $searchfields : explode(',', $searchfields);

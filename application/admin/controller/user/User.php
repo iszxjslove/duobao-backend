@@ -6,7 +6,6 @@ use app\common\controller\Backend;
 use app\common\library\Auth;
 use fast\Random;
 use think\Db;
-use think\Exception;
 use think\exception\PDOException;
 use think\exception\ValidateException;
 
@@ -21,15 +20,34 @@ class User extends Backend
     protected $relationSearch = true;
     protected $searchFields = 'id,username,nickname';
 
+    protected $dataFilter = false;
+
+    protected $dataFilterCondition = [];
+
     /**
      * @var \app\admin\model\User
      */
     protected $model = null;
 
+    /**
+     * @var \app\admin\model\User
+     */
+    protected $currentUser = null;
+
     public function _initialize()
     {
         parent::_initialize();
         $this->model = model('User');
+        if ($this->auth->frontend_user_id) {
+            $this->currentUser = $this->model::get($this->auth->frontend_user_id);
+            if ($this->currentUser) {
+                $this->dataFilter = true;
+                $this->dataFilterCondition = [
+                    ['lft', '>', $this->currentUser->lft],
+                    ['rgt', '<', $this->currentUser->rgt],
+                ];
+            }
+        }
     }
 
     /**
@@ -57,6 +75,7 @@ class User extends Backend
                 ->limit($offset, $limit)
                 ->select();
             foreach ($list as $k => $v) {
+                $v->agent_level = $v->depth - $this->currentUser->depth;
                 $v->hidden(['password', 'salt']);
             }
             $result = array("total" => $total, "rows" => $list);

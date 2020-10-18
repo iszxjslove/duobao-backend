@@ -34,7 +34,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li class="text-center password" style="padding:0 20px">{:date('Y-m-d H:i:s')}</li>
-                     </ul>
+                    </ul>
                 </li>
 
                 <!-- 清除缓存 -->
@@ -43,11 +43,15 @@
                         <i class="fa fa-trash"></i>
                     </a>
                     <ul class="dropdown-menu wipecache">
-                        <li><a href="javascript:;" data-type="all"><i class="fa fa-trash"></i> {:__('Wipe all cache')}</a></li>
+                        <li><a href="javascript:;" data-type="all"><i class="fa fa-trash"></i> {:__('Wipe all
+                            cache')}</a></li>
                         <li class="divider"></li>
-                        <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text"></i> {:__('Wipe content cache')}</a></li>
-                        <li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o"></i> {:__('Wipe template cache')}</a></li>
-                        <li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket"></i> {:__('Wipe addons cache')}</a></li>
+                        <li><a href="javascript:;" data-type="content"><i class="fa fa-file-text"></i> {:__('Wipe
+                            content cache')}</a></li>
+                        <li><a href="javascript:;" data-type="template"><i class="fa fa-file-image-o"></i> {:__('Wipe
+                            template cache')}</a></li>
+                        <li><a href="javascript:;" data-type="addons"><i class="fa fa-rocket"></i> {:__('Wipe addons
+                            cache')}</a></li>
                     </ul>
                 </li>
 
@@ -74,7 +78,8 @@
                 <!-- 账号信息下拉框 -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{$admin.avatar|cdnurl|htmlentities}" class="user-image" alt="{$admin.nickname|htmlentities}">
+                        <img src="{$admin.avatar|cdnurl|htmlentities}" class="user-image"
+                             alt="{$admin.nickname|htmlentities}">
                         <span class="hidden-xs">{$admin.nickname|htmlentities}</span>
                     </a>
                     <ul class="dropdown-menu">
@@ -87,6 +92,14 @@
                                 <small>{$admin.logintime|date="Y-m-d H:i:s",###}</small>
                             </p>
                         </li>
+                        {if $auth->frontend_user_id}
+                        <li class="user-footer" style="border-bottom: 1px solid #EEEEEE">
+                            <div class="pull-left">推广链接</div>
+                            <div class="pull-right">
+                                <a href="javascript:" class="btn-referrer-url">查看</a>
+                            </div>
+                        </li>
+                        {/if}
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
@@ -113,10 +126,18 @@
     <div id="secondnav">
         <ul class="nav nav-tabs nav-addtabs disable-top-badge" role="tablist">
             {if $fixedmenu}
-            <li role="presentation" id="tab_{$fixedmenu.id}" class="{:$referermenu?'':'active'}"><a href="#con_{$fixedmenu.id}" node-id="{$fixedmenu.id}" aria-controls="{$fixedmenu.id}" role="tab" data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> <span>{$fixedmenu.title}</span> <span class="pull-right-container"> </span></a></li>
+            <li role="presentation" id="tab_{$fixedmenu.id}" class="{:$referermenu?'':'active'}"><a
+                    href="#con_{$fixedmenu.id}" node-id="{$fixedmenu.id}" aria-controls="{$fixedmenu.id}" role="tab"
+                    data-toggle="tab"><i class="fa fa-dashboard fa-fw"></i> <span>{$fixedmenu.title}</span> <span
+                    class="pull-right-container"> </span></a></li>
             {/if}
             {if $referermenu}
-            <li role="presentation" id="tab_{$referermenu.id}" class="active"><a href="#con_{$referermenu.id}" node-id="{$referermenu.id}" aria-controls="{$referermenu.id}" role="tab" data-toggle="tab"><i class="fa fa-list fa-fw"></i> <span>{$referermenu.title}</span> <span class="pull-right-container"> </span></a> <i class="close-tab fa fa-remove"></i></li>
+            <li role="presentation" id="tab_{$referermenu.id}" class="active"><a href="#con_{$referermenu.id}"
+                                                                                 node-id="{$referermenu.id}"
+                                                                                 aria-controls="{$referermenu.id}"
+                                                                                 role="tab" data-toggle="tab"><i
+                    class="fa fa-list fa-fw"></i> <span>{$referermenu.title}</span> <span
+                    class="pull-right-container"> </span></a> <i class="close-tab fa fa-remove"></i></li>
             {/if}
         </ul>
     </div>

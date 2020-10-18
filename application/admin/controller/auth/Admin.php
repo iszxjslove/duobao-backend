@@ -4,9 +4,11 @@ namespace app\admin\controller\auth;
 
 use app\admin\model\AuthGroup;
 use app\admin\model\AuthGroupAccess;
+use app\admin\model\User;
 use app\common\controller\Backend;
 use fast\Random;
 use fast\Tree;
+use think\Config;
 use think\Validate;
 
 /**
@@ -270,10 +272,46 @@ class Admin extends Backend
         if ($this->request->isPost()) {
             $this->token();
             $money = $this->request->post("money");
-            \app\admin\model\Admin::money($money, $row->id,"管理员变动余额[{$this->auth->id}]");
+            \app\admin\model\Admin::money($money, $row->id, "管理员变动余额[{$this->auth->id}]");
             $this->success();
         }
         $this->view->assign('row', $row);
         return $this->view->fetch();
+    }
+
+
+    public function builduser($ids, $account)
+    {
+        $row = $this->model::get($ids);
+        if (!$row) {
+            $this->error(__('No Results were found'));
+        }
+        if ($this->request->isPost()) {
+            $user = User::get(['username|mobile' => $account]);
+            if (!$user) {
+                $this->error($account . ':用户不存在');
+            }
+            if ($row->frontend_user_id && $row->frontend_user_id === $user->id) {
+                $this->error('不需要重复绑定');
+            }
+            $count = $this->model->where(['frontend_user_id' => $user->id])->count();
+            if ($count) {
+                $this->error("该用户已被其它业务员绑定：$account");
+            }
+            $row->frontend_user_id = $user->id;
+            $row->save();
+            $this->success();
+        }
+        $this->view->assign('row', $row);
+        return $this->view->fetch();
+    }
+
+    public function getUserReferrerUrl()
+    {
+        $user = User::get($this->auth->frontend_user_id);
+        if (!$user) {
+            $this->error('没有绑定用户或者用户不存在');
+        }
+        $this->success('获取成功', '', ['url' => Config::get('site.frontend_url') . 'register?referrer=' . $user->referrer]);
     }
 }

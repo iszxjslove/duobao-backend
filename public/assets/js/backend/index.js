@@ -9,6 +9,28 @@ define(['jquery', 'bootstrap', 'backend', 'addtabs', 'adminlte', 'form'], functi
                 e.stopPropagation();
             });
 
+            $(document).on('click', '.btn-referrer-url', function (){
+                let selectText = function (obj){
+                    obj.focus().select()
+                }
+                Fast.api.ajax({
+                    url: 'auth/admin/getUserReferrerUrl'
+                }, function (res){
+                    layer.prompt({
+                        title:'推广链接',
+                        value: res.url,
+                        btn:false,
+                        success(ret){
+                            setTimeout(function (){
+                                selectText($(ret).find('input.layui-layer-input'))
+                            },500)
+                        }
+                    }, function (val,index,el){
+                        selectText($(el))
+                    })
+                })
+            })
+
             //修复在移除窗口时下拉框不隐藏的BUG
             $(window).on("blur", function () {
                 $("[data-toggle='dropdown']").parent().removeClass("open");

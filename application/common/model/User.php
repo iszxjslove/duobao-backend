@@ -14,7 +14,6 @@ use think\exception\DbException;
 use think\Model;
 
 /**
- * 会员模型
  * Class User
  * @package app\common\model
  * @property int id ID
@@ -50,7 +49,7 @@ use think\Model;
  * @property string token Token
  * @property string status 状态
  * @property string verification 验证
- * @property int first_recharge 首充
+ * @property int first_recharge_time 首充时间
  * @property int depth 深度
  * @property int lft 左范围
  * @property int rgt 右范围

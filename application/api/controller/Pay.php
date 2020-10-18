@@ -28,10 +28,10 @@ class Pay extends Api
         $list = FastpayAccount::where(['status' => 1])
             ->field('id,fastpay,channel,amount_list,min_amount,max_amount,custom_amount,desc,status,title')
             ->select();
-        if($list){
+        if ($list) {
             $list = collection((array)$list)->toArray();
         }
-        foreach ($list as $key=> &$item) {
+        foreach ($list as $key => &$item) {
             unset($item['fastpay_config']);
         }
         unset($item);
@@ -64,7 +64,10 @@ class Pay extends Api
             }
         }
         $recharge = new RechargeOrder;
-        $order = $recharge->createOrder($this->auth->id, $amount, $account->toArray(), $other_params);
+        $extend = [
+            'first_recharge' => $this->auth->first_recharge_time ? 0 : 1
+        ];
+        $order = $recharge->createOrder($this->auth->id, $amount, $account->toArray(), $other_params, $extend);
         if (!$order) {
             $this->error('Order creation failed');
         }

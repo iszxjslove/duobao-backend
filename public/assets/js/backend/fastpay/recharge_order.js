@@ -39,6 +39,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             formatter: Table.api.formatter.datetime
                         },
                         {
+                            field: 'first_recharge',
+                            title: __('首充'),
+                            searchList: {'1':'首充','0':'非首充'},
+                            formatter: Table.api.formatter.label
+                        },
+                        {
                             field: 'status',
                             title: __('Status'),
                             searchList: {0: '未支付', 1: '已付款'},

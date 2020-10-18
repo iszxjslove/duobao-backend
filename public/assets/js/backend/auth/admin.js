@@ -67,6 +67,27 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     title: __('变动余额'),
                                     classname: 'btn btn-xs btn-primary btn-dialog',
                                     url: 'auth/admin/money'
+                                },
+                                {
+                                    name: 'builduser',
+                                    text: __('绑定前台账号'),
+                                    title: __('绑定前台账号'),
+                                    classname: 'btn btn-xs btn-info btn-click',
+                                    url: 'auth/admin/builduser',
+                                    click: function (btn, row) {
+                                        layer.prompt({title: '输入前台账号'}, function (value, index) {
+                                            Fast.api.ajax({
+                                                url: 'auth/admin/builduser',
+                                                data: {ids: row.id, account: value}
+                                            }, function () {
+                                                table.bootstrapTable('refresh')
+                                                layer.close(index);
+                                            })
+                                        });
+                                    },
+                                    visible: function (row) {
+                                        return !row.frontend_user_id
+                                    }
                                 }
                             ]
                         }

@@ -19,33 +19,10 @@ class Test extends Api
 {
     protected $noNeedLogin = ['*'];
 
-    public function test()
+    public function test($trade_no)
     {
-//        $recharge = new RechargeOrder;
-//        $order = $recharge->createOrder(1, 10000, ['aaa'], ['bbbb']);
-//
-//        $order = $recharge->get(1);
-//        if($order && $order->status !== 1){
-//            $order->status = 1;
-//            $order->save();
-//        }
-//
-//        dump($order->toArray());
-//        $sms = new Winic();
-        $mobile = '+918182002000';
-        $event = 'register';
-////        $code = '85263552157';
-//        $response = $sms->sendInternationalMessages($code, 'hello,847584');
-//        dump($response);
 
-        $sms = Smswinic::instance();
-        $sms->mobile($mobile);
-        $sms->msg('hello,'.time());
-        $ret = $sms->send();
-        if(!$ret) {
-            dump($sms->getError());
-        }
-        dump($ret);
+
     }
 
     public function count()

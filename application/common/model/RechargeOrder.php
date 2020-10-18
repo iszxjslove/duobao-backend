@@ -18,6 +18,7 @@ use think\Model;
  * @property string merchant_config 商户配置
  * @property string other_params 其它参数
  * @property int create_time 创建时间
+ * @property int first_recharge 首充
  * @property int completion_time 完成时间
  * @property int update_time 更新时间
  * @property int status 状态
@@ -33,22 +34,31 @@ class RechargeOrder extends Base
 
     protected static function init()
     {
-        self::beforeUpdate(static function($row){
-            if($row->status === 1){
+        self::beforeUpdate(static function ($row) {
+            if ($row->status === 1) {
                 $row->completion_time = time();
+            }
+        });
+        self::afterWrite(static function ($row) {
+            if ($row->status === 1 && $row->first_recharge) {
+                $user = User::get($row->user_id);
+                if ($user) {
+                    $user->first_recharge_time = $row->completion_time;
+                    $user->save();
+                }
             }
         });
     }
 
-    public function createOrder($uid, $amount, $merchant = [], $other_params = [])
+    public function createOrder($uid, $amount, $merchant = [], $other_params = [], $extend = [])
     {
-        $order = [
+        $order = array_merge([
             'user_id'         => $uid,
             'trade_no'        => '10' . time() . Random::numeric(4),
             'amount'          => $amount,
             'merchant_config' => $merchant,
             'other_params'    => $other_params
-        ];
+        ], $extend);
         $this->save($order);
         return $this;
     }

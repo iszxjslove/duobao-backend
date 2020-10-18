@@ -136,8 +136,7 @@ class InsertModelDoc extends Command
     /**
      * @param $path
      * @param array $names
-     * @param array $files
-     * @return array|false|mixed
+     * @return array|false
      */
     public static function getModelFiles($path, $names = [])
     {

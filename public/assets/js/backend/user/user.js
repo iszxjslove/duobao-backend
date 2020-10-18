@@ -28,7 +28,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'group.name', title: __('Group')},
                         {
                             field: 'parent_user', title: __('上级'), operate: false, formatter: function (val, row) {
-                                if(val){
+                                if (val) {
                                     return val.username
                                 }
                                 return '-'
@@ -65,13 +65,12 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {
                             field: 'jointime',
                             title: __('Jointime'),
-                            visible: false,
                             formatter: Table.api.formatter.datetime,
                             operate: 'RANGE',
                             addclass: 'datetimerange',
                             sortable: true
                         },
-                        {field: 'joinip', title: __('Joinip'), visible: false, formatter: Table.api.formatter.search},
+                        {field: 'joinip', title: __('Joinip'), formatter: Table.api.formatter.search},
                         {
                             field: 'status',
                             title: __('Status'),

@@ -21,6 +21,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                     [
                         {checkbox: true},
                         {field: 'user_id', title: __('User_id')},
+                        {field: 'fastpay_name', title: __('支付')},
                         {field: 'user.username', title: __('用户')},
                         {field: 'trade_no', title: __('Trade_no')},
                         {field: 'amount', title: __('Amount'), operate: 'BETWEEN'},

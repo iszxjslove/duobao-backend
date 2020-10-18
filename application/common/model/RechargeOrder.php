@@ -57,7 +57,8 @@ class RechargeOrder extends Base
             'trade_no'        => '10' . time() . Random::numeric(4),
             'amount'          => $amount,
             'merchant_config' => $merchant,
-            'other_params'    => $other_params
+            'other_params'    => $other_params,
+            'fastpay_name'    => $merchant['fastpay']
         ], $extend);
         $this->save($order);
         return $this;

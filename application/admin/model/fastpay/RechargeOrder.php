@@ -44,6 +44,24 @@ class RechargeOrder extends Model
         'update_time_text'
     ];
 
+    protected static function init()
+    {
+        self::beforeUpdate(static function ($row) {
+            if ($row->status === 1) {
+                $row->completion_time = time();
+            }
+        });
+        self::afterWrite(static function ($row) {
+            if ($row->status === 1 && $row->first_recharge) {
+                $user = \app\common\model\User::get($row->user_id);
+                if ($user) {
+                    $user->first_recharge_time = $row->completion_time;
+                    $user->save();
+                }
+            }
+        });
+    }
+
 
     public function getCreateTimeTextAttr($value, $data)
     {

@@ -31,7 +31,7 @@ class RechargeOrder extends Backend
         $this->model = new \app\admin\model\fastpay\RechargeOrder;
 
         if ($this->auth->frontend_user_id) {
-            $this->currentUser = $this->model::get($this->auth->frontend_user_id);
+            $this->currentUser = User::get($this->auth->frontend_user_id);
             if ($this->currentUser) {
                 $this->dataFilter = true;
                 $this->dataFilterCondition = [

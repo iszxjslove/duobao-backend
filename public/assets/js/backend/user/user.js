@@ -15,6 +15,7 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             });
 
             var table = $("#table");
+            var agent_level;
 
             // 初始化表格
             table.bootstrapTable({

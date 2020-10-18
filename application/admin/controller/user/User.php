@@ -75,7 +75,7 @@ class User extends Backend
                 ->limit($offset, $limit)
                 ->select();
             foreach ($list as $k => $v) {
-                $v->agent_level = $v->depth - $this->currentUser->depth;
+                $v->agent_level = $this->currentUser ? $v->depth - $this->currentUser->depth : '';
                 $v->hidden(['password', 'salt']);
             }
             $result = array("total" => $total, "rows" => $list);

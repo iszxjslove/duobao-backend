@@ -61,7 +61,14 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                             addclass: 'datetimerange',
                             sortable: true
                         },
-                        {field: 'loginip', title: __('Loginip'), visible: false, formatter: Table.api.formatter.search},
+                        {
+                            field: 'first_recharge_time',
+                            title: __('首充时间'),
+                            operate: 'RANGE',
+                            addclass: 'datetimerange',
+                            sortable: true,
+                            formatter: Table.api.formatter.datetime
+                        },
                         {
                             field: 'jointime',
                             title: __('Jointime'),

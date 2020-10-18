@@ -27,6 +27,8 @@ class Admin extends Backend
     protected $childrenGroupIds = [];
     protected $childrenAdminIds = [];
 
+    protected $noNeedLogin = ['getUserReferrerUrl'];
+
     public function _initialize()
     {
         parent::_initialize();
@@ -280,6 +282,14 @@ class Admin extends Backend
     }
 
 
+    /**
+     * 绑定前台用户
+     * @param $ids
+     * @param $account
+     * @return string
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
     public function builduser($ids, $account)
     {
         $row = $this->model::get($ids);
